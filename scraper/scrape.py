@@ -20,7 +20,7 @@ import random
 import re
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import requests
 from bs4 import BeautifulSoup
@@ -30,6 +30,9 @@ from streets import find_street
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "geocode_cache.json")
 DATA_PATH = os.path.join(ROOT, "data.json")
+HISTORY_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "history.jsonl")
+
+INACTIVE_RETENTION_DAYS = 30
 
 OLX_BASE = "https://www.olx.pl/nieruchomosci/garaze-parkingi/lublin/"
 USER_AGENT_BROWSER = (
@@ -331,7 +334,84 @@ def price_stats(subset):
     return {"count": len(subset), "avg": round(sum(prices) / len(prices)), "min": min(prices), "max": max(prices)}
 
 
-def assemble(items):
+def load_previous_offers():
+    """Returns {offer_id: offer_dict} from the data.json written by the last run, or {}."""
+    try:
+        with open(DATA_PATH, encoding="utf-8") as f:
+            prev = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+    offers = {}
+    for m in prev.get("markers", []):
+        for o in m["offers"]:
+            offers[o["id"]] = o
+    return offers
+
+
+def merge_with_history(on_map, previous_offers, now):
+    """Enriches freshly-scraped offers with first_seen/price_history/trend by
+    comparing against the previous run's data.json, and keeps offers that
+    disappeared from the current scrape around (marked inactive) for a
+    while, so the map can show a "recently delisted" layer instead of
+    listings just vanishing between runs.
+
+    Returns (merged_offers, new_count, newly_inactive_count).
+    """
+    today = now.strftime("%Y-%m-%d")
+    seen_ids = set()
+    new_count = 0
+    for o in on_map:
+        seen_ids.add(o["id"])
+        prev = previous_offers.get(o["id"])
+        if prev:
+            price_history = list(prev.get("price_history") or ([prev["price"]] if prev.get("price") is not None else []))
+            last_price = price_history[-1] if price_history else None
+            if o["price"] is not None and o["price"] != last_price:
+                price_history.append(o["price"])
+                o["price_trend"] = "up" if (last_price is not None and o["price"] > last_price) else (
+                    "down" if last_price is not None else None)
+                o["previous_price"] = last_price
+                o["price_changed_at"] = today
+            else:
+                o["price_trend"] = prev.get("price_trend")
+                o["previous_price"] = prev.get("previous_price")
+                o["price_changed_at"] = prev.get("price_changed_at")
+            o["price_history"] = price_history
+            o["first_seen"] = prev.get("first_seen") or today
+            o["is_new"] = False
+        else:
+            o["price_history"] = [o["price"]] if o["price"] is not None else []
+            o["price_trend"] = None
+            o["previous_price"] = None
+            o["price_changed_at"] = None
+            o["first_seen"] = today
+            o["is_new"] = True
+            new_count += 1
+        o["active"] = True
+        o["last_seen"] = today
+
+    cutoff = now - timedelta(days=INACTIVE_RETENTION_DAYS)
+    newly_inactive_count = 0
+    for oid, prev in previous_offers.items():
+        if oid in seen_ids:
+            continue
+        try:
+            last_seen_dt = datetime.strptime(prev.get("last_seen", ""), "%Y-%m-%d").replace(tzinfo=timezone.utc)
+        except ValueError:
+            last_seen_dt = now
+        if last_seen_dt < cutoff:
+            continue  # dropped for good after ~30 days of being gone
+        if prev.get("active", True):
+            newly_inactive_count += 1
+        inactive = dict(prev)
+        inactive["active"] = False
+        inactive["is_new"] = False
+        on_map.append(inactive)
+
+    return on_map, new_count, newly_inactive_count
+
+
+def assemble(items, previous_offers, now):
     on_map, off_map = [], []
     for it in items:
         if it["is_product"]:
@@ -361,6 +441,9 @@ def assemble(items):
             "area_m2": it["area_m2"], "price_per_m2": it["price_per_m2"],
         })
 
+    on_map, new_count, newly_inactive_count = merge_with_history(on_map, previous_offers, now)
+    active = [o for o in on_map if o["active"]]
+
     markers = {}
     for o in on_map:
         key = (round(o["lat"], 4), round(o["lon"], 4))
@@ -368,23 +451,42 @@ def assemble(items):
             markers[key] = {"coords": {"lat": key[0], "lon": key[1]}, "address": o["address"], "offers": []}
         markers[key]["offers"].append(o)
 
-    now = datetime.now(timezone.utc)
-    return {
+    address_matched = sum(1 for o in active if o["precision"] in ("exact", "street"))
+    data = {
         "generated_at": now.strftime("%d.%m.%Y %H:%M"),
         "sources": ["olx.pl", "otodom.pl (via OLX)"],
         "city": "Lublin",
         "stats": {
-            "total_offers": len(on_map),
-            "garaz_sprzedaz": price_stats([o for o in on_map if o["type"] == "garaz" and o["transaction"] == "sprzedaz"]),
-            "garaz_wynajem": price_stats([o for o in on_map if o["type"] == "garaz" and o["transaction"] == "wynajem"]),
-            "parking_wynajem": price_stats([o for o in on_map if o["type"] == "miejsce_parkingowe" and o["transaction"] == "wynajem"]),
-            "parking_sprzedaz": price_stats([o for o in on_map if o["type"] == "miejsce_parkingowe" and o["transaction"] == "sprzedaz"]),
+            "total_offers": len(active),
+            "garaz_sprzedaz": price_stats([o for o in active if o["type"] == "garaz" and o["transaction"] == "sprzedaz"]),
+            "garaz_wynajem": price_stats([o for o in active if o["type"] == "garaz" and o["transaction"] == "wynajem"]),
+            "parking_wynajem": price_stats([o for o in active if o["type"] == "miejsce_parkingowe" and o["transaction"] == "wynajem"]),
+            "parking_sprzedaz": price_stats([o for o in active if o["type"] == "miejsce_parkingowe" and o["transaction"] == "sprzedaz"]),
         },
         "markers": list(markers.values()),
         "off_map_products": [
             {"id": i["id"], "url": i["link"], "title": i["title"], "price": i["price"]} for i in off_map
         ],
     }
+
+    scan_meta = {
+        "ts": now.isoformat(),
+        "date": now.strftime("%Y-%m-%d %H:%M"),
+        "active_total": len(active),
+        "new_count": new_count,
+        "newly_inactive_count": newly_inactive_count,
+        "address_match_pct": round(100 * address_matched / len(active), 1) if active else None,
+        "avg_garaz_wynajem": data["stats"]["garaz_wynajem"]["avg"],
+        "avg_garaz_sprzedaz": data["stats"]["garaz_sprzedaz"]["avg"],
+        "avg_parking_wynajem": data["stats"]["parking_wynajem"]["avg"],
+        "avg_parking_sprzedaz": data["stats"]["parking_sprzedaz"]["avg"],
+    }
+    return data, scan_meta
+
+
+def append_history(scan_meta):
+    with open(HISTORY_PATH, "a", encoding="utf-8") as f:
+        f.write(json.dumps(scan_meta, ensure_ascii=False) + "\n")
 
 
 def main():
@@ -400,11 +502,18 @@ def main():
     with open(CACHE_PATH, "w", encoding="utf-8") as f:
         json.dump(cache, f, ensure_ascii=False, indent=2)
 
-    data = assemble(items)
+    previous_offers = load_previous_offers()
+    now = datetime.now(timezone.utc)
+    data, scan_meta = assemble(items, previous_offers, now)
     with open(DATA_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+    append_history(scan_meta)
 
-    print(f"Wrote {DATA_PATH}: {len(data['markers'])} markers, {data['stats']['total_offers']} offers on map", file=sys.stderr)
+    print(
+        f"Wrote {DATA_PATH}: {len(data['markers'])} markers, {data['stats']['total_offers']} active offers "
+        f"({scan_meta['new_count']} new, {scan_meta['newly_inactive_count']} newly inactive)",
+        file=sys.stderr,
+    )
 
 
 if __name__ == "__main__":
