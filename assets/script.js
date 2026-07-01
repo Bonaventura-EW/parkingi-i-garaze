@@ -1,17 +1,10 @@
 (function () {
     "use strict";
 
-    var TYPE_COLORS = {
-        garaz: { sprzedaz: "#0b5394", wynajem: "#1d7a46" },
-        miejsce_parkingowe: { sprzedaz: "#a64d79", wynajem: "#e69138" },
-        hala_wiata: { sprzedaz: "#674ea7", wynajem: "#674ea7" },
-    };
-
-    var TYPE_LABELS = {
-        garaz: "Garaż",
-        miejsce_parkingowe: "Miejsce parkingowe",
-        hala_wiata: "Hala / wiata garażowa",
-    };
+    var TYPE_LABELS = SG.TYPE_LABELS;
+    var fmtPrice = SG.fmtPrice;
+    var colorFor = SG.colorFor;
+    var escapeHtml = SG.escapeHtml;
 
     var map = L.map("map", { zoomControl: true, minZoom: 10 }).setView([51.2465, 22.5684], 13);
 
@@ -27,19 +20,6 @@
         data: null,
         allMarkers: [], // {marker, offers, address, precision}
     };
-
-    function fmtPrice(o) {
-        if (o.price == null) return "cena nieznana";
-        var suffix = o.transaction === "wynajem" ? " zł/mies." : " zł";
-        var txt = o.price.toLocaleString("pl-PL") + suffix;
-        if (o.negotiable) txt += " (do negocjacji)";
-        return txt;
-    }
-
-    function colorFor(o) {
-        var byType = TYPE_COLORS[o.type] || TYPE_COLORS.garaz;
-        return byType[o.transaction] || byType.wynajem;
-    }
 
     function makeIcon(offers) {
         var main = offers[0];
@@ -58,12 +38,6 @@
     function offerCardHtml(o) {
         var typeLabel = TYPE_LABELS[o.type] || o.type;
         var txLabel = o.transaction === "wynajem" ? "Wynajem" : "Sprzedaż";
-        var precisionLabel =
-            o.precision === "exact" || o.precision === "street"
-                ? "adres dokładny"
-                : o.precision === "district"
-                ? "lokalizacja przybliżona (dzielnica)"
-                : "lokalizacja przybliżona";
         return (
             '<div class="offer-card">' +
             '<span class="offer-tag">' + typeLabel + "</span>" +
@@ -71,18 +45,11 @@
             '<span class="offer-tag">' + o.source + "</span>" +
             "<h4>" + escapeHtml(o.title) + "</h4>" +
             '<div class="offer-price">' + fmtPrice(o) + "</div>" +
-            '<div class="offer-meta">📍 ' + escapeHtml(o.address) + " (" + precisionLabel + ")</div>" +
+            '<div class="offer-meta">📍 ' + escapeHtml(o.address) + " (" + SG.precisionLabel(o) + ")</div>" +
             '<div class="offer-meta">' + escapeHtml(o.loc_raw || "") + "</div>" +
             '<a class="offer-link" href="' + o.url + '" target="_blank" rel="noopener">Zobacz ogłoszenie →</a>' +
             "</div>"
         );
-    }
-
-    function escapeHtml(s) {
-        if (!s) return "";
-        return s.replace(/[&<>"']/g, function (c) {
-            return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
-        });
     }
 
     function openPanel(offers) {
@@ -184,8 +151,7 @@
             .join("");
     }
 
-    fetch("data.json?_=" + Date.now())
-        .then(function (r) { return r.json(); })
+    SG.loadData()
         .then(function (data) {
             state.data = data;
             state.allMarkers = data.markers.map(function (m) {

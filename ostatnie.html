@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SONAR GARAŻOWY - Ostatnio dodane / odświeżone</title>
+    <meta name="description" content="Najnowsze oferty garaży i miejsc parkingowych w Lublinie.">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="stylesheet" href="assets/style.css?v=1">
+</head>
+<body>
+    <div id="app">
+        <header class="sg-header">
+            <div class="sg-brand">
+                <svg class="sg-brand-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="sgRb" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#233b52"/>
+                            <stop offset="100%" stop-color="#0a141f"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="32" cy="32" r="32" fill="url(#sgRb)"/>
+                    <circle cx="32" cy="32" r="30" fill="none" stroke="#ffb300" stroke-width="0.5" opacity="0.6"/>
+                </svg>
+                <h1>
+                    <span class="sg-b">SONAR GARAŻOWY</span>
+                    <span class="sg-s">·</span>
+                    <span class="sg-p">🆕 Ostatnie</span>
+                </h1>
+            </div>
+            <nav class="sg-nav">
+                <a href="index.html">🗺️ Mapa</a>
+                <a href="ostatnie.html" class="active">🆕 Ostatnie</a>
+                <a href="top5.html">🏆 Top 5</a>
+            </nav>
+        </header>
+
+        <main class="list-page">
+            <div class="list-page-toolbar">
+                <label>Pokaż: <select id="list-filter-type">
+                    <option value="all">Wszystkie typy</option>
+                    <option value="garaz">Garaż</option>
+                    <option value="miejsce_parkingowe">Miejsce parkingowe</option>
+                    <option value="hala_wiata">Hala / wiata</option>
+                </select></label>
+                <label><select id="list-filter-transaction">
+                    <option value="all">Sprzedaż i wynajem</option>
+                    <option value="sprzedaz">Tylko sprzedaż</option>
+                    <option value="wynajem">Tylko wynajem</option>
+                </select></label>
+                <span id="list-count" class="list-count"></span>
+            </div>
+            <div id="offer-list" class="offer-list"></div>
+        </main>
+    </div>
+
+    <script src="assets/common.js?v=1"></script>
+    <script src="assets/ostatnie.js?v=1"></script>
+</body>
+</html>

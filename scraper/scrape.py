@@ -66,6 +66,35 @@ PARKING_KEYWORDS = ["miejsce postojowe", "miejsce parkingowe", "postojow", "park
 HALA_KEYWORDS = ["hala garażowa", "hala garazowa", "wiata"]
 EXCLUDE_KEYWORDS = ["mieszkanie", "pokoj", "pokoje", "kawalerk", "dzialka", "działka", "komórk", "komork", "piwnic"]
 
+MONTHS_PL = {
+    "stycznia": 1, "lutego": 2, "marca": 3, "kwietnia": 4, "maja": 5, "czerwca": 6,
+    "lipca": 7, "sierpnia": 8, "września": 9, "wrzesnia": 9, "października": 10,
+    "pazdziernika": 10, "listopada": 11, "grudnia": 12,
+}
+
+
+def parse_loc_date(loc_raw, now=None):
+    """Best-effort parse of OLX's 'location-date' string into an ISO date + label."""
+    if not loc_raw:
+        return None, None
+    now = now or datetime.now(timezone.utc)
+    text = loc_raw.split(" - ", 1)[-1].strip()
+    m = re.search(r"Dzisiaj\s+o\s+(\d{1,2}):(\d{2})", text, re.I)
+    if m:
+        return now.strftime("%Y-%m-%d"), "dzisiaj o " + m.group(0).split(" o ")[-1]
+    m = re.search(r"(\d{1,2})\s+([a-zżźćńółęąś]+)\s+(\d{4})", text, re.I)
+    if m:
+        day, month_name, year = m.group(1), m.group(2).lower(), m.group(3)
+        month = MONTHS_PL.get(month_name)
+        if month:
+            try:
+                dt = datetime(int(year), month, int(day), tzinfo=timezone.utc)
+                return dt.strftime("%Y-%m-%d"), text
+            except ValueError:
+                pass
+    return None, text
+
+
 STREET_RE_UL = re.compile(
     r"ul\.?\s*([A-ZŁŚŻŹĆŃÓĄĘ][a-ząćęłńóśźż]+(?:\s[A-ZŁŚŻŹĆŃÓĄĘ][a-ząćęłńóśźż]+){0,2})\s*(\d{1,4}\s?[A-Za-z]?)?"
 )
@@ -297,11 +326,13 @@ def assemble(items):
             precision = "unknown"
             address = "Lublin (lokalizacja nieznana)"
 
+        date_iso, date_label = parse_loc_date(it["loc_raw"])
         on_map.append({
             "id": it["id"], "url": it["link"], "source": it["source"], "title": it["title"],
             "price": it["price"], "negotiable": it["negotiable"], "transaction": it["transaction"],
             "type": it["type"], "lat": round(lat, 6), "lon": round(lon, 6),
             "precision": precision, "address": address, "loc_raw": it["loc_raw"],
+            "date_iso": date_iso, "date_label": date_label,
         })
 
     markers = {}
