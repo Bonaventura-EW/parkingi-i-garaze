@@ -359,15 +359,6 @@ html, body {
 }
 .offer-card a.offer-link:hover { background: var(--accent-dark); }
 
-/* Leaflet marker cluster color override */
-.marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div {
-    background-color: rgba(230, 145, 56, 0.8) !important;
-    color: #fff;
-}
-.marker-cluster-small, .marker-cluster-medium, .marker-cluster-large {
-    background-color: rgba(230, 145, 56, 0.4) !important;
-}
-
 .approx-marker { opacity: 0.85; }
 
 /* List pages (Ostatnie / Top 5) */

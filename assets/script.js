@@ -14,7 +14,9 @@
         attribution: "&copy; OpenStreetMap contributors",
     }).addTo(map);
 
-    var clusterGroup = L.markerClusterGroup({ maxClusterRadius: 45, disableClusteringAtZoom: 17 });
+    // Plain layer group: every offer gets its own pin at its own (exact or approximate)
+    // location — no automatic proximity clustering into count bubbles.
+    var clusterGroup = L.layerGroup();
     map.addLayer(clusterGroup);
     var approxRadiusLayer = L.layerGroup().addTo(map);
 
