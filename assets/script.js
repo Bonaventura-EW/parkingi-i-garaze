@@ -16,6 +16,9 @@
 
     var clusterGroup = L.markerClusterGroup({ maxClusterRadius: 45, disableClusteringAtZoom: 17 });
     map.addLayer(clusterGroup);
+    var approxRadiusLayer = L.layerGroup().addTo(map);
+
+    var APPROX_RADIUS_M = { district: 550, unknown: 1300 };
 
     var state = {
         data: null,
@@ -29,10 +32,12 @@
         var anyInactive = offers.some(function (o) { return o.active === false; });
         var count = offers.length;
         var size = count > 1 ? 26 : 18;
+        var opacity = anyInactive ? 0.55 : (approx ? 0.85 : 1);
         var html =
             '<div style="background:' + color + ";width:" + size + "px;height:" + size +
-            "px;border-radius:50%;border:2px " + (approx ? "dashed" : "solid") + " #fff;box-shadow:0 0 0 1px " + color +
-            (anyInactive ? ";opacity:0.6" : "") +
+            "px;border-radius:50%;border:2px " + (approx ? "dashed #fff" : "solid #fff") +
+            ";box-shadow:0 0 0 1px " + color + (approx ? ",0 0 0 4px " + color + "33" : "") +
+            ";opacity:" + opacity +
             ';display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;">' +
             (count > 1 ? count : "") +
             "</div>";
@@ -190,6 +195,7 @@
     function applyFilters() {
         var f = currentFilters();
         clusterGroup.clearLayers();
+        approxRadiusLayer.clearLayers();
         var visible = [];
         var counts = { sprzedaz: 0, wynajem: 0, garaz: 0, parking: 0, hala: 0 };
         var inactiveTotal = 0;
@@ -210,6 +216,21 @@
             var marker = L.marker([m.coords.lat, m.coords.lon], { icon: makeIcon(passing) });
             marker.on("click", function () { openPanel(passing); });
             clusterGroup.addLayer(marker);
+
+            var approxPrecision = passing.every(function (o) { return o.precision === "district"; })
+                ? "district"
+                : (passing.every(function (o) { return o.precision !== "exact" && o.precision !== "street"; }) ? "unknown" : null);
+            if (approxPrecision) {
+                L.circle([m.coords.lat, m.coords.lon], {
+                    radius: APPROX_RADIUS_M[approxPrecision],
+                    color: colorFor(passing[0]),
+                    weight: 1,
+                    fillColor: colorFor(passing[0]),
+                    fillOpacity: 0.08,
+                    dashArray: "4,6",
+                    interactive: false,
+                }).addTo(approxRadiusLayer);
+            }
         });
 
         document.getElementById("visible-count").textContent = visible.length;
