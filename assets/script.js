@@ -102,6 +102,17 @@
         return true;
     }
 
+    function fmtStat(s) {
+        if (!s || s.avg == null) return "brak danych";
+        return s.avg.toLocaleString("pl-PL") + " zł (" + s.count + ")";
+    }
+
+    function avgOf(offers) {
+        var prices = offers.map(function (o) { return o.price; }).filter(function (p) { return p != null; });
+        if (!prices.length) return { avg: null, count: offers.length };
+        return { avg: Math.round(prices.reduce(function (a, b) { return a + b; }, 0) / prices.length), count: offers.length };
+    }
+
     function applyFilters() {
         var f = currentFilters();
         clusterGroup.clearLayers();
@@ -128,11 +139,28 @@
         document.getElementById("count-garaz").textContent = "(" + (counts.garaz || 0) + ")";
         document.getElementById("count-parking").textContent = "(" + (counts.parking || 0) + ")";
         document.getElementById("count-hala").textContent = "(" + (counts.hala || 0) + ")";
-    }
 
-    function fmtStat(s) {
-        if (!s || s.avg == null) return "brak danych";
-        return s.avg.toLocaleString("pl-PL") + " zł (" + s.count + ")";
+        var byCat = function (type, tx) {
+            return visible.filter(function (o) { return o.type === type && o.transaction === tx; });
+        };
+        document.getElementById("stat-garaz-wynajem").textContent = fmtStat(avgOf(byCat("garaz", "wynajem")));
+        document.getElementById("stat-garaz-sprzedaz").textContent = fmtStat(avgOf(byCat("garaz", "sprzedaz")));
+        document.getElementById("stat-parking-wynajem").textContent = fmtStat(avgOf(byCat("miejsce_parkingowe", "wynajem")));
+        document.getElementById("stat-parking-sprzedaz").textContent = fmtStat(avgOf(byCat("miejsce_parkingowe", "sprzedaz")));
+
+        var mapEl = document.getElementById("map");
+        var existingEmpty = document.getElementById("map-empty-state");
+        if (visible.length === 0) {
+            if (!existingEmpty) {
+                var div = document.createElement("div");
+                div.id = "map-empty-state";
+                div.className = "map-empty-state";
+                div.textContent = "Brak ofert spełniających wybrane filtry. Spróbuj poluzować kryteria.";
+                mapEl.appendChild(div);
+            }
+        } else if (existingEmpty) {
+            existingEmpty.remove();
+        }
     }
 
     function renderProducts(products) {
@@ -159,17 +187,17 @@
             });
 
             document.getElementById("last-scan").textContent = data.generated_at || "-";
-            document.getElementById("stat-garaz-wynajem").textContent = fmtStat(data.stats.garaz_wynajem);
-            document.getElementById("stat-garaz-sprzedaz").textContent = fmtStat(data.stats.garaz_sprzedaz);
-            document.getElementById("stat-parking-wynajem").textContent = fmtStat(data.stats.parking_wynajem);
-            document.getElementById("stat-parking-sprzedaz").textContent = fmtStat(data.stats.parking_sprzedaz);
-
             renderProducts(data.off_map_products);
             applyFilters();
         })
         .catch(function (err) {
             console.error("Błąd wczytywania danych:", err);
             document.getElementById("visible-count").textContent = "błąd";
+            var mapEl = document.getElementById("map");
+            var div = document.createElement("div");
+            div.className = "map-empty-state";
+            div.textContent = "Nie udało się wczytać danych ofert (data.json). Odśwież stronę za chwilę.";
+            mapEl.appendChild(div);
         });
 
     [
