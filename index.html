@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SONAR GARAŻOWY - Mapa garaży i miejsc parkingowych w Lublinie</title>
+    <meta name="description" content="Mapa ofert garaży i miejsc parkingowych na sprzedaż i wynajem w Lublinie, zbieranych z OLX i Otodom.">
+
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+    <!-- Leaflet CSS (vendored locally, no external CDN dependency) -->
+    <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css" />
+    <!-- MarkerCluster CSS -->
+    <link rel="stylesheet" href="assets/vendor/leaflet.markercluster/MarkerCluster.css" />
+    <link rel="stylesheet" href="assets/vendor/leaflet.markercluster/MarkerCluster.Default.css" />
+
+    <link rel="stylesheet" href="assets/style.css?v=1">
+</head>
+<body>
+    <div id="app">
+        <header class="sg-header">
+            <div class="sg-brand">
+                <svg class="sg-brand-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="sgRb" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#233b52"/>
+                            <stop offset="100%" stop-color="#0a141f"/>
+                        </radialGradient>
+                        <linearGradient id="sgRs" x1="50%" y1="50%" x2="100%" y2="50%">
+                            <stop offset="0%" stop-color="#ffb300" stop-opacity="0.85"/>
+                            <stop offset="100%" stop-color="#ffb300" stop-opacity="0"/>
+                        </linearGradient>
+                        <mask id="sgRm"><circle cx="32" cy="32" r="28" fill="white"/></mask>
+                    </defs>
+                    <circle cx="32" cy="32" r="32" fill="url(#sgRb)"/>
+                    <circle cx="32" cy="32" r="30" fill="none" stroke="#ffb300" stroke-width="0.5" opacity="0.6"/>
+                    <circle cx="32" cy="32" r="22" fill="none" stroke="#ffb300" stroke-width="0.3" opacity="0.3"/>
+                    <circle cx="32" cy="32" r="14" fill="none" stroke="#ffb300" stroke-width="0.3" opacity="0.3"/>
+                    <line x1="32" y1="4" x2="32" y2="60" stroke="#ffb300" stroke-width="0.3" opacity="0.3"/>
+                    <line x1="4" y1="32" x2="60" y2="32" stroke="#ffb300" stroke-width="0.3" opacity="0.3"/>
+                    <g mask="url(#sgRm)">
+                        <path d="M32,32 L32,4 A28,28 0 0,1 60,32 Z" fill="url(#sgRs)" opacity="0.7">
+                            <animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="3s" repeatCount="indefinite"/>
+                        </path>
+                    </g>
+                    <circle cx="22" cy="18" r="1.5" fill="#ffb300">
+                        <animate attributeName="opacity" values="0.9;0.3;0.9" dur="1.5s" repeatCount="indefinite"/>
+                    </circle>
+                </svg>
+                <h1>
+                    <span class="sg-b">SONAR GARAŻOWY</span>
+                    <span class="sg-s">·</span>
+                    <span class="sg-p">🗺️ Mapa</span>
+                </h1>
+            </div>
+            <button class="sg-menu-toggle" id="menu-toggle" aria-label="Pokaż/ukryj panel filtrów">☰ Filtry</button>
+        </header>
+
+        <div class="main-container">
+            <div id="map">
+                <div class="map-search-control">
+                    <input type="text" id="search-input" placeholder="🔍 Szukaj adresu lub tytułu...">
+                    <button id="locate-btn" title="Pokaż moją lokalizację">📍</button>
+                </div>
+                <div class="map-legend" id="map-legend">
+                    <div class="legend-row"><span class="legend-dot" style="background:#1d7a46"></span> Garaż – wynajem</div>
+                    <div class="legend-row"><span class="legend-dot" style="background:#0b5394"></span> Garaż – sprzedaż</div>
+                    <div class="legend-row"><span class="legend-dot" style="background:#e69138"></span> Miejsce parkingowe – wynajem</div>
+                    <div class="legend-row"><span class="legend-dot" style="background:#a64d79"></span> Miejsce parkingowe – sprzedaż</div>
+                    <div class="legend-row"><span class="legend-ring"></span> Lokalizacja przybliżona</div>
+                </div>
+            </div>
+
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Widocznych ofert:</span>
+                        <span class="stat-value" id="visible-count">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Garaż – wynajem śr.:</span>
+                        <span class="stat-value" id="stat-garaz-wynajem">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Garaż – sprzedaż śr.:</span>
+                        <span class="stat-value" id="stat-garaz-sprzedaz">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Parking – wynajem śr.:</span>
+                        <span class="stat-value" id="stat-parking-wynajem">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Parking – sprzedaż śr.:</span>
+                        <span class="stat-value" id="stat-parking-sprzedaz">-</span>
+                    </div>
+                    <div class="stat-item scan-time">
+                        <span>🕐 Ostatnia aktualizacja: <strong id="last-scan">-</strong></span>
+                    </div>
+                </div>
+
+                <div class="filters-container">
+                    <div class="filter-group">
+                        <h3>Rodzaj transakcji</h3>
+                        <label>
+                            <input type="checkbox" id="filter-sprzedaz" checked>
+                            <span>Sprzedaż</span>
+                            <span id="count-sprzedaz" class="badge-count">(0)</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="filter-wynajem" checked>
+                            <span>Wynajem</span>
+                            <span id="count-wynajem" class="badge-count">(0)</span>
+                        </label>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>Typ miejsca</h3>
+                        <label>
+                            <input type="checkbox" id="filter-garaz" checked>
+                            <span class="legend-dot" style="background:#1d7a46"></span>
+                            <span>Garaż</span>
+                            <span id="count-garaz" class="badge-count">(0)</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="filter-parking" checked>
+                            <span class="legend-dot" style="background:#e69138"></span>
+                            <span>Miejsce parkingowe</span>
+                            <span id="count-parking" class="badge-count">(0)</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="filter-hala" checked>
+                            <span class="legend-dot" style="background:#674ea7"></span>
+                            <span>Hala / wiata garażowa</span>
+                            <span id="count-hala" class="badge-count">(0)</span>
+                        </label>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>Źródło</h3>
+                        <label>
+                            <input type="checkbox" id="filter-olx" checked>
+                            <span>OLX</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="filter-otodom" checked>
+                            <span>Otodom</span>
+                        </label>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>Dokładność lokalizacji</h3>
+                        <label>
+                            <input type="checkbox" id="filter-precise" checked>
+                            <span>Dokładny adres</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" id="filter-approx" checked>
+                            <span>Przybliżona (dzielnica / brak adresu)</span>
+                        </label>
+                    </div>
+
+                    <div class="filter-group">
+                        <h3>Cena</h3>
+                        <label>
+                            Min: <input type="number" id="price-min" placeholder="0" min="0" step="50"> zł
+                        </label>
+                        <label>
+                            Max: <input type="number" id="price-max" placeholder="150000" min="0" step="50"> zł
+                        </label>
+                        <button id="price-reset" class="btn-secondary">Wyczyść</button>
+                    </div>
+
+                    <div class="filter-group" id="products-group" style="display:none;">
+                        <h3 onclick="toggleProducts()" style="cursor:pointer;user-select:none;">
+                            🏗️ Garaże blaszane na sprzedaż (bez lokalizacji) <span id="products-toggle-icon">▶</span>
+                        </h3>
+                        <div id="products-list" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <div class="sidebar-footer">
+                    <p>Dane z <a href="https://www.olx.pl/nieruchomosci/garaze-parkingi/lublin/" target="_blank" rel="noopener">OLX</a>
+                        i <a href="https://www.otodom.pl/pl/wyniki/sprzedaz/garaz/lubelskie/lublin/lublin/lublin" target="_blank" rel="noopener">Otodom</a>.
+                        Lokalizacje przybliżane na podstawie adresu w tytule ogłoszenia (geokodowanie OpenStreetMap) –
+                        mogą nie być w 100% dokładne. Zawsze weryfikuj adres w treści ogłoszenia.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Offer detail panel -->
+    <div id="offer-panel" class="offer-panel hidden">
+        <button id="offer-panel-close" class="offer-panel-close">✕</button>
+        <div id="offer-panel-content"></div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="assets/vendor/leaflet/leaflet.js"></script>
+    <script src="assets/vendor/leaflet.markercluster/leaflet.markercluster.js"></script>
+    <script src="assets/script.js?v=1"></script>
+</body>
+</html>
