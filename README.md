@@ -9,25 +9,54 @@ zbieranych z OLX i Otodom — w tym samym duchu co pozostałe sonary:
 
 ## Strony
 
-- `index.html` — mapa (Leaflet), z filtrami (transakcja, typ, źródło, dokładność
-  lokalizacji, cena) i panelem szczegółów oferty.
+- `index.html` — mapa (Leaflet). Filtry: transakcja, typ, źródło, dokładność lokalizacji,
+  status (nowe / cena wzrosła / spadła / bez zmian, plus warstwa zniknionych ofert),
+  data dodania (z histogramem 30 dni), cena, ulubione, wyszukiwarka tekstowa. Przybliżone
+  lokalizacje pokazują pinezkę + półprzezroczysty okrąg obszaru zamiast punktu. Narzędzie
+  "punkt odniesienia" — kliknij, żeby ustawić pinezkę (np. swój dom) i filtrować/sortować
+  oferty wg odległości. Panel szczegółów oferty, eksport widocznych ofert do CSV,
+  udostępnianie widoku przez link (filtry w URL).
 - `ostatnie.html` — lista ofert posortowana wg daty dodania/odświeżenia, z filtrami
-  typu i transakcji.
+  typu/transakcji/ulubionych, eksportem CSV i statusami (N/↑/↓) przy każdej pozycji.
 - `top5.html` — najtańsze oferty w każdej kategorii (garaż/parking × sprzedaż/wynajem)
   oraz najniższa cena za m² dla garaży na sprzedaż.
+- `analityka.html` — trend liczby aktywnych ofert i średnich cen w czasie (na podstawie
+  historii skanów), ranking lokalizacji wg liczby ofert, tabela historii skanów.
+- `pominiete.html` — pełna przejrzystość: ogłoszenia z kategorii OLX, które klasyfikator
+  odrzucił, wraz z powodem (inny temat / inna miejscowość / produkt-blaszak bez adresu).
+
+Ulubione oferty (⭐) są zapisywane w localStorage przeglądarki i działają na każdej stronie.
 
 ## Struktura
 
 - `assets/common.js` — helpery współdzielone przez wszystkie strony (kolory, etykiety,
-  wczytywanie `data.json`).
-- `assets/script.js`, `assets/ostatnie.js`, `assets/top5.js` — logika poszczególnych stron.
+  wczytywanie `data.json`, ulubione, eksport CSV, badge statusu oferty).
+- `assets/script.js`, `assets/ostatnie.js`, `assets/top5.js`, `assets/analityka.js`,
+  `assets/pominiete.js` — logika poszczególnych stron.
 - `assets/vendor/` — Leaflet i Leaflet.markercluster zvendorowane lokalnie (bez CDN).
-- `data.json` — dane ofert (generowane przez scraper, wczytywane przez strony).
-- `scraper/scrape.py` — scraper OLX, klasyfikacja ofert, geokodowanie, zapis `data.json`.
+- `data.json` — aktywne (i niedawno zniknięte) oferty, generowane przez scraper.
+- `skipped.json` — ogłoszenia pominięte przez klasyfikator, z powodem (dla `pominiete.html`).
+- `scraper/history.jsonl` — jedna linia JSON na każde uruchomienie scrapera (liczba
+  aktywnych/nowych/zniknionych ofert, średnie ceny, % adresów dokładnych) — źródło danych
+  dla `analityka.html`.
+- `scraper/scrape.py` — scraper OLX, klasyfikacja ofert, geokodowanie, śledzenie historii
+  cen/dat między uruchomieniami, zapis `data.json` / `skipped.json` / `history.jsonl`.
 - `scraper/streets.py` + `scraper/lublin_streets.json` — dopasowywanie nazw ulic z
   tytułów ogłoszeń do rzeczywistych ulic Lublina (snapshot z OpenStreetMap/Overpass),
   łącznie z potocznymi aliasami (np. "ul. Sowińskiego" dla oficjalnej "Józefa Sowińskiego").
 - `.github/workflows/scrape.yml` — cykliczne odświeżanie danych i deploy na GitHub Pages.
+
+## Śledzenie historii ofert
+
+Każde uruchomienie scrapera wczytuje poprzedni `data.json` i scala go ze świeżo
+zescrapowanymi ofertami:
+
+- oferta widziana po raz pierwszy → `is_new: true`, trafia do warstwy "Nowe";
+- zmiana ceny → `price_trend: "up"/"down"`, poprzednia cena i data zmiany są zapamiętane;
+- oferta, która zniknęła z OLX → zostaje na mapie jako nieaktywna (wyszarzona, wyłączona
+  domyślnie) przez 30 dni, potem jest usuwana na stałe.
+
+Dzięki temu mapa pokazuje nie tylko stan bieżący, ale i to, co się zmieniło.
 
 ## Źródła danych
 
