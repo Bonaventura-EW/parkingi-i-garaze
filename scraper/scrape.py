@@ -13,10 +13,8 @@ Usage:
 Writes: data.json (repo root), scraper/geocode_cache.json (cache, committed
 so re-runs don't re-hit Nominatim for addresses already resolved).
 """
-import hashlib
 import json
 import os
-import random
 import re
 import sys
 import time
@@ -44,22 +42,40 @@ USER_AGENT_NOMINATIM = "parkingi-i-garaze-sonar/0.1 (github.com/Bonaventura-EW/p
 
 LUBLIN_BBOX = (22.40, 51.15, 22.70, 51.32)  # lon_min, lat_min, lon_max, lat_max
 LUBLIN_CENTER = (51.2465, 22.5684)
+# Lublin's main street, used as the last-resort anchor when an offer has no
+# usable location info at all (not even a district name).
+FALLBACK_STREET = "Krakowskie Przedmieście"
 
-DISTRICTS = {
-    "czechow": (51.2732, 22.5537), "czechów": (51.2732, 22.5537),
-    "weglin": (51.2237, 22.4936), "węglin": (51.2237, 22.4936),
-    "weglinek": (51.2237, 22.4936), "węglinek": (51.2237, 22.4936),
-    "czuby": (51.2211, 22.5340), "kalinowszczyzna": (51.2571, 22.5865),
-    "ponikwoda": (51.2680, 22.5806), "rury": (51.2373, 22.5285),
-    "wrotkow": (51.2224, 22.5652), "wrotków": (51.2224, 22.5652),
-    "slawinek": (51.2695, 22.5225), "sławinek": (51.2695, 22.5225),
-    "srodmiescie": (51.2489, 22.5610), "śródmieście": (51.2489, 22.5610),
-    "bronowice": (51.2601, 22.5083), "tatary": (51.2569, 22.5972),
-    "botanik": (51.2296, 22.5013), "lsm": (51.2582, 22.5433),
-    "dziesiata": (51.2277, 22.5486), "dziesiąta": (51.2277, 22.5486),
-    "kosminek": (51.2603, 22.5877), "kośminek": (51.2603, 22.5877),
-    "felin": (51.2130, 22.5540), "konstantynow": (51.2380, 22.4930),
-    "konstantynów": (51.2380, 22.4930),
+DISTRICTS = list(dict.fromkeys([
+    "czechow", "czechów", "weglin", "węglin", "weglinek", "węglinek", "czuby",
+    "kalinowszczyzna", "ponikwoda", "rury", "wrotkow", "wrotków", "slawinek",
+    "sławinek", "srodmiescie", "śródmieście", "bronowice", "tatary", "botanik",
+    "lsm", "dziesiata", "dziesiąta", "kosminek", "kośminek", "felin",
+    "konstantynow", "konstantynów", "glusk", "głusk",
+]))
+
+# A real, verified-to-exist Lublin street standing in for each district, so an
+# offer with only a district-level match still gets placed on an actual road
+# instead of a fabricated point in the middle of nowhere. Streets are resolved
+# to coordinates via Nominatim (same cache as everything else); districts not
+# listed here fall back to geocoding the district/neighbourhood name itself.
+DISTRICT_STREET = {
+    "czechow": "Koncertowa", "czechów": "Koncertowa",
+    "weglin": "Onyksowa", "węglin": "Onyksowa",
+    "weglinek": "Onyksowa", "węglinek": "Onyksowa",
+    "czuby": "Filaretów",
+    "kalinowszczyzna": "Kalinowszczyzna",
+    "ponikwoda": "Ponikwoda",
+    "wrotkow": "Wrotkowska", "wrotków": "Wrotkowska",
+    "slawinek": "Sławinkowska", "sławinek": "Sławinkowska",
+    "srodmiescie": "Krakowskie Przedmieście", "śródmieście": "Krakowskie Przedmieście",
+    "bronowice": "Bronowicka",
+    "tatary": "Tatarska",
+    "lsm": "Wojciechowska",
+    "dziesiata": "Dziesiąta", "dziesiąta": "Dziesiąta",
+    "konstantynow": "Konstantynów", "konstantynów": "Konstantynów",
+    "abramowice": "Abramowicka",
+    "glusk": "Głuska", "głusk": "Głuska",
 }
 
 RENT_KEYWORDS = ["wynajm", "wynajem", "do wynajęcia", "na wynajem", "wynajmę", "wynajme"]
@@ -229,7 +245,7 @@ def find_address(title):
     if street:
         return street, number, "street"
     tl = title.lower()
-    for key, _ in DISTRICTS.items():
+    for key in DISTRICTS:
         if key in tl:
             return key, "", "district"
     return None, None, None
@@ -318,18 +334,24 @@ def geocode_items(items, cache):
     return items
 
 
-def jitter(lat, lon, seed, spread=0.006):
-    h = int(hashlib.md5(seed.encode("utf-8")).hexdigest(), 16)
-    rnd = random.Random(h)
-    return lat + (rnd.random() - 0.5) * spread, lon + (rnd.random() - 0.5) * spread
-
-
-def district_coords(key):
-    key = key.strip().lower()
-    for k, v in DISTRICTS.items():
-        if k in key or key in k:
-            return v
-    return LUBLIN_CENTER
+def resolve_area_point(key, cache):
+    """Coordinates to use for a district-level (or unknown-location) match: a
+    real point on an actual street/place in that area, resolved via Nominatim,
+    rather than a fabricated offset. Every offer sharing the same area lands
+    on the exact same point (shown as one pin with a count), which is more
+    honest than scattering fake positions around when we don't know the
+    real address.
+    """
+    street = DISTRICT_STREET.get(key.strip().lower())
+    if street:
+        r = nominatim(f"{street}, Lublin, Polska", cache)
+        if r:
+            return r["lat"], r["lon"]
+    r = nominatim(f"{key}, Lublin, Polska", cache)
+    if r:
+        return r["lat"], r["lon"]
+    r = nominatim(f"{FALLBACK_STREET}, Lublin, Polska", cache)
+    return (r["lat"], r["lon"]) if r else LUBLIN_CENTER
 
 
 def price_stats(subset):
@@ -416,7 +438,7 @@ def merge_with_history(on_map, previous_offers, now):
     return on_map, new_count, newly_inactive_count
 
 
-def assemble(items, previous_offers, now):
+def assemble(items, previous_offers, now, cache):
     on_map, off_map = [], []
     for it in items:
         if it["is_product"]:
@@ -427,12 +449,12 @@ def assemble(items, previous_offers, now):
             precision = it["precision"]
             address = it.get("resolved_address") or it["street"]
         elif it["addr_kind"] == "district" and it["street"]:
-            base = district_coords(it["street"])
-            lat, lon = jitter(base[0], base[1], it["id"], spread=0.01)
+            lat, lon = resolve_area_point(it["street"], cache)
             precision = "district"
             address = it["street"].strip().title()
         else:
-            lat, lon = jitter(LUBLIN_CENTER[0], LUBLIN_CENTER[1], it["id"], spread=0.03)
+            r = nominatim(f"{FALLBACK_STREET}, Lublin, Polska", cache)
+            lat, lon = (r["lat"], r["lon"]) if r else LUBLIN_CENTER
             precision = "unknown"
             address = "Lublin (lokalizacja nieznana)"
 
@@ -504,12 +526,12 @@ def main():
 
     cache = load_cache()
     items = geocode_items(items, cache)
-    with open(CACHE_PATH, "w", encoding="utf-8") as f:
-        json.dump(cache, f, ensure_ascii=False, indent=2)
 
     previous_offers = load_previous_offers()
     now = datetime.now(timezone.utc)
-    data, scan_meta = assemble(items, previous_offers, now)
+    data, scan_meta = assemble(items, previous_offers, now, cache)
+    with open(CACHE_PATH, "w", encoding="utf-8") as f:
+        json.dump(cache, f, ensure_ascii=False, indent=2)
     with open(DATA_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     append_history(scan_meta)

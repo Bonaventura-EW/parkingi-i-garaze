@@ -18,9 +18,6 @@
     // location — no automatic proximity clustering into count bubbles.
     var clusterGroup = L.layerGroup();
     map.addLayer(clusterGroup);
-    var approxRadiusLayer = L.layerGroup().addTo(map);
-
-    var APPROX_RADIUS_M = { district: 550, unknown: 1300 };
 
     var state = {
         data: null,
@@ -238,7 +235,6 @@
     function applyFilters() {
         var f = currentFilters();
         clusterGroup.clearLayers();
-        approxRadiusLayer.clearLayers();
         var visible = [];
         var counts = { sprzedaz: 0, wynajem: 0, garaz: 0, parking: 0, hala: 0 };
         var inactiveTotal = 0;
@@ -259,21 +255,6 @@
             var marker = L.marker([m.coords.lat, m.coords.lon], { icon: makeIcon(passing) });
             marker.on("click", function () { openPanel(passing); });
             clusterGroup.addLayer(marker);
-
-            var approxPrecision = passing.every(function (o) { return o.precision === "district"; })
-                ? "district"
-                : (passing.every(function (o) { return o.precision !== "exact" && o.precision !== "street"; }) ? "unknown" : null);
-            if (approxPrecision) {
-                L.circle([m.coords.lat, m.coords.lon], {
-                    radius: APPROX_RADIUS_M[approxPrecision],
-                    color: colorFor(passing[0]),
-                    weight: 1,
-                    fillColor: colorFor(passing[0]),
-                    fillOpacity: 0.08,
-                    dashArray: "4,6",
-                    interactive: false,
-                }).addTo(approxRadiusLayer);
-            }
         });
 
         document.getElementById("visible-count").textContent = visible.length;
