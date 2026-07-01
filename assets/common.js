@@ -34,6 +34,24 @@ var SG = (function () {
         });
     }
 
+    function offerStatus(o) {
+        if (o.is_new) return "new";
+        if (o.price_trend === "up") return "up";
+        if (o.price_trend === "down") return "down";
+        return "unchanged";
+    }
+
+    var STATUS_BADGES = {
+        new: '<span class="badge-pill badge-crimson" title="Nowa oferta">N</span>',
+        up: '<span class="badge-pill badge-red" title="Cena wzrosła">↑</span>',
+        down: '<span class="badge-pill badge-green" title="Cena spadła">↓</span>',
+        unchanged: "",
+    };
+
+    function statusBadgeHtml(o) {
+        return STATUS_BADGES[offerStatus(o)] || "";
+    }
+
     function precisionLabel(o) {
         return o.precision === "exact" || o.precision === "street"
             ? "adres dokładny"
@@ -61,6 +79,8 @@ var SG = (function () {
         fmtPrice: fmtPrice,
         colorFor: colorFor,
         escapeHtml: escapeHtml,
+        offerStatus: offerStatus,
+        statusBadgeHtml: statusBadgeHtml,
         precisionLabel: precisionLabel,
         flattenOffers: flattenOffers,
         loadData: loadData,

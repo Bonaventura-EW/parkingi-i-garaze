@@ -24,16 +24,19 @@
 
     function makeIcon(offers) {
         var main = offers[0];
-        var color = colorFor(main);
+        var color = main.active === false ? "#9ca3af" : colorFor(main);
         var approx = offers.every(function (o) { return o.precision !== "exact" && o.precision !== "street"; });
+        var anyInactive = offers.some(function (o) { return o.active === false; });
         var count = offers.length;
+        var size = count > 1 ? 26 : 18;
         var html =
-            '<div style="background:' + color + ";width:" + (count > 1 ? 26 : 18) + "px;height:" + (count > 1 ? 26 : 18) +
+            '<div style="background:' + color + ";width:" + size + "px;height:" + size +
             "px;border-radius:50%;border:2px " + (approx ? "dashed" : "solid") + " #fff;box-shadow:0 0 0 1px " + color +
+            (anyInactive ? ";opacity:0.6" : "") +
             ';display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;">' +
             (count > 1 ? count : "") +
             "</div>";
-        return L.divIcon({ html: html, className: "sg-marker", iconSize: [count > 1 ? 26 : 18, count > 1 ? 26 : 18] });
+        return L.divIcon({ html: html, className: "sg-marker", iconSize: [size, size] });
     }
 
     function offerCardHtml(o) {
@@ -43,16 +46,32 @@
             ? '<div class="offer-meta">📐 ' + o.area_m2 + " m²" +
               (o.price_per_m2 ? " · " + o.price_per_m2.toLocaleString("pl-PL") + " zł/m²" : "") + "</div>"
             : "";
+        var trendLine = "";
+        if (o.price_trend && o.previous_price != null) {
+            var arrow = o.price_trend === "up" ? "podrożało" : "potaniało";
+            trendLine = '<div class="offer-meta">' + SG.statusBadgeHtml(o) + " " + arrow + " z " +
+                o.previous_price.toLocaleString("pl-PL") + " zł (" + (o.price_changed_at || "") + ")</div>";
+        }
+        var inactiveLine = o.active === false
+            ? '<div class="offer-meta offer-inactive-notice">👻 Ogłoszenie zniknęło z OLX — ostatnio widziane: ' + escapeHtml(o.last_seen || "") + "</div>"
+            : "";
+        var firstSeenLine = o.first_seen
+            ? '<div class="offer-meta">🕐 Pierwszy raz zauważone: ' + escapeHtml(o.first_seen) + "</div>"
+            : "";
         return (
-            '<div class="offer-card">' +
+            '<div class="offer-card' + (o.active === false ? " offer-card-inactive" : "") + '">' +
+            (o.is_new ? SG.statusBadgeHtml(o) + " " : "") +
             '<span class="offer-tag">' + typeLabel + "</span>" +
             '<span class="offer-tag">' + txLabel + "</span>" +
             '<span class="offer-tag">' + o.source + "</span>" +
             "<h4>" + escapeHtml(o.title) + "</h4>" +
             '<div class="offer-price">' + fmtPrice(o) + "</div>" +
             areaLine +
+            trendLine +
             '<div class="offer-meta">📍 ' + escapeHtml(o.address) + " (" + SG.precisionLabel(o) + ")</div>" +
             '<div class="offer-meta">' + escapeHtml(o.loc_raw || "") + "</div>" +
+            firstSeenLine +
+            inactiveLine +
             '<a class="offer-link" href="' + o.url + '" target="_blank" rel="noopener">Zobacz ogłoszenie →</a>' +
             "</div>"
         );
@@ -80,6 +99,11 @@
             otodom: document.getElementById("filter-otodom").checked,
             precise: document.getElementById("filter-precise").checked,
             approx: document.getElementById("filter-approx").checked,
+            statusNew: document.getElementById("filter-status-new").checked,
+            statusUp: document.getElementById("filter-status-up").checked,
+            statusDown: document.getElementById("filter-status-down").checked,
+            statusUnchanged: document.getElementById("filter-status-unchanged").checked,
+            showInactive: document.getElementById("filter-show-inactive").checked,
             priceMin: parseFloat(document.getElementById("price-min").value) || 0,
             priceMax: parseFloat(document.getElementById("price-max").value) || Infinity,
             query: (document.getElementById("search-input").value || "").toLowerCase().trim(),
@@ -87,8 +111,12 @@
     }
 
     var TYPE_KEY = { garaz: "garaz", miejsce_parkingowe: "parking", hala_wiata: "hala" };
+    var STATUS_FILTER_KEY = { new: "statusNew", up: "statusUp", down: "statusDown", unchanged: "statusUnchanged" };
 
     function offerPasses(o, f) {
+        if (o.active === false) {
+            return f.showInactive;
+        }
         if (o.transaction === "sprzedaz" && !f.sprzedaz) return false;
         if (o.transaction === "wynajem" && !f.wynajem) return false;
         var tk = TYPE_KEY[o.type] || "garaz";
@@ -100,6 +128,7 @@
         var isPrecise = o.precision === "exact" || o.precision === "street";
         if (isPrecise && !f.precise) return false;
         if (!isPrecise && !f.approx) return false;
+        if (!f[STATUS_FILTER_KEY[SG.offerStatus(o)]]) return false;
         if (o.price != null && (o.price < f.priceMin || o.price > f.priceMax)) return false;
         if (f.query) {
             var hay = (o.title + " " + o.address).toLowerCase();
@@ -124,6 +153,11 @@
         clusterGroup.clearLayers();
         var visible = [];
         var counts = { sprzedaz: 0, wynajem: 0, garaz: 0, parking: 0, hala: 0 };
+        var inactiveTotal = 0;
+
+        state.allMarkers.forEach(function (m) {
+            inactiveTotal += m.offers.filter(function (o) { return o.active === false; }).length;
+        });
 
         state.allMarkers.forEach(function (m) {
             var passing = m.offers.filter(function (o) { return offerPasses(o, f); });
@@ -145,6 +179,7 @@
         document.getElementById("count-garaz").textContent = "(" + (counts.garaz || 0) + ")";
         document.getElementById("count-parking").textContent = "(" + (counts.parking || 0) + ")";
         document.getElementById("count-hala").textContent = "(" + (counts.hala || 0) + ")";
+        document.getElementById("count-inactive").textContent = "(" + inactiveTotal + ")";
 
         var byCat = function (type, tx) {
             return visible.filter(function (o) { return o.type === type && o.transaction === tx; });
@@ -209,6 +244,8 @@
     [
         "filter-sprzedaz", "filter-wynajem", "filter-garaz", "filter-parking", "filter-hala",
         "filter-olx", "filter-otodom", "filter-precise", "filter-approx",
+        "filter-status-new", "filter-status-up", "filter-status-down", "filter-status-unchanged",
+        "filter-show-inactive",
     ].forEach(function (id) {
         document.getElementById(id).addEventListener("change", applyFilters);
     });
