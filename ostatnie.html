@@ -43,14 +43,14 @@
                     <option value="miejsce_parkingowe">Miejsce parkingowe</option>
                     <option value="hala_wiata">Hala / wiata</option>
                 </select></label>
-                <label><select id="list-filter-transaction">
+                <label><span class="visually-hidden">Rodzaj transakcji</span><select id="list-filter-transaction">
                     <option value="all">Sprzedaż i wynajem</option>
                     <option value="sprzedaz">Tylko sprzedaż</option>
                     <option value="wynajem">Tylko wynajem</option>
                 </select></label>
-                <span id="list-count" class="list-count"></span>
+                <span id="list-count" class="list-count" aria-live="polite"></span>
             </div>
-            <div id="offer-list" class="offer-list"></div>
+            <div id="offer-list" class="offer-list" aria-live="polite"></div>
         </main>
     </div>
 

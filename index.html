@@ -61,11 +61,13 @@
             <button class="sg-menu-toggle" id="menu-toggle" aria-label="Pokaż/ukryj panel filtrów">☰ Filtry</button>
         </header>
 
-        <div class="main-container">
-            <div id="map">
+        <a class="skip-link" href="#sidebar">Przejdź do filtrów</a>
+        <main class="main-container">
+            <div id="map" role="application" aria-label="Mapa ofert garaży i miejsc parkingowych w Lublinie">
                 <div class="map-search-control">
+                    <label for="search-input" class="visually-hidden">Szukaj adresu lub tytułu ogłoszenia</label>
                     <input type="text" id="search-input" placeholder="🔍 Szukaj adresu lub tytułu...">
-                    <button id="locate-btn" title="Pokaż moją lokalizację">📍</button>
+                    <button id="locate-btn" aria-label="Pokaż moją lokalizację na mapie" title="Pokaż moją lokalizację">📍</button>
                 </div>
                 <div class="map-legend" id="map-legend">
                     <div class="legend-row"><span class="legend-dot" style="background:#1d7a46"></span> Garaż – wynajem</div>
@@ -77,7 +79,7 @@
             </div>
 
             <aside class="sidebar" id="sidebar">
-                <div class="sidebar-stats">
+                <div class="sidebar-stats" aria-live="polite">
                     <p class="sidebar-stats-title">Statystyki widocznych ofert</p>
                     <div class="stat-item">
                         <span class="stat-label">Widocznych ofert:</span>
@@ -191,12 +193,12 @@
                         mogą nie być w 100% dokładne. Zawsze weryfikuj adres w treści ogłoszenia.</p>
                 </div>
             </aside>
-        </div>
+        </main>
     </div>
 
     <!-- Offer detail panel -->
-    <div id="offer-panel" class="offer-panel hidden">
-        <button id="offer-panel-close" class="offer-panel-close">✕</button>
+    <div id="offer-panel" class="offer-panel hidden" role="dialog" aria-modal="true" aria-label="Szczegóły oferty">
+        <button id="offer-panel-close" class="offer-panel-close" aria-label="Zamknij szczegóły oferty">✕</button>
         <div id="offer-panel-content"></div>
     </div>
 
