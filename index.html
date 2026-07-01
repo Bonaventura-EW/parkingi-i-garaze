@@ -233,6 +233,24 @@
                     </div>
 
                     <div class="filter-group">
+                        <h3>📍 Punkt odniesienia</h3>
+                        <p style="font-size:12px;color:#6b7280;margin:0 0 6px 0;">Kliknij przycisk, a potem kliknij dowolne miejsce na mapie, żeby filtrować/sortować oferty wg odległości od niego (np. Twój dom lub praca).</p>
+                        <button id="set-refpoint-btn" class="btn-secondary">🎯 Ustaw punkt na mapie</button>
+                        <div id="refpoint-controls" style="display:none;margin-top:8px;">
+                            <label>
+                                Promień: <select id="refpoint-radius">
+                                    <option value="500">500 m</option>
+                                    <option value="1000" selected>1 km</option>
+                                    <option value="2000">2 km</option>
+                                    <option value="5000">5 km</option>
+                                    <option value="999999">bez limitu (tylko sortuj)</option>
+                                </select>
+                            </label>
+                            <button id="clear-refpoint-btn" class="btn-secondary">✕ Usuń punkt</button>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
                         <h3>Cena</h3>
                         <label>
                             Min: <input type="number" id="price-min" placeholder="0" min="0" step="50"> zł

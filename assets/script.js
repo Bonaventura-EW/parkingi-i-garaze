@@ -23,7 +23,10 @@
     var state = {
         data: null,
         allMarkers: [], // {marker, offers, address, precision}
+        refPoint: null, // L.LatLng or null
+        refPointArmed: false,
     };
+    var refMarker = null;
 
     function makeIcon(offers) {
         var main = offers[0];
@@ -42,6 +45,10 @@
             (count > 1 ? count : "") +
             "</div>";
         return L.divIcon({ html: html, className: "sg-marker", iconSize: [size, size] });
+    }
+
+    function fmtDistance(m) {
+        return m >= 1000 ? (m / 1000).toFixed(1).replace(".0", "") + " km" : m + " m";
     }
 
     function offerCardHtml(o) {
@@ -63,6 +70,9 @@
         var firstSeenLine = o.first_seen
             ? '<div class="offer-meta">🕐 Pierwszy raz zauważone: ' + escapeHtml(o.first_seen) + "</div>"
             : "";
+        var distanceLine = o._distanceM != null
+            ? '<div class="offer-meta">📏 ' + fmtDistance(o._distanceM) + " od punktu odniesienia</div>"
+            : "";
         return (
             '<div class="offer-card' + (o.active === false ? " offer-card-inactive" : "") + '">' +
             SG.favoriteBtnHtml(o.id, "offer-card-fav") +
@@ -77,6 +87,7 @@
             '<div class="offer-meta">📍 ' + escapeHtml(o.address) + " (" + SG.precisionLabel(o) + ")</div>" +
             '<div class="offer-meta">' + escapeHtml(o.loc_raw || "") + "</div>" +
             firstSeenLine +
+            distanceLine +
             inactiveLine +
             '<a class="offer-link" href="' + o.url + '" target="_blank" rel="noopener">Zobacz ogłoszenie →</a>' +
             "</div>"
@@ -161,6 +172,8 @@
             query: (document.getElementById("search-input").value || "").toLowerCase().trim(),
             daysFilter: document.getElementById("date-quick-filter").value,
             favoritesOnly: document.getElementById("filter-favorites-only").checked,
+            refPoint: state.refPoint,
+            refRadius: parseInt(document.getElementById("refpoint-radius").value, 10),
         };
     }
 
@@ -178,6 +191,12 @@
     var STATUS_FILTER_KEY = { new: "statusNew", up: "statusUp", down: "statusDown", unchanged: "statusUnchanged" };
 
     function offerPasses(o, f) {
+        if (f.refPoint) {
+            o._distanceM = Math.round(f.refPoint.distanceTo(L.latLng(o.lat, o.lon)));
+            if (o._distanceM > f.refRadius) return false;
+        } else {
+            o._distanceM = null;
+        }
         if (f.favoritesOnly && !SG.favorites.has(o.id)) return false;
         if (o.active === false) {
             return f.showInactive;
@@ -420,6 +439,49 @@
             }).addTo(map);
         });
     });
+
+    function setRefPoint(latlng) {
+        state.refPoint = latlng;
+        if (refMarker) map.removeLayer(refMarker);
+        refMarker = L.marker(latlng, {
+            draggable: true,
+            icon: L.divIcon({
+                html: '<div style="font-size:26px;line-height:1;">🎯</div>',
+                className: "sg-refpoint-marker",
+                iconSize: [26, 26],
+                iconAnchor: [13, 13],
+            }),
+        }).addTo(map);
+        refMarker.on("drag", function (ev) {
+            state.refPoint = ev.target.getLatLng();
+            applyFilters();
+        });
+        document.getElementById("refpoint-controls").style.display = "block";
+        document.getElementById("map").style.cursor = "";
+        applyFilters();
+    }
+
+    document.getElementById("set-refpoint-btn").addEventListener("click", function () {
+        state.refPointArmed = true;
+        document.getElementById("map").style.cursor = "crosshair";
+        this.textContent = "🎯 Kliknij na mapie...";
+    });
+
+    map.on("click", function (ev) {
+        if (!state.refPointArmed) return;
+        state.refPointArmed = false;
+        document.getElementById("set-refpoint-btn").textContent = "🎯 Ustaw punkt na mapie";
+        setRefPoint(ev.latlng);
+    });
+
+    document.getElementById("clear-refpoint-btn").addEventListener("click", function () {
+        state.refPoint = null;
+        if (refMarker) { map.removeLayer(refMarker); refMarker = null; }
+        document.getElementById("refpoint-controls").style.display = "none";
+        applyFilters();
+    });
+
+    document.getElementById("refpoint-radius").addEventListener("change", applyFilters);
 
     window.toggleProducts = function () {
         var list = document.getElementById("products-list");
