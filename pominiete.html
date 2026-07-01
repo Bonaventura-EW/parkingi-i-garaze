@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SONAR GARAŻOWY - Top 5 najtańszych ofert</title>
-    <meta name="description" content="Najtańsze oferty garaży i miejsc parkingowych w Lublinie.">
+    <title>SONAR GARAŻOWY - Pominięte ogłoszenia</title>
+    <meta name="description" content="Ogłoszenia znalezione w kategorii OLX, które zostały pominięte przez klasyfikator, i dlaczego.">
     <meta name="theme-color" content="#16222e">
-    <link rel="canonical" href="https://bonaventura-ew.github.io/parkingi-i-garaze/top5.html">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="SONAR GARAŻOWY">
-    <meta property="og:title" content="SONAR GARAŻOWY - Top 5 najtańszych ofert">
-    <meta property="og:description" content="Najtańsze oferty garaży i miejsc parkingowych w Lublinie.">
-    <meta property="og:url" content="https://bonaventura-ew.github.io/parkingi-i-garaze/top5.html">
+    <link rel="canonical" href="https://bonaventura-ew.github.io/parkingi-i-garaze/pominiete.html">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="stylesheet" href="assets/style.css?v=1">
 </head>
@@ -32,24 +27,38 @@
                 <h1>
                     <span class="sg-b">SONAR GARAŻOWY</span>
                     <span class="sg-s">·</span>
-                    <span class="sg-p">🏆 Top 5</span>
+                    <span class="sg-p">🐛 Pominięte</span>
                 </h1>
             </div>
             <nav class="sg-nav">
                 <a href="index.html">🗺️ Mapa</a>
                 <a href="ostatnie.html">🆕 Ostatnie</a>
-                <a href="top5.html" class="active">🏆 Top 5</a>
+                <a href="top5.html">🏆 Top 5</a>
                 <a href="analityka.html">📈 Analityka</a>
-                <a href="pominiete.html">🐛 Pominięte</a>
+                <a href="pominiete.html" class="active">🐛 Pominięte</a>
             </nav>
         </header>
 
         <main class="list-page">
-            <div id="top5-sections"></div>
+            <p style="color:#6b7280;font-size:13px;margin-top:0;">
+                Ogłoszenia znalezione w kategorii OLX „garaże i parkingi” dla Lublina, które <strong>nie trafiły</strong>
+                na mapę — dla przejrzystości, żeby było widać co i dlaczego zostało odrzucone przez klasyfikator.
+                Ostatnia aktualizacja: <strong id="skipped-generated-at">-</strong>
+            </p>
+            <div class="list-page-toolbar">
+                <label>Powód: <select id="reason-filter">
+                    <option value="all">Wszystkie</option>
+                    <option value="inny_temat">Inny temat (nie garaż/parking)</option>
+                    <option value="inna_miejscowosc">Inna miejscowość</option>
+                    <option value="produkt_blaszak">Produkt (blaszak na sprzedaż, bez adresu)</option>
+                </select></label>
+                <span id="skipped-count" class="list-count"></span>
+            </div>
+            <div id="skipped-list" class="offer-list"></div>
         </main>
     </div>
 
     <script src="assets/common.js?v=1"></script>
-    <script src="assets/top5.js?v=1"></script>
+    <script src="assets/pominiete.js?v=1"></script>
 </body>
 </html>

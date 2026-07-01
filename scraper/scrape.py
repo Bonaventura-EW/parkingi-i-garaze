@@ -30,6 +30,7 @@ from streets import find_street
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "geocode_cache.json")
 DATA_PATH = os.path.join(ROOT, "data.json")
+SKIPPED_PATH = os.path.join(ROOT, "skipped.json")
 HISTORY_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "history.jsonl")
 
 INACTIVE_RETENTION_DAYS = 30
@@ -236,11 +237,15 @@ def find_address(title):
 
 def classify_items(raw_items):
     items = []
+    skipped = []
     for r in raw_items:
         title = r["title"] or ""
         if any(k in title.lower() for k in EXCLUDE_KEYWORDS):
+            skipped.append({"id": r["id"], "title": title, "link": r["link"], "reason": "inny_temat"})
             continue
-        if other_city_mentioned(title):
+        other_city = other_city_mentioned(title)
+        if other_city:
+            skipped.append({"id": r["id"], "title": title, "link": r["link"], "reason": "inna_miejscowosc", "detail": other_city})
             continue
         price, negotiable = clean_price(r["price_raw"])
         street, number, kind = find_address(title)
@@ -254,7 +259,7 @@ def classify_items(raw_items):
             "addr_kind": kind, "loc_raw": r["loc_raw"], "area_m2": area, "price_per_m2": price_per_m2,
             "source": "otodom" if "otodom.pl" in (r["link"] or "") else "olx",
         })
-    return items
+    return items, skipped
 
 
 def load_cache():
@@ -494,8 +499,8 @@ def main():
     raw_items = scrape_olx()
     print(f"Fetched {len(raw_items)} raw cards", file=sys.stderr)
 
-    items = classify_items(raw_items)
-    print(f"Classified {len(items)} garage/parking offers", file=sys.stderr)
+    items, skipped = classify_items(raw_items)
+    print(f"Classified {len(items)} garage/parking offers, skipped {len(skipped)}", file=sys.stderr)
 
     cache = load_cache()
     items = geocode_items(items, cache)
@@ -508,6 +513,11 @@ def main():
     with open(DATA_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
     append_history(scan_meta)
+
+    for p in data["off_map_products"]:
+        skipped.append({"id": p["id"], "title": p["title"], "link": p["url"], "reason": "produkt_blaszak"})
+    with open(SKIPPED_PATH, "w", encoding="utf-8") as f:
+        json.dump({"generated_at": data["generated_at"], "skipped": skipped}, f, ensure_ascii=False, indent=2)
 
     print(
         f"Wrote {DATA_PATH}: {len(data['markers'])} markers, {data['stats']['total_offers']} active offers "
