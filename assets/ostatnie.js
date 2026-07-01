@@ -20,6 +20,7 @@
             '<div class="offer-row-meta">🕐 ' + SG.escapeHtml(o.date_label || o.loc_raw || "brak daty") + "</div>" +
             "</div>" +
             '<div class="offer-row-price">' + SG.fmtPrice(o) + "</div>" +
+            SG.favoriteBtnHtml(o.id, "offer-row-fav") +
             "</a>"
         );
     }
@@ -41,8 +42,10 @@
     function render() {
         var typeFilter = document.getElementById("list-filter-type").value;
         var txFilter = document.getElementById("list-filter-transaction").value;
+        var favoritesOnly = document.getElementById("list-filter-favorites").checked;
         var filtered = allOffers.filter(function (o) {
             if (o.active === false) return false;
+            if (favoritesOnly && !SG.favorites.has(o.id)) return false;
             if (typeFilter !== "all" && o.type !== typeFilter) return false;
             if (txFilter !== "all" && o.transaction !== txFilter) return false;
             return true;
@@ -65,4 +68,8 @@
 
     document.getElementById("list-filter-type").addEventListener("change", render);
     document.getElementById("list-filter-transaction").addEventListener("change", render);
+    document.getElementById("list-filter-favorites").addEventListener("change", render);
+    SG.wireFavoriteButtons(document.getElementById("offer-list"), function () {
+        if (document.getElementById("list-filter-favorites").checked) render();
+    });
 })();

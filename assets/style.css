@@ -254,6 +254,19 @@ html, body {
     color: #fff;
     padding: 0 4px;
 }
+.fav-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    color: #c7ccd1;
+    padding: 2px 4px;
+}
+.fav-btn:hover { color: #f59e0b; }
+.fav-btn-active { color: #f59e0b; }
+.offer-row-fav { margin-left: 8px; flex-shrink: 0; }
+.offer-card-fav { float: right; }
 .badge-crimson { background: #dc2626; }
 .badge-red { background: #e11d48; }
 .badge-green { background: #16a34a; }
@@ -316,6 +329,7 @@ html, body {
     cursor: pointer;
     font-size: 14px;
 }
+#offer-panel-content { padding-top: 20px; }
 .offer-card { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
 .offer-card-inactive { opacity: 0.7; }
 .offer-inactive-notice { color: #9333ea; font-style: italic; }

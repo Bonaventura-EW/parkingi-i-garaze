@@ -65,6 +65,7 @@
             : "";
         return (
             '<div class="offer-card' + (o.active === false ? " offer-card-inactive" : "") + '">' +
+            SG.favoriteBtnHtml(o.id, "offer-card-fav") +
             (o.is_new ? SG.statusBadgeHtml(o) + " " : "") +
             '<span class="offer-tag">' + typeLabel + "</span>" +
             '<span class="offer-tag">' + txLabel + "</span>" +
@@ -131,6 +132,10 @@
         panel.classList.remove("hidden");
     }
 
+    SG.wireFavoriteButtons(document.getElementById("offer-panel-content"), function () {
+        updateFavoritesCount();
+    });
+
     document.getElementById("offer-panel-close").addEventListener("click", function () {
         document.getElementById("offer-panel").classList.add("hidden");
     });
@@ -155,7 +160,12 @@
             priceMax: parseFloat(document.getElementById("price-max").value) || Infinity,
             query: (document.getElementById("search-input").value || "").toLowerCase().trim(),
             daysFilter: document.getElementById("date-quick-filter").value,
+            favoritesOnly: document.getElementById("filter-favorites-only").checked,
         };
+    }
+
+    function updateFavoritesCount() {
+        document.getElementById("count-favorites").textContent = "(" + SG.favorites.count() + ")";
     }
 
     function dateCutoffIso(days) {
@@ -168,6 +178,7 @@
     var STATUS_FILTER_KEY = { new: "statusNew", up: "statusUp", down: "statusDown", unchanged: "statusUnchanged" };
 
     function offerPasses(o, f) {
+        if (f.favoritesOnly && !SG.favorites.has(o.id)) return false;
         if (o.active === false) {
             return f.showInactive;
         }
@@ -332,6 +343,7 @@
             document.getElementById("last-scan").textContent = data.generated_at || "-";
             renderProducts(data.off_map_products);
             renderDateHistogram(state.allMarkers);
+            updateFavoritesCount();
             applyFilters();
         })
         .catch(function (err) {
@@ -348,7 +360,7 @@
         "filter-sprzedaz", "filter-wynajem", "filter-garaz", "filter-parking", "filter-hala",
         "filter-olx", "filter-otodom", "filter-precise", "filter-approx",
         "filter-status-new", "filter-status-up", "filter-status-down", "filter-status-unchanged",
-        "filter-show-inactive", "date-quick-filter",
+        "filter-show-inactive", "date-quick-filter", "filter-favorites-only",
     ].forEach(function (id) {
         document.getElementById(id).addEventListener("change", applyFilters);
     });

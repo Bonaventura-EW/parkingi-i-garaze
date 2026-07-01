@@ -73,6 +73,59 @@ var SG = (function () {
         return fetch("data.json?_=" + Date.now()).then(function (r) { return r.json(); });
     }
 
+    var FAVORITES_KEY = "sg_favorites";
+
+    function readFavorites() {
+        try {
+            return JSON.parse(window.localStorage.getItem(FAVORITES_KEY) || "{}");
+        } catch (e) {
+            return {};
+        }
+    }
+
+    function writeFavorites(obj) {
+        try {
+            window.localStorage.setItem(FAVORITES_KEY, JSON.stringify(obj));
+        } catch (e) { /* localStorage unavailable (private mode / quota) — favorites just won't persist */ }
+    }
+
+    var favorites = {
+        has: function (id) { return !!readFavorites()[id]; },
+        toggle: function (id) {
+            var favs = readFavorites();
+            if (favs[id]) delete favs[id];
+            else favs[id] = true;
+            writeFavorites(favs);
+            return !!favs[id];
+        },
+        count: function () { return Object.keys(readFavorites()).length; },
+    };
+
+    function favoriteBtnHtml(id, extraClass) {
+        var starred = favorites.has(id);
+        return '<button type="button" class="fav-btn' + (extraClass ? " " + extraClass : "") +
+            (starred ? " fav-btn-active" : "") + '" data-fav-id="' + escapeHtml(String(id)) +
+            '" aria-label="' + (starred ? "Usuń z ulubionych" : "Dodaj do ulubionych") + '" title="Ulubione">' +
+            (starred ? "★" : "☆") + "</button>";
+    }
+
+    // Delegated click handler: call once per container that renders favoriteBtnHtml() buttons.
+    // `onChange` is called with (id, isNowFavorite) after toggling, so callers can re-render if needed.
+    function wireFavoriteButtons(container, onChange) {
+        container.addEventListener("click", function (ev) {
+            var btn = ev.target.closest(".fav-btn");
+            if (!btn) return;
+            ev.preventDefault();
+            ev.stopPropagation();
+            var id = btn.getAttribute("data-fav-id");
+            var isFav = favorites.toggle(id);
+            btn.classList.toggle("fav-btn-active", isFav);
+            btn.textContent = isFav ? "★" : "☆";
+            btn.setAttribute("aria-label", isFav ? "Usuń z ulubionych" : "Dodaj do ulubionych");
+            if (onChange) onChange(id, isFav);
+        });
+    }
+
     return {
         TYPE_COLORS: TYPE_COLORS,
         TYPE_LABELS: TYPE_LABELS,
@@ -84,5 +137,8 @@ var SG = (function () {
         precisionLabel: precisionLabel,
         flattenOffers: flattenOffers,
         loadData: loadData,
+        favorites: favorites,
+        favoriteBtnHtml: favoriteBtnHtml,
+        wireFavoriteButtons: wireFavoriteButtons,
     };
 })();

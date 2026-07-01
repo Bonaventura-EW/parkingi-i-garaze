@@ -28,6 +28,7 @@
             metricLine +
             "</div>" +
             '<div class="offer-row-price">' + SG.fmtPrice(o) + "</div>" +
+            SG.favoriteBtnHtml(o.id, "offer-row-fav") +
             "</a>"
         );
     }
@@ -53,4 +54,6 @@
             return sectionHtml(s, offers);
         }).join("");
     });
+
+    SG.wireFavoriteButtons(document.getElementById("top5-sections"));
 })();
