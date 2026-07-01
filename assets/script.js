@@ -285,6 +285,7 @@
             existingEmpty.remove();
         }
 
+        state.visibleOffers = visible;
         syncUrlFromFilters();
     }
 
@@ -389,6 +390,12 @@
         } else {
             done(false);
         }
+    });
+
+    document.getElementById("export-csv-btn").addEventListener("click", function () {
+        var offers = state.visibleOffers || [];
+        var stamp = new Date().toISOString().slice(0, 10);
+        SG.downloadCsv(offers, "sonar-garazowy-oferty-" + stamp + ".csv");
     });
 
     function debounce(fn, ms) {

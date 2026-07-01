@@ -126,6 +126,44 @@ var SG = (function () {
         });
     }
 
+    var CSV_COLUMNS = [
+        ["title", "Tytuł"], ["type", "Typ"], ["transaction", "Transakcja"], ["price", "Cena"],
+        ["address", "Adres"], ["precision", "Dokładność"], ["source", "Źródło"],
+        ["first_seen", "Pierwszy raz zauważone"], ["url", "Link"],
+    ];
+
+    function csvCell(v) {
+        if (v == null) return "";
+        var s = String(v).replace(/"/g, '""');
+        return /[",\n]/.test(s) ? '"' + s + '"' : s;
+    }
+
+    function offersToCsv(offers) {
+        var header = CSV_COLUMNS.map(function (c) { return csvCell(c[1]); }).join(",");
+        var rows = offers.map(function (o) {
+            return CSV_COLUMNS.map(function (c) {
+                var key = c[0];
+                var val = key === "type" ? (TYPE_LABELS[o.type] || o.type)
+                    : key === "transaction" ? (o.transaction === "wynajem" ? "Wynajem" : "Sprzedaż")
+                    : o[key];
+                return csvCell(val);
+            }).join(",");
+        });
+        return "﻿" + [header].concat(rows).join("\r\n");
+    }
+
+    function downloadCsv(offers, filename) {
+        var blob = new Blob([offersToCsv(offers)], { type: "text/csv;charset=utf-8;" });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = filename || "oferty.csv";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }
+
     return {
         TYPE_COLORS: TYPE_COLORS,
         TYPE_LABELS: TYPE_LABELS,
@@ -140,5 +178,6 @@ var SG = (function () {
         favorites: favorites,
         favoriteBtnHtml: favoriteBtnHtml,
         wireFavoriteButtons: wireFavoriteButtons,
+        downloadCsv: downloadCsv,
     };
 })();

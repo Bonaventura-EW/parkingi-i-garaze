@@ -2,6 +2,7 @@
     "use strict";
 
     var allOffers = [];
+    var currentFiltered = [];
 
     function rowHtml(o) {
         var typeLabel = SG.TYPE_LABELS[o.type] || o.type;
@@ -53,6 +54,7 @@
         filtered.sort(function (a, b) {
             return (b.date_iso || "").localeCompare(a.date_iso || "");
         });
+        currentFiltered = filtered;
         document.getElementById("list-count").textContent = filtered.length + " ofert";
         document.getElementById("offer-list").innerHTML = filtered.map(rowHtml).join("") ||
             '<p class="empty-state">Brak ofert spełniających kryteria.</p>';
@@ -71,5 +73,9 @@
     document.getElementById("list-filter-favorites").addEventListener("change", render);
     SG.wireFavoriteButtons(document.getElementById("offer-list"), function () {
         if (document.getElementById("list-filter-favorites").checked) render();
+    });
+
+    document.getElementById("export-csv-btn").addEventListener("click", function () {
+        SG.downloadCsv(currentFiltered, "sonar-garazowy-ostatnie-" + new Date().toISOString().slice(0, 10) + ".csv");
     });
 })();
