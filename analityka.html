@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SONAR GARAŻOWY - Analiza rynku</title>
+    <meta name="description" content="Trendy cen i liczby ofert garaży i miejsc parkingowych w Lublinie w czasie.">
+    <meta name="theme-color" content="#16222e">
+    <link rel="canonical" href="https://bonaventura-ew.github.io/parkingi-i-garaze/analityka.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SONAR GARAŻOWY">
+    <meta property="og:title" content="SONAR GARAŻOWY - Analiza rynku">
+    <meta property="og:description" content="Trendy cen i liczby ofert garaży i miejsc parkingowych w Lublinie w czasie.">
+    <meta property="og:url" content="https://bonaventura-ew.github.io/parkingi-i-garaze/analityka.html">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="stylesheet" href="assets/style.css?v=1">
+</head>
+<body>
+    <div id="app">
+        <header class="sg-header">
+            <div class="sg-brand">
+                <svg class="sg-brand-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="sgRb" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#233b52"/>
+                            <stop offset="100%" stop-color="#0a141f"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="32" cy="32" r="32" fill="url(#sgRb)"/>
+                    <circle cx="32" cy="32" r="30" fill="none" stroke="#ffb300" stroke-width="0.5" opacity="0.6"/>
+                </svg>
+                <h1>
+                    <span class="sg-b">SONAR GARAŻOWY</span>
+                    <span class="sg-s">·</span>
+                    <span class="sg-p">📈 Analityka</span>
+                </h1>
+            </div>
+            <nav class="sg-nav">
+                <a href="index.html">🗺️ Mapa</a>
+                <a href="ostatnie.html">🆕 Ostatnie</a>
+                <a href="top5.html">🏆 Top 5</a>
+                <a href="analityka.html" class="active">📈 Analityka</a>
+            </nav>
+        </header>
+
+        <main class="list-page">
+            <section class="filter-group">
+                <h3>📊 Liczba aktywnych ofert w czasie</h3>
+                <div id="chart-total"></div>
+            </section>
+
+            <section class="filter-group">
+                <h3>💰 Średnia cena w czasie</h3>
+                <div class="analytics-charts-grid">
+                    <div>
+                        <h4>Garaż – wynajem (zł/mies.)</h4>
+                        <div id="chart-garaz-wynajem"></div>
+                    </div>
+                    <div>
+                        <h4>Garaż – sprzedaż (zł)</h4>
+                        <div id="chart-garaz-sprzedaz"></div>
+                    </div>
+                    <div>
+                        <h4>Parking – wynajem (zł/mies.)</h4>
+                        <div id="chart-parking-wynajem"></div>
+                    </div>
+                    <div>
+                        <h4>Parking – sprzedaż (zł)</h4>
+                        <div id="chart-parking-sprzedaz"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="filter-group">
+                <h3>🏘️ Najwięcej ofert wg lokalizacji</h3>
+                <div id="district-bars"></div>
+            </section>
+
+            <section class="filter-group">
+                <h3>🕐 Historia skanów</h3>
+                <div class="table-scroll">
+                    <table class="scan-table" id="scan-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th><th>Aktywne</th><th>Nowe</th><th>Zniknęły</th><th>Adresy dokładne</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="assets/common.js?v=1"></script>
+    <script src="assets/analityka.js?v=1"></script>
+</body>
+</html>
