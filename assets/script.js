@@ -77,6 +77,45 @@
         );
     }
 
+    var FILTER_CHECKBOX_DEFAULTS = {
+        "filter-sprzedaz": true, "filter-wynajem": true, "filter-garaz": true, "filter-parking": true, "filter-hala": true,
+        "filter-olx": true, "filter-otodom": true, "filter-precise": true, "filter-approx": true,
+        "filter-status-new": true, "filter-status-up": true, "filter-status-down": true, "filter-status-unchanged": true,
+        "filter-show-inactive": false,
+    };
+
+    function paramKey(id) { return id.replace(/^filter-/, ""); }
+
+    function applyFiltersFromUrl() {
+        var params = new URLSearchParams(window.location.search);
+        Object.keys(FILTER_CHECKBOX_DEFAULTS).forEach(function (id) {
+            var key = paramKey(id);
+            if (params.has(key)) {
+                document.getElementById(id).checked = params.get(key) === "1";
+            }
+        });
+        if (params.has("price-min")) document.getElementById("price-min").value = params.get("price-min");
+        if (params.has("price-max")) document.getElementById("price-max").value = params.get("price-max");
+        if (params.has("q")) document.getElementById("search-input").value = params.get("q");
+    }
+
+    function syncUrlFromFilters() {
+        var params = new URLSearchParams();
+        Object.keys(FILTER_CHECKBOX_DEFAULTS).forEach(function (id) {
+            var checked = document.getElementById(id).checked;
+            if (checked !== FILTER_CHECKBOX_DEFAULTS[id]) params.set(paramKey(id), checked ? "1" : "0");
+        });
+        var pmin = document.getElementById("price-min").value;
+        var pmax = document.getElementById("price-max").value;
+        var q = document.getElementById("search-input").value;
+        if (pmin) params.set("price-min", pmin);
+        if (pmax) params.set("price-max", pmax);
+        if (q) params.set("q", q);
+        var qs = params.toString();
+        var newUrl = window.location.pathname + (qs ? "?" + qs : "");
+        window.history.replaceState(null, "", newUrl);
+    }
+
     function openPanel(offers) {
         var panel = document.getElementById("offer-panel");
         var content = document.getElementById("offer-panel-content");
@@ -202,6 +241,8 @@
         } else if (existingEmpty) {
             existingEmpty.remove();
         }
+
+        syncUrlFromFilters();
     }
 
     function renderProducts(products) {
@@ -219,6 +260,8 @@
             })
             .join("");
     }
+
+    applyFiltersFromUrl();
 
     SG.loadData()
         .then(function (data) {
@@ -260,6 +303,21 @@
     });
 
     document.getElementById("search-input").addEventListener("input", debounce(applyFilters, 250));
+
+    document.getElementById("copy-link-btn").addEventListener("click", function (ev) {
+        syncUrlFromFilters();
+        var btn = ev.currentTarget;
+        var restore = btn.textContent;
+        var done = function (ok) {
+            btn.textContent = ok ? "✅ Skopiowano!" : "⚠️ Nie udało się skopiować";
+            setTimeout(function () { btn.textContent = restore; }, 1800);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(window.location.href).then(function () { done(true); }, function () { done(false); });
+        } else {
+            done(false);
+        }
+    });
 
     function debounce(fn, ms) {
         var t;
