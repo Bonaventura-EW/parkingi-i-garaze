@@ -39,6 +39,10 @@
     function offerCardHtml(o) {
         var typeLabel = TYPE_LABELS[o.type] || o.type;
         var txLabel = o.transaction === "wynajem" ? "Wynajem" : "Sprzedaż";
+        var areaLine = o.area_m2
+            ? '<div class="offer-meta">📐 ' + o.area_m2 + " m²" +
+              (o.price_per_m2 ? " · " + o.price_per_m2.toLocaleString("pl-PL") + " zł/m²" : "") + "</div>"
+            : "";
         return (
             '<div class="offer-card">' +
             '<span class="offer-tag">' + typeLabel + "</span>" +
@@ -46,6 +50,7 @@
             '<span class="offer-tag">' + o.source + "</span>" +
             "<h4>" + escapeHtml(o.title) + "</h4>" +
             '<div class="offer-price">' + fmtPrice(o) + "</div>" +
+            areaLine +
             '<div class="offer-meta">📍 ' + escapeHtml(o.address) + " (" + SG.precisionLabel(o) + ")</div>" +
             '<div class="offer-meta">' + escapeHtml(o.loc_raw || "") + "</div>" +
             '<a class="offer-link" href="' + o.url + '" target="_blank" rel="noopener">Zobacz ogłoszenie →</a>' +

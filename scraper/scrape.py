@@ -169,6 +169,19 @@ def clean_price(raw):
     return int(digits), negotiable
 
 
+AREA_RE = re.compile(r"(\d{1,3}(?:[.,]\d{1,2})?)\s*(?:m2|m²|m\s*kw|mkw)\b", re.IGNORECASE)
+
+
+def find_area(title):
+    m = AREA_RE.search(title)
+    if not m:
+        return None
+    try:
+        return float(m.group(1).replace(",", "."))
+    except ValueError:
+        return None
+
+
 def classify(title, price, has_street):
     t = title.lower()
     is_product = any(k in t for k in PRODUCT_KEYWORDS) and "ul." not in t and not has_street
@@ -207,11 +220,13 @@ def classify_items(raw_items):
         price, negotiable = clean_price(r["price_raw"])
         street, number, kind = find_address(title)
         transaction, typ, is_product = classify(title, price, has_street=bool(street))
+        area = find_area(title)
+        price_per_m2 = round(price / area) if (price and area and transaction == "sprzedaz") else None
         items.append({
             "id": r["id"], "title": title, "link": r["link"], "price": price,
             "negotiable": negotiable, "transaction": transaction, "type": typ,
             "is_product": is_product, "street": street, "number": number,
-            "addr_kind": kind, "loc_raw": r["loc_raw"],
+            "addr_kind": kind, "loc_raw": r["loc_raw"], "area_m2": area, "price_per_m2": price_per_m2,
             "source": "otodom" if "otodom.pl" in (r["link"] or "") else "olx",
         })
     return items
@@ -321,6 +336,7 @@ def assemble(items):
             "type": it["type"], "lat": round(lat, 6), "lon": round(lon, 6),
             "precision": precision, "address": address, "loc_raw": it["loc_raw"],
             "date_iso": date_iso, "date_label": date_label,
+            "area_m2": it["area_m2"], "price_per_m2": it["price_per_m2"],
         })
 
     markers = {}
