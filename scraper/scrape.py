@@ -25,6 +25,8 @@ from datetime import datetime, timezone
 import requests
 from bs4 import BeautifulSoup
 
+from streets import find_street
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "geocode_cache.json")
 DATA_PATH = os.path.join(ROOT, "data.json")
@@ -95,17 +97,6 @@ def parse_loc_date(loc_raw, now=None):
     return None, text
 
 
-STREET_RE_UL = re.compile(
-    r"ul\.?\s*([A-ZŁŚŻŹĆŃÓĄĘ][a-ząćęłńóśźż]+(?:\s[A-ZŁŚŻŹĆŃÓĄĘ][a-ząćęłńóśźż]+){0,2})\s*(\d{1,4}\s?[A-Za-z]?)?"
-)
-STREET_RE_BARE = re.compile(
-    r"\b([A-ZŁŚŻŹĆŃÓĄĘ][a-ząćęłńóśźż]{3,}(?:owa|ówna|yńska|ińska|icka|acka|owskiej|ińskiej|yńskiej|ackiej|eckiej|ego))\s?(\d{1,4}\s?[A-Za-z]?)?\b"
-)
-SKIP_WORDS = {
-    "Lublin", "Lublinie", "Lublina", "Botanik", "Wynajmę", "Wynajmuje", "Miejsce",
-    "Sprzedam", "Sprzedaż", "Garaż", "Garaże", "Garaz", "Garaze", "Duży", "Duzy",
-    "Podziemny", "Podziemne", "Premium", "Lubelskie",
-}
 
 
 def fetch(url, retries=3):
@@ -178,9 +169,9 @@ def clean_price(raw):
     return int(digits), negotiable
 
 
-def classify(title, price):
+def classify(title, price, has_street):
     t = title.lower()
-    is_product = any(k in t for k in PRODUCT_KEYWORDS) and "ul." not in t and not STREET_RE_UL.search(title)
+    is_product = any(k in t for k in PRODUCT_KEYWORDS) and "ul." not in t and not has_street
     if any(k in t for k in RENT_KEYWORDS):
         transaction = "wynajem"
     elif any(k in t for k in SALE_KEYWORDS):
@@ -197,12 +188,9 @@ def classify(title, price):
 
 
 def find_address(title):
-    m = STREET_RE_UL.search(title)
-    if m:
-        return m.group(1).strip(), (m.group(2) or "").strip(), "street"
-    m = STREET_RE_BARE.search(title)
-    if m and m.group(1) not in SKIP_WORDS:
-        return m.group(1).strip(), (m.group(2) or "").strip(), "street_guess"
+    street, number = find_street(title)
+    if street:
+        return street, number, "street"
     tl = title.lower()
     for key, _ in DISTRICTS.items():
         if key in tl:
@@ -217,8 +205,8 @@ def classify_items(raw_items):
         if any(k in title.lower() for k in EXCLUDE_KEYWORDS):
             continue
         price, negotiable = clean_price(r["price_raw"])
-        transaction, typ, is_product = classify(title, price)
         street, number, kind = find_address(title)
+        transaction, typ, is_product = classify(title, price, has_street=bool(street))
         items.append({
             "id": r["id"], "title": title, "link": r["link"], "price": price,
             "negotiable": negotiable, "transaction": transaction, "type": typ,
@@ -267,7 +255,7 @@ def nominatim(query, cache):
 
 def geocode_items(items, cache):
     for it in items:
-        if it["addr_kind"] in ("street", "street_guess") and it["street"]:
+        if it["addr_kind"] == "street" and it["street"]:
             q1 = f"{it['street']} {it['number']}, Lublin, Polska".strip()
             q2 = f"{it['street']}, Lublin, Polska"
             r = nominatim(q1, cache) if it["number"] else None
