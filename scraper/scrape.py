@@ -68,6 +68,26 @@ PARKING_KEYWORDS = ["miejsce postojowe", "miejsce parkingowe", "postojow", "park
 HALA_KEYWORDS = ["hala garażowa", "hala garazowa", "wiata"]
 EXCLUDE_KEYWORDS = ["mieszkanie", "pokoj", "pokoje", "kawalerk", "dzialka", "działka", "komórk", "komork", "piwnic"]
 
+# Nearby towns that are distinct from Lublin itself; OLX's "Lublin" category search
+# sometimes bleeds into these. An ad naming one of them (without also naming Lublin)
+# is out of scope for a Lublin-only map and would otherwise get geocoded onto a
+# same-named Lublin street by mistake.
+NEARBY_TOWNS = [
+    "świdnik", "swidnik", "nałęczów", "naleczow", "lubartów", "lubartow", "bychawa",
+    "piaski", "niemce", "jastków", "jastkow", "konopnica", "wólka", "wolka",
+    "bełżyce", "belzyce", "krzczonów", "krzczonow", "milejów", "milejow",
+]
+
+
+def other_city_mentioned(title):
+    t = title.lower()
+    if "lublin" in t:
+        return None
+    for town in NEARBY_TOWNS:
+        if town in t:
+            return town
+    return None
+
 MONTHS_PL = {
     "stycznia": 1, "lutego": 2, "marca": 3, "kwietnia": 4, "maja": 5, "czerwca": 6,
     "lipca": 7, "sierpnia": 8, "września": 9, "wrzesnia": 9, "października": 10,
@@ -216,6 +236,8 @@ def classify_items(raw_items):
     for r in raw_items:
         title = r["title"] or ""
         if any(k in title.lower() for k in EXCLUDE_KEYWORDS):
+            continue
+        if other_city_mentioned(title):
             continue
         price, negotiable = clean_price(r["price_raw"])
         street, number, kind = find_address(title)
