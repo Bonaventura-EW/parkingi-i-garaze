@@ -360,8 +360,15 @@ html, body {
 /* Mobile */
 @media (max-width: 860px) {
     .sg-menu-toggle { display: block; }
-    .sg-nav { position: static; justify-content: flex-start; overflow-x: auto; flex: 0 1 auto; max-width: 40vw; }
-    .sg-nav a { padding: 7px 8px; font-size: 12.5px; }
+    .sg-header { flex-wrap: wrap; height: auto; min-height: var(--header-h); padding: 8px 12px; row-gap: 6px; }
+    .sg-nav {
+        order: 3;
+        flex-basis: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .sg-nav a { padding: 6px 10px; font-size: 13px; flex-shrink: 0; }
     .sg-brand h1 { font-size: 14px; }
     .main-container { position: relative; }
     .sidebar {
@@ -377,8 +384,11 @@ html, body {
         box-shadow: -4px 0 16px rgba(0,0,0,0.3);
     }
     .sidebar.open { transform: translateX(0); }
-    .map-search-control { width: 92%; left: 4%; transform: none; }
+    .map-search-control { left: 8px; right: 54px; top: 8px; transform: none; width: auto; }
     .map-search-control input { width: 100%; }
-    .map-legend { font-size: 11px; padding: 8px 10px; }
+    .map-legend { font-size: 11px; padding: 6px 8px; max-width: 46vw; bottom: 10px; }
     .offer-panel { width: 100%; max-width: 100%; }
+    .list-page { padding: 14px; }
+    .offer-row { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .offer-row-price { font-size: 16px; }
 }

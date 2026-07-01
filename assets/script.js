@@ -6,7 +6,8 @@
     var colorFor = SG.colorFor;
     var escapeHtml = SG.escapeHtml;
 
-    var map = L.map("map", { zoomControl: true, minZoom: 10 }).setView([51.2465, 22.5684], 13);
+    var map = L.map("map", { zoomControl: false, minZoom: 10 }).setView([51.2465, 22.5684], 13);
+    L.control.zoom({ position: "topright" }).addTo(map);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
