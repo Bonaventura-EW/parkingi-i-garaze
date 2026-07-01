@@ -102,6 +102,7 @@
         if (params.has("price-min")) document.getElementById("price-min").value = params.get("price-min");
         if (params.has("price-max")) document.getElementById("price-max").value = params.get("price-max");
         if (params.has("q")) document.getElementById("search-input").value = params.get("q");
+        if (params.has("dni")) document.getElementById("date-quick-filter").value = params.get("dni");
     }
 
     function syncUrlFromFilters() {
@@ -116,6 +117,8 @@
         if (pmin) params.set("price-min", pmin);
         if (pmax) params.set("price-max", pmax);
         if (q) params.set("q", q);
+        var daysFilter = document.getElementById("date-quick-filter").value;
+        if (daysFilter !== "all") params.set("dni", daysFilter);
         var qs = params.toString();
         var newUrl = window.location.pathname + (qs ? "?" + qs : "");
         window.history.replaceState(null, "", newUrl);
@@ -151,7 +154,14 @@
             priceMin: parseFloat(document.getElementById("price-min").value) || 0,
             priceMax: parseFloat(document.getElementById("price-max").value) || Infinity,
             query: (document.getElementById("search-input").value || "").toLowerCase().trim(),
+            daysFilter: document.getElementById("date-quick-filter").value,
         };
+    }
+
+    function dateCutoffIso(days) {
+        var d = new Date();
+        d.setUTCDate(d.getUTCDate() - (days - 1));
+        return d.toISOString().slice(0, 10);
     }
 
     var TYPE_KEY = { garaz: "garaz", miejsce_parkingowe: "parking", hala_wiata: "hala" };
@@ -173,6 +183,7 @@
         if (isPrecise && !f.precise) return false;
         if (!isPrecise && !f.approx) return false;
         if (!f[STATUS_FILTER_KEY[SG.offerStatus(o)]]) return false;
+        if (f.daysFilter !== "all" && o.first_seen && o.first_seen < dateCutoffIso(parseInt(f.daysFilter, 10))) return false;
         if (o.price != null && (o.price < f.priceMin || o.price > f.priceMax)) return false;
         if (f.query) {
             var hay = (o.title + " " + o.address).toLowerCase();
@@ -266,6 +277,33 @@
         syncUrlFromFilters();
     }
 
+    function renderDateHistogram(allMarkers) {
+        var counts = {};
+        var today = new Date();
+        var days = 30;
+        for (var i = 0; i < days; i++) {
+            var d = new Date(today);
+            d.setUTCDate(d.getUTCDate() - i);
+            counts[d.toISOString().slice(0, 10)] = 0;
+        }
+        allMarkers.forEach(function (m) {
+            m.offers.forEach(function (o) {
+                if (o.active === false || !o.first_seen) return;
+                if (counts.hasOwnProperty(o.first_seen)) counts[o.first_seen]++;
+            });
+        });
+        var dates = Object.keys(counts).sort();
+        var max = Math.max.apply(null, dates.map(function (d) { return counts[d]; })) || 1;
+        var el = document.getElementById("date-histogram");
+        el.innerHTML = dates
+            .map(function (d) {
+                var c = counts[d];
+                var pct = Math.max(4, Math.round((c / max) * 100));
+                return '<div class="date-histogram-bar' + (c === 0 ? " empty" : "") + '" style="height:' + pct + '%" title="' + d + ": " + c + ' ofert"></div>';
+            })
+            .join("");
+    }
+
     function renderProducts(products) {
         var group = document.getElementById("products-group");
         var list = document.getElementById("products-list");
@@ -293,6 +331,7 @@
 
             document.getElementById("last-scan").textContent = data.generated_at || "-";
             renderProducts(data.off_map_products);
+            renderDateHistogram(state.allMarkers);
             applyFilters();
         })
         .catch(function (err) {
@@ -309,7 +348,7 @@
         "filter-sprzedaz", "filter-wynajem", "filter-garaz", "filter-parking", "filter-hala",
         "filter-olx", "filter-otodom", "filter-precise", "filter-approx",
         "filter-status-new", "filter-status-up", "filter-status-down", "filter-status-unchanged",
-        "filter-show-inactive",
+        "filter-show-inactive", "date-quick-filter",
     ].forEach(function (id) {
         document.getElementById(id).addEventListener("change", applyFilters);
     });

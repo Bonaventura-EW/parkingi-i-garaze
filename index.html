@@ -150,6 +150,19 @@
                     </div>
 
                     <div class="filter-group">
+                        <h3>📅 Data dodania</h3>
+                        <select id="date-quick-filter" class="time-filter-select">
+                            <option value="all" selected>Wszystkie</option>
+                            <option value="1">Dzisiaj</option>
+                            <option value="3">Ostatnie 3 dni</option>
+                            <option value="7">Ostatnie 7 dni</option>
+                            <option value="30">Ostatnie 30 dni</option>
+                            <option value="90">Ostatnie 90 dni</option>
+                        </select>
+                        <div id="date-histogram" class="date-histogram" aria-hidden="true"></div>
+                    </div>
+
+                    <div class="filter-group">
                         <h3>Rodzaj transakcji</h3>
                         <label>
                             <input type="checkbox" id="filter-sprzedaz" checked>
