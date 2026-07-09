@@ -2,11 +2,12 @@
 """Scrapes garage/parking-spot offers for Lublin from OLX (which also
 re-publishes Otodom listings) and rebuilds data.json used by index.html.
 
-Otodom.pl blocks direct automated requests to its search pages (Cloudflare/
-CloudFront bot protection returns HTTP 403), so it is not scraped directly.
-OLX's own "garaze-parkingi/lublin" category already surfaces a large share of
-Otodom-sourced listings (otodom.pl links appear alongside olx.pl ones), which
-gives partial Otodom coverage without working around anti-bot protections.
+Otodom.pl is not scraped directly (yet). OLX's own "garaze-parkingi/lublin"
+category already surfaces a large share of Otodom-sourced listings (otodom.pl
+links appear alongside olx.pl ones), which gives partial Otodom coverage.
+An earlier bot-protection block (HTTP 403) no longer reproduces as of 2026-07
+— verified from both the dev environment and a GitHub Actions runner — so
+scraping Otodom search pages directly is a viable future improvement.
 
 Usage:
     python3 scraper/scrape.py
@@ -240,6 +241,28 @@ def classify(title, price, has_street):
     return transaction, typ, is_product
 
 
+def fetch_description(link):
+    """Fetches an ad's detail page and returns its description text, or "".
+
+    Only olx.pl pages are fetched — Otodom detail pages have different markup
+    and are not parsed here (yet).
+    """
+    if not link or "olx.pl" not in link:
+        return ""
+    try:
+        html = fetch(link)
+    except requests.RequestException as e:
+        print(f"description fetch failed for {link}: {e}", file=sys.stderr)
+        return ""
+    time.sleep(1.0)
+    soup = BeautifulSoup(html, "html.parser")
+    el = soup.find(attrs={"data-cy": "ad_description"})
+    if not el:
+        return ""
+    text = el.get_text(" ", strip=True)
+    return re.sub(r"^Opis\s+", "", text)
+
+
 def find_address(title):
     street, number = find_street(title)
     if street:
@@ -249,6 +272,20 @@ def find_address(title):
         if key in tl:
             return key, "", "district"
     return None, None, None
+
+
+def street_from_description(link):
+    """Fallback when the title carries no street: a marker-prefixed ("ul.",
+    "al.") street from the ad's description. Districts are deliberately not
+    matched in descriptions — keys like "rury" are ordinary Polish words that
+    long prose would hit constantly. A description naming a nearby town (and
+    not Lublin) is ignored outright, same rule the title-level scope filter
+    applies, so a same-named Lublin street doesn't capture the pin.
+    """
+    description = fetch_description(link)
+    if not description or other_city_mentioned(description):
+        return None, None
+    return find_street(description, require_marker=True)
 
 
 def classify_items(raw_items):
@@ -266,6 +303,10 @@ def classify_items(raw_items):
         price, negotiable = clean_price(r["price_raw"])
         street, number, kind = find_address(title)
         transaction, typ, is_product = classify(title, price, has_street=bool(street))
+        if not is_product and kind != "street":
+            d_street, d_number = street_from_description(r["link"])
+            if d_street:
+                street, number, kind = d_street, d_number, "street"
         area = find_area(title)
         price_per_m2 = round(price / area) if (price and area and transaction == "sprzedaz") else None
         items.append({

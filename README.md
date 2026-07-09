@@ -42,7 +42,7 @@ Ulubione oferty (⭐) są zapisywane w localStorage przeglądarki i działają n
 - `scraper/scrape.py` — scraper OLX, klasyfikacja ofert, geokodowanie, śledzenie historii
   cen/dat między uruchomieniami, zapis `data.json` / `skipped.json` / `history.jsonl`.
 - `scraper/streets.py` + `scraper/lublin_streets.json` — dopasowywanie nazw ulic z
-  tytułów ogłoszeń do rzeczywistych ulic Lublina (snapshot z OpenStreetMap/Overpass),
+  tytułów i treści ogłoszeń do rzeczywistych ulic Lublina (snapshot z OpenStreetMap/Overpass),
   łącznie z potocznymi aliasami (np. "ul. Sowińskiego" dla oficjalnej "Józefa Sowińskiego").
 - `.github/workflows/scrape.yml` — cykliczne odświeżanie danych i deploy na GitHub Pages.
 
@@ -61,13 +61,16 @@ Dzięki temu mapa pokazuje nie tylko stan bieżący, ale i to, co się zmieniło
 ## Źródła danych
 
 - **OLX** (`olx.pl/nieruchomosci/garaze-parkingi/lublin`) — scrapowane bezpośrednio.
-- **Otodom** — otodom.pl blokuje bezpośrednie zapytania (ochrona Cloudflare/CloudFront,
-  HTTP 403). Kategoria OLX faktycznie zawiera też sporą część ofert linkujących do
-  otodom.pl (obie platformy należą do OLX Group), więc te oferty trafiają do danych
-  bez omijania zabezpieczeń Otodomu.
+- **Otodom** — na razie nie jest scrapowany bezpośrednio. Kategoria OLX zawiera
+  sporą część ofert linkujących do otodom.pl (obie platformy należą do OLX Group),
+  więc te oferty i tak trafiają do danych. Wcześniejsza blokada anty-botowa
+  (HTTP 403) już nie występuje (zweryfikowano 2026-07, także z GitHub Actions),
+  więc bezpośredni scraping Otodomu to możliwe przyszłe rozszerzenie.
 
 Adresy budynków są dopasowywane do rzeczywistych ulic Lublina (`scraper/streets.py`)
-i geokodowane przez OpenStreetMap Nominatim. Gdy nie da się ustalić konkretnej ulicy,
+i geokodowane przez OpenStreetMap Nominatim. Ulica jest szukana najpierw w tytule
+ogłoszenia, a gdy go tam nie ma — w treści ogłoszenia (pobieranej ze strony oferty
+na OLX). Gdy nie da się ustalić konkretnej ulicy,
 oferta jest umieszczana w przybliżeniu (centroid dzielnicy lub środek miasta) i
 oznaczona jako "lokalizacja przybliżona" — zawsze warto zweryfikować adres w treści
 ogłoszenia. Ogłoszenia jednoznacznie dotyczące sąsiednich miejscowości (np. Świdnik)
