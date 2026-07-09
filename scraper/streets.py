@@ -41,10 +41,16 @@ ALIASES = _load_aliases()
 # Longest alias first so "Tomasza Zana" matches before a shorter overlapping alias would.
 _SORTED_ALIASES = sorted(ALIASES.keys(), key=len, reverse=True)
 
-NUMBER_RE = re.compile(r"\d{1,4}\s?[A-Za-z]?\b")
+# Anchored to the text right after the street name (a leading comma or word
+# breaks the match), so incidental numbers in prose ("ul. Zana, 5 minut do
+# centrum") are not mistaken for house numbers. A building letter only counts
+# when glued to the digits ("26A"), otherwise "56 w Lublinie" would yield "56 w".
+NUMBER_RE = re.compile(r"^\s*\d{1,4}[A-Za-z]?\b")
 
-
-_UL_PREFIX_RE = re.compile(r"\bul\.?\s*$", re.IGNORECASE)
+_UL_PREFIX_RE = re.compile(
+    r"\b(?:ul|ulica|ulicy|al|aleja|aleje|alei|przy|adres|adresem|adresie)\.?\s*$",
+    re.IGNORECASE,
+)
 
 
 def _match_all(lower):
@@ -60,26 +66,36 @@ def _match_all(lower):
             yield m.start(), m.end(), alias
 
 
-def find_street(title):
+def find_street(text, require_marker=False):
     """Returns (canonical_street_name, house_number_or_'') or (None, None).
 
-    Prefers a match immediately preceded by "ul." (explicit street marker),
-    since ad titles often mention other place names (districts, landmarks)
+    Prefers a match immediately preceded by "ul."/"al." (explicit street
+    marker), since ads often mention other place names (districts, landmarks)
     that can otherwise collide with a street alias.
+
+    With require_marker=True a match must be marker-prefixed ("ul. Onyksowa",
+    "przy Koncertowej") or be a full multi-word official name ("Ludwika
+    Hirszfelda" — specific enough on its own). Use it for long free text
+    (ad descriptions), where a bare single-word alias hit is usually an
+    incidental word ("cicha okolica" vs the street "Cicha"), not the address.
     """
-    lower = title.lower()
+    lower = text.lower()
     matches = list(_match_all(lower))
     if not matches:
         return None, None
 
     def with_number(end):
-        tail = title[end:end + 15]
-        num_m = NUMBER_RE.search(tail)
+        num_m = NUMBER_RE.search(text[end:end + 15])
         return num_m.group(0).strip() if num_m else ""
 
     for start, end, alias in matches:
         if _UL_PREFIX_RE.search(lower[:start]):
             return ALIASES[alias], with_number(end)
 
+    if require_marker:
+        for start, end, alias in matches:
+            if " " in alias:
+                return ALIASES[alias], with_number(end)
+        return None, None
     start, end, alias = matches[0]
     return ALIASES[alias], with_number(end)

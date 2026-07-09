@@ -254,8 +254,7 @@ def fetch_description(link):
     except requests.RequestException as e:
         print(f"description fetch failed for {link}: {e}", file=sys.stderr)
         return ""
-    finally:
-        time.sleep(1.0)
+    time.sleep(1.0)
     soup = BeautifulSoup(html, "html.parser")
     el = soup.find(attrs={"data-cy": "ad_description"})
     if not el:
@@ -264,22 +263,29 @@ def fetch_description(link):
     return re.sub(r"^Opis\s+", "", text)
 
 
-def find_address(title, description=""):
-    """Street match in the title wins; otherwise a street from the ad's
-    description; only then district-level matches (title first)."""
+def find_address(title):
     street, number = find_street(title)
     if street:
         return street, number, "street"
-    if description:
-        street, number = find_street(description)
-        if street:
-            return street, number, "street"
-    for text in (title, description):
-        tl = text.lower()
-        for key in DISTRICTS:
-            if key in tl:
-                return key, "", "district"
+    tl = title.lower()
+    for key in DISTRICTS:
+        if key in tl:
+            return key, "", "district"
     return None, None, None
+
+
+def street_from_description(link):
+    """Fallback when the title carries no street: a marker-prefixed ("ul.",
+    "al.") street from the ad's description. Districts are deliberately not
+    matched in descriptions — keys like "rury" are ordinary Polish words that
+    long prose would hit constantly. A description naming a nearby town (and
+    not Lublin) is ignored outright, same rule the title-level scope filter
+    applies, so a same-named Lublin street doesn't capture the pin.
+    """
+    description = fetch_description(link)
+    if not description or other_city_mentioned(description):
+        return None, None
+    return find_street(description, require_marker=True)
 
 
 def classify_items(raw_items):
@@ -298,9 +304,9 @@ def classify_items(raw_items):
         street, number, kind = find_address(title)
         transaction, typ, is_product = classify(title, price, has_street=bool(street))
         if not is_product and kind != "street":
-            description = fetch_description(r["link"])
-            if description:
-                street, number, kind = find_address(title, description)
+            d_street, d_number = street_from_description(r["link"])
+            if d_street:
+                street, number, kind = d_street, d_number, "street"
         area = find_area(title)
         price_per_m2 = round(price / area) if (price and area and transaction == "sprzedaz") else None
         items.append({
