@@ -2,11 +2,12 @@
 """Scrapes garage/parking-spot offers for Lublin from OLX (which also
 re-publishes Otodom listings) and rebuilds data.json used by index.html.
 
-Otodom.pl blocks direct automated requests to its search pages (Cloudflare/
-CloudFront bot protection returns HTTP 403), so it is not scraped directly.
-OLX's own "garaze-parkingi/lublin" category already surfaces a large share of
-Otodom-sourced listings (otodom.pl links appear alongside olx.pl ones), which
-gives partial Otodom coverage without working around anti-bot protections.
+Otodom.pl is not scraped directly (yet). OLX's own "garaze-parkingi/lublin"
+category already surfaces a large share of Otodom-sourced listings (otodom.pl
+links appear alongside olx.pl ones), which gives partial Otodom coverage.
+An earlier bot-protection block (HTTP 403) no longer reproduces as of 2026-07
+— verified from both the dev environment and a GitHub Actions runner — so
+scraping Otodom search pages directly is a viable future improvement.
 
 Usage:
     python3 scraper/scrape.py
@@ -243,8 +244,8 @@ def classify(title, price, has_street):
 def fetch_description(link):
     """Fetches an ad's detail page and returns its description text, or "".
 
-    Only olx.pl pages are fetched — Otodom blocks direct automated requests
-    (see module docstring).
+    Only olx.pl pages are fetched — Otodom detail pages have different markup
+    and are not parsed here (yet).
     """
     if not link or "olx.pl" not in link:
         return ""

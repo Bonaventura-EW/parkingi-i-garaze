@@ -61,10 +61,11 @@ Dzięki temu mapa pokazuje nie tylko stan bieżący, ale i to, co się zmieniło
 ## Źródła danych
 
 - **OLX** (`olx.pl/nieruchomosci/garaze-parkingi/lublin`) — scrapowane bezpośrednio.
-- **Otodom** — otodom.pl blokuje bezpośrednie zapytania (ochrona Cloudflare/CloudFront,
-  HTTP 403). Kategoria OLX faktycznie zawiera też sporą część ofert linkujących do
-  otodom.pl (obie platformy należą do OLX Group), więc te oferty trafiają do danych
-  bez omijania zabezpieczeń Otodomu.
+- **Otodom** — na razie nie jest scrapowany bezpośrednio. Kategoria OLX zawiera
+  sporą część ofert linkujących do otodom.pl (obie platformy należą do OLX Group),
+  więc te oferty i tak trafiają do danych. Wcześniejsza blokada anty-botowa
+  (HTTP 403) już nie występuje (zweryfikowano 2026-07, także z GitHub Actions),
+  więc bezpośredni scraping Otodomu to możliwe przyszłe rozszerzenie.
 
 Adresy budynków są dopasowywane do rzeczywistych ulic Lublina (`scraper/streets.py`)
 i geokodowane przez OpenStreetMap Nominatim. Ulica jest szukana najpierw w tytule
