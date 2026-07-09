@@ -42,7 +42,7 @@ Ulubione oferty (⭐) są zapisywane w localStorage przeglądarki i działają n
 - `scraper/scrape.py` — scraper OLX, klasyfikacja ofert, geokodowanie, śledzenie historii
   cen/dat między uruchomieniami, zapis `data.json` / `skipped.json` / `history.jsonl`.
 - `scraper/streets.py` + `scraper/lublin_streets.json` — dopasowywanie nazw ulic z
-  tytułów ogłoszeń do rzeczywistych ulic Lublina (snapshot z OpenStreetMap/Overpass),
+  tytułów i treści ogłoszeń do rzeczywistych ulic Lublina (snapshot z OpenStreetMap/Overpass),
   łącznie z potocznymi aliasami (np. "ul. Sowińskiego" dla oficjalnej "Józefa Sowińskiego").
 - `.github/workflows/scrape.yml` — cykliczne odświeżanie danych i deploy na GitHub Pages.
 
@@ -67,7 +67,9 @@ Dzięki temu mapa pokazuje nie tylko stan bieżący, ale i to, co się zmieniło
   bez omijania zabezpieczeń Otodomu.
 
 Adresy budynków są dopasowywane do rzeczywistych ulic Lublina (`scraper/streets.py`)
-i geokodowane przez OpenStreetMap Nominatim. Gdy nie da się ustalić konkretnej ulicy,
+i geokodowane przez OpenStreetMap Nominatim. Ulica jest szukana najpierw w tytule
+ogłoszenia, a gdy go tam nie ma — w treści ogłoszenia (pobieranej ze strony oferty
+na OLX). Gdy nie da się ustalić konkretnej ulicy,
 oferta jest umieszczana w przybliżeniu (centroid dzielnicy lub środek miasta) i
 oznaczona jako "lokalizacja przybliżona" — zawsze warto zweryfikować adres w treści
 ogłoszenia. Ogłoszenia jednoznacznie dotyczące sąsiednich miejscowości (np. Świdnik)

@@ -1,4 +1,4 @@
-"""Matches Lublin street names inside free-text ad titles.
+"""Matches Lublin street names inside free-text ad titles and descriptions.
 
 Built from scraper/lublin_streets.json, a snapshot of OSM way names within
 Lublin's administrative boundary (fetched via the Overpass API). Polish

@@ -240,14 +240,44 @@ def classify(title, price, has_street):
     return transaction, typ, is_product
 
 
-def find_address(title):
+def fetch_description(link):
+    """Fetches an ad's detail page and returns its description text, or "".
+
+    Only olx.pl pages are fetched — Otodom blocks direct automated requests
+    (see module docstring).
+    """
+    if not link or "olx.pl" not in link:
+        return ""
+    try:
+        html = fetch(link)
+    except requests.RequestException as e:
+        print(f"description fetch failed for {link}: {e}", file=sys.stderr)
+        return ""
+    finally:
+        time.sleep(1.0)
+    soup = BeautifulSoup(html, "html.parser")
+    el = soup.find(attrs={"data-cy": "ad_description"})
+    if not el:
+        return ""
+    text = el.get_text(" ", strip=True)
+    return re.sub(r"^Opis\s+", "", text)
+
+
+def find_address(title, description=""):
+    """Street match in the title wins; otherwise a street from the ad's
+    description; only then district-level matches (title first)."""
     street, number = find_street(title)
     if street:
         return street, number, "street"
-    tl = title.lower()
-    for key in DISTRICTS:
-        if key in tl:
-            return key, "", "district"
+    if description:
+        street, number = find_street(description)
+        if street:
+            return street, number, "street"
+    for text in (title, description):
+        tl = text.lower()
+        for key in DISTRICTS:
+            if key in tl:
+                return key, "", "district"
     return None, None, None
 
 
@@ -266,6 +296,10 @@ def classify_items(raw_items):
         price, negotiable = clean_price(r["price_raw"])
         street, number, kind = find_address(title)
         transaction, typ, is_product = classify(title, price, has_street=bool(street))
+        if not is_product and kind != "street":
+            description = fetch_description(r["link"])
+            if description:
+                street, number, kind = find_address(title, description)
         area = find_area(title)
         price_per_m2 = round(price / area) if (price and area and transaction == "sprzedaz") else None
         items.append({
