@@ -288,6 +288,58 @@ def street_from_description(link):
     return find_street(description, require_marker=True)
 
 
+_NEXT_DATA_RE = re.compile(r'<script[^>]*id="__NEXT_DATA__"[^>]*>(.*?)</script>', re.S)
+
+
+def otodom_location(link):
+    """(street, number, geo_or_None) declared by an Otodom listing.
+
+    Otodom ad pages embed the listing's own location as JSON (__NEXT_DATA__):
+    the street name, sometimes a house number, and the seller's map pin
+    coordinates — all more authoritative than parsing prose. The description
+    is used to fill a missing house number and as a fallback street source,
+    under the same rules as OLX descriptions.
+    """
+    try:
+        html = fetch(link)
+    except requests.RequestException as e:
+        print(f"otodom fetch failed for {link}: {e}", file=sys.stderr)
+        return None, "", None
+    time.sleep(1.0)
+    m = _NEXT_DATA_RE.search(html)
+    if not m:
+        return None, "", None
+    try:
+        ad = json.loads(m.group(1))["props"]["pageProps"]["ad"]
+    except (json.JSONDecodeError, KeyError, TypeError):
+        return None, "", None
+    loc = ad.get("location") or {}
+
+    geo = None
+    coords = loc.get("coordinates") or {}
+    lat, lon = coords.get("latitude"), coords.get("longitude")
+    if lat and lon and in_bbox(lat, lon):
+        geo = {"lat": lat, "lon": lon}
+
+    description = BeautifulSoup(ad.get("description") or "", "html.parser").get_text(" ", strip=True)
+    desc_usable = description and not other_city_mentioned(description)
+
+    declared = (loc.get("address") or {}).get("street") or {}
+    street, number = declared.get("name"), declared.get("number") or ""
+    if street:
+        # Map onto our canonical street set ("Sowińskiego" -> "Józefa
+        # Sowińskiego"); an unrecognized name still goes through as-is.
+        canonical, _ = find_street(f"ul. {street}")
+        street = canonical or street.strip()
+        if not number and desc_usable:
+            d_street, d_number = find_street(description, require_marker=True)
+            if d_street == street and d_number:
+                number = d_number
+    elif desc_usable:
+        street, number = find_street(description, require_marker=True)
+    return street, number or "", geo
+
+
 def classify_items(raw_items):
     items = []
     skipped = []
@@ -303,7 +355,16 @@ def classify_items(raw_items):
         price, negotiable = clean_price(r["price_raw"])
         street, number, kind = find_address(title)
         transaction, typ, is_product = classify(title, price, has_street=bool(street))
-        if not is_product and kind != "street":
+        geo_direct = None
+        if not is_product and "otodom.pl" in (r["link"] or ""):
+            o_street, o_number, o_geo = otodom_location(r["link"])
+            if kind != "street" and o_street:
+                street, number, kind = o_street, o_number, "street"
+            elif kind == "street" and o_street == street and o_number and not number:
+                number = o_number
+            if kind == "street":
+                geo_direct = o_geo
+        elif not is_product and kind != "street":
             d_street, d_number = street_from_description(r["link"])
             if d_street:
                 street, number, kind = d_street, d_number, "street"
@@ -313,7 +374,8 @@ def classify_items(raw_items):
             "id": r["id"], "title": title, "link": r["link"], "price": price,
             "negotiable": negotiable, "transaction": transaction, "type": typ,
             "is_product": is_product, "street": street, "number": number,
-            "addr_kind": kind, "loc_raw": r["loc_raw"], "area_m2": area, "price_per_m2": price_per_m2,
+            "addr_kind": kind, "geo_direct": geo_direct,
+            "loc_raw": r["loc_raw"], "area_m2": area, "price_per_m2": price_per_m2,
             "source": "otodom" if "otodom.pl" in (r["link"] or "") else "olx",
         })
     return items, skipped
@@ -358,6 +420,12 @@ def nominatim(query, cache):
 def geocode_items(items, cache):
     for it in items:
         if it["addr_kind"] == "street" and it["street"]:
+            if it.get("geo_direct"):
+                # Seller's own map pin (Otodom) — no need to ask Nominatim.
+                it["geo"] = it["geo_direct"]
+                it["precision"] = "exact" if it["number"] else "street"
+                it["resolved_address"] = f"{it['street']} {it['number']}".strip()
+                continue
             q1 = f"{it['street']} {it['number']}, Lublin, Polska".strip()
             q2 = f"{it['street']}, Lublin, Polska"
             r = nominatim(q1, cache) if it["number"] else None

@@ -51,17 +51,36 @@ def _inflected(alias):
     return []
 
 
+# Frequent irregular inflections the generic rules can't derive.
+EXTRA_WEAK_ALIASES = {
+    "krakowskim przedmieściu": "Krakowskie Przedmieście",
+}
+
+
 def _load_aliases():
     with open(_PATH, encoding="utf-8") as f:
         names = json.load(f)
-    base = {}
+    base, base_weak = {}, dict(EXTRA_WEAK_ALIASES)
     for name in names:
         base.setdefault(name.lower(), name)
         words = name.split()
-        if len(words) >= 2 and not name.startswith(GENERIC_PREFIXES):
+        if name.startswith(GENERIC_PREFIXES):
+            # "al. Unii Lubelskiej" won't contain the word "Aleja", so index
+            # the name minus its generic prefix too.
+            rest = name.split(" ", 1)[1]
+            if len(rest) >= MIN_ALIAS_LEN:
+                target = base if " " in rest else base_weak
+                target.setdefault(rest.lower(), name)
+        elif len(words) >= 2:
             last = words[-1]
-            if len(last) >= MIN_ALIAS_LEN and last not in GENERIC_ALIAS_STOP:
+            if last in GENERIC_ALIAS_STOP:
+                continue
+            if len(last) >= MIN_ALIAS_LEN:
                 base.setdefault(last.lower(), name)
+            elif len(last) >= 4:
+                # Short surnames ("ul. Zana") are too collision-prone to trust
+                # bare, but fine when an explicit street marker precedes them.
+                base_weak.setdefault(last.lower(), name)
     strong, weak = {}, {}
     for alias, name in base.items():
         strong.setdefault(alias, name)
@@ -70,6 +89,9 @@ def _load_aliases():
             if len(variant) >= MIN_ALIAS_LEN:
                 weak.setdefault(variant, name)
                 weak.setdefault(_fold(variant), name)
+    for alias, name in base_weak.items():
+        weak.setdefault(alias, name)
+        weak.setdefault(_fold(alias), name)
     weak = {a: n for a, n in weak.items() if a not in strong}
     return strong, weak
 
@@ -85,9 +107,21 @@ _SORTED_ALIASES = sorted(_ALL_ALIASES, key=len, reverse=True)
 # when glued to the digits ("26A"), otherwise "56 w Lublinie" would yield "56 w".
 NUMBER_RE = re.compile(r"^\s*\d{1,4}[A-Za-z]?\b")
 
+# Applied to diacritic-folded text, so "ulicą"/"aleją" are covered by their
+# folded forms "ulica"/"aleja".
 _UL_PREFIX_RE = re.compile(
-    r"\b(?:ul|ulica|ulicy|al|aleja|aleje|alei|przy|adres|adresem|adresie)\.?\s*$",
+    r"\b(?:ul|ulica|ulicy|ulice|al|aleja|aleje|alei|alejach|pl|plac|placu"
+    r"|przy|adres|adresem|adresie)\.?\s*$",
     re.IGNORECASE,
+)
+
+# Words that signal the street is only a reference point ("blisko ul. X",
+# "5 minut do ul. X", "dojazd od ul. X"), not the ad's own address. Such a
+# match is demoted, so a street mentioned as the actual address wins over it.
+_PROXIMITY_RE = re.compile(
+    r"(?:blisko|obok|niedaleko|nieopodal|naprzeciw\w*|w pobli\w*|okolic\w*"
+    r"|minut\w*|kilometr\w*|metr\w*|\d+\s*(?:m|km|min)\b|dojazd\w*|dojscie"
+    r"|skrzyzowani\w*|rog|rogu)[^,.;!]{0,25}$"
 )
 
 
@@ -118,26 +152,34 @@ def find_street(text, require_marker=False):
     Hirszfelda" — specific enough on its own). Use it for long free text
     (ad descriptions), where a bare single-word alias hit is usually an
     incidental word ("cicha okolica" vs the street "Cicha"), not the address.
+
+    When several streets are mentioned, the best-scoring one wins: an explicit
+    marker and a house number push a candidate up, a proximity phrase before
+    it ("blisko ul. X") pushes it down, ties go to the earliest mention.
     """
     lower = _fold(text.lower())
-    matches = list(_match_all(lower))
-    if not matches:
-        return None, None
 
     def with_number(end):
         num_m = NUMBER_RE.search(text[end:end + 15])
         return num_m.group(0).strip() if num_m else ""
 
-    for start, end, alias in matches:
-        if _UL_PREFIX_RE.search(lower[:start]):
-            return _ALL_ALIASES[alias], with_number(end)
-
-    if require_marker:
-        for start, end, alias in matches:
-            if " " in alias and alias in ALIASES:
-                return ALIASES[alias], with_number(end)
+    best = None
+    for start, end, alias in _match_all(lower):
+        prefix = lower[:start]
+        marker = _UL_PREFIX_RE.search(prefix)
+        strong = alias in ALIASES
+        if not marker and not strong:
+            continue  # weak (inflected/short) aliases only count after a marker
+        if require_marker and not marker and not (strong and " " in alias):
+            continue
+        number = with_number(end)
+        context = prefix[:marker.start()] if marker else prefix
+        proximity = _PROXIMITY_RE.search(context[-40:])
+        score = (4 if marker else 0) + (2 if number else 0) \
+            + (1 if " " in alias else 0) - (3 if proximity else 0)
+        candidate = (score, -start, _ALL_ALIASES[alias], number)
+        if best is None or candidate > best:
+            best = candidate
+    if best is None:
         return None, None
-    for start, end, alias in matches:
-        if alias in ALIASES:
-            return ALIASES[alias], with_number(end)
-    return None, None
+    return best[2], best[3]
