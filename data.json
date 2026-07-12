@@ -1,5 +1,5 @@
 {
-  "generated_at": "12.07.2026 07:29",
+  "generated_at": "12.07.2026 17:58",
   "sources": [
     "olx.pl",
     "otodom.pl (via OLX)"
@@ -8,98 +8,31 @@
   "stats": {
     "total_offers": 82,
     "garaz_sprzedaz": {
-      "count": 20,
-      "avg": 113295,
+      "count": 19,
+      "avg": 113521,
       "min": 80000,
       "max": 149000
     },
     "garaz_wynajem": {
-      "count": 24,
-      "avg": 448,
+      "count": 25,
+      "avg": 450,
       "min": 250,
       "max": 850
     },
     "parking_wynajem": {
-      "count": 33,
-      "avg": 324,
+      "count": 32,
+      "avg": 312,
       "min": 100,
       "max": 1000
     },
     "parking_sprzedaz": {
-      "count": 4,
-      "avg": 46975,
+      "count": 5,
+      "avg": 49380,
       "min": 34900,
       "max": 64999
     }
   },
   "markers": [
-    {
-      "coords": {
-        "lat": 51.2742,
-        "lon": 22.5427
-      },
-      "address": "Koncertowa",
-      "offers": [
-        {
-          "id": "1082319541",
-          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-osiedle-koncertowa-CID3-ID1bfiKN.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Miejsce parkingowe osiedle Koncertowa",
-          "price": 200,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.274216,
-          "lon": 22.542708,
-          "precision": "street",
-          "address": "Koncertowa",
-          "loc_raw": "Lublin - Odświeżono dnia 11 lipca 2026",
-          "date_iso": "2026-07-11",
-          "date_label": "Odświeżono dnia 11 lipca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            200
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        },
-        {
-          "id": "1077435486",
-          "url": "https://www.olx.pl/d/oferta/garaz-w-lublinie-na-czechowie-ul-koncertowa-sprzedam-CID3-ID1aUObI.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Garaż w Lublinie na Czechowie ul. Koncertowa sprzedam",
-          "price": 110000,
-          "negotiable": true,
-          "transaction": "sprzedaz",
-          "type": "garaz",
-          "lat": 51.274216,
-          "lon": 22.542708,
-          "precision": "street",
-          "address": "Koncertowa",
-          "loc_raw": "Lublin - 03 lipca 2026",
-          "date_iso": "2026-07-03",
-          "date_label": "03 lipca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            110000
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
     {
       "coords": {
         "lat": 51.2506,
@@ -135,256 +68,6 @@
           "is_new": false,
           "active": true,
           "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2502,
-        "lon": 22.5561
-      },
-      "address": "Ogrodowa",
-      "offers": [
-        {
-          "id": "922373320",
-          "url": "https://www.olx.pl/d/oferta/garaz-drewnopodobny-hala-wiata-rolnicza-budka-ogrodowa-magazyn-blaszak-CID3-ID10qbr2.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "GARAŻ Drewnopodobny Hala Wiata Rolnicza Budka ogrodowa Magazyn Blaszak",
-          "price": 11000,
-          "negotiable": false,
-          "transaction": "sprzedaz",
-          "type": "hala_wiata",
-          "lat": 51.25023,
-          "lon": 22.556115,
-          "precision": "street",
-          "address": "Ogrodowa",
-          "loc_raw": "Lublin - 11 lipca 2026",
-          "date_iso": "2026-07-11",
-          "date_label": "11 lipca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            11000
-          ],
-          "first_seen": "2026-07-11",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2477,
-        "lon": 22.5541
-      },
-      "address": "Lublin (lokalizacja nieznana)",
-      "offers": [
-        {
-          "id": "1042091736",
-          "url": "https://www.olx.pl/d/oferta/wynajm-placu-w-lublinie-CID3-ID18vwFe.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Wynajm placu w Lublinie",
-          "price": 320,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "garaz",
-          "lat": 51.247708,
-          "lon": 22.55408,
-          "precision": "unknown",
-          "address": "Lublin (lokalizacja nieznana)",
-          "loc_raw": "Lublin - 11 lipca 2026",
-          "date_iso": "2026-07-11",
-          "date_label": "11 lipca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            320
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        },
-        {
-          "id": "905768205",
-          "url": "https://www.olx.pl/d/oferta/magazyn-samoobslugowy-24-7-przechowalnia-garaz-self-storage-lublin-CID3-IDZiwGB.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Magazyn Samoobsługowy 24/7 przechowalnia garaż self storage LUBLIN",
-          "price": 295,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "garaz",
-          "lat": 51.247708,
-          "lon": 22.55408,
-          "precision": "unknown",
-          "address": "Lublin (lokalizacja nieznana)",
-          "loc_raw": "Lublin - 07 lipca 2026",
-          "date_iso": "2026-07-07",
-          "date_label": "07 lipca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            295
-          ],
-          "first_seen": "2026-07-07",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        },
-        {
-          "id": "1082482938",
-          "url": "https://www.olx.pl/d/oferta/miejsce-postojowe-unia-art-residence-podziemne-wynajme-CID3-ID1bfZge.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Miejsce postojowe-  Unia Art Residence - podziemne - wynajmę",
-          "price": 500,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.247708,
-          "lon": 22.55408,
-          "precision": "unknown",
-          "address": "Lublin (lokalizacja nieznana)",
-          "loc_raw": "Lublin - 28 czerwca 2026",
-          "date_iso": "2026-06-28",
-          "date_label": "28 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            500
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        },
-        {
-          "id": "141458609",
-          "url": "https://www.olx.pl/d/oferta/parking-samochodow-ciezarowych-tir-CID3-ID9zxQt.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Parking samochodów ciężarowych TIR",
-          "price": 320,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.247708,
-          "lon": 22.55408,
-          "precision": "unknown",
-          "address": "Lublin (lokalizacja nieznana)",
-          "loc_raw": "Lublin - 22 czerwca 2026",
-          "date_iso": "2026-06-22",
-          "date_label": "22 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            320
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        },
-        {
-          "id": "1072684898",
-          "url": "https://www.olx.pl/d/oferta/sprzedam-garaz-lublin-CID3-ID1aASlk.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Sprzedam  garaż / Lublin",
-          "price": 105000,
-          "negotiable": false,
-          "transaction": "sprzedaz",
-          "type": "garaz",
-          "lat": 51.247708,
-          "lon": 22.55408,
-          "precision": "unknown",
-          "address": "Lublin (lokalizacja nieznana)",
-          "loc_raw": "Lublin - Odświeżono dnia 09 czerwca 2026",
-          "date_iso": "2026-06-09",
-          "date_label": "Odświeżono dnia 09 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            105000
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": false,
-          "last_seen": "2026-07-11"
-        },
-        {
-          "id": "1083671557",
-          "url": "https://www.olx.pl/d/oferta/garaz-do-wynajecia-CID3-ID1bkYtw.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Garaż do wynajęcia",
-          "price": 350,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "garaz",
-          "lat": 51.247708,
-          "lon": 22.55408,
-          "precision": "unknown",
-          "address": "Lublin (lokalizacja nieznana)",
-          "loc_raw": "Lublin - 06 lipca 2026",
-          "date_iso": "2026-07-06",
-          "date_label": "06 lipca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            350
-          ],
-          "first_seen": "2026-07-06",
-          "is_new": false,
-          "active": false,
-          "last_seen": "2026-07-09"
-        },
-        {
-          "id": "1081715402",
-          "url": "https://www.olx.pl/d/oferta/miejsce-postojowe-wolinskiego-CID3-ID1bcLAC.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Miejsce postojowe wolinskiego",
-          "price": 200,
-          "negotiable": true,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.247708,
-          "lon": 22.55408,
-          "precision": "unknown",
-          "address": "Lublin (lokalizacja nieznana)",
-          "loc_raw": "Lublin - 24 czerwca 2026",
-          "date_iso": "2026-06-24",
-          "date_label": "24 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            200
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": false,
-          "last_seen": "2026-07-05"
         }
       ]
     },
@@ -466,6 +149,73 @@
     },
     {
       "coords": {
+        "lat": 51.2742,
+        "lon": 22.5427
+      },
+      "address": "Koncertowa",
+      "offers": [
+        {
+          "id": "1077435486",
+          "url": "https://www.olx.pl/d/oferta/garaz-w-lublinie-na-czechowie-ul-koncertowa-sprzedam-CID3-ID1aUObI.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Garaż w Lublinie na Czechowie ul. Koncertowa sprzedam",
+          "price": 110000,
+          "negotiable": true,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.274216,
+          "lon": 22.542708,
+          "precision": "street",
+          "address": "Koncertowa",
+          "loc_raw": "Lublin - 03 lipca 2026",
+          "date_iso": "2026-07-03",
+          "date_label": "03 lipca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            110000
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        },
+        {
+          "id": "1082319541",
+          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-osiedle-koncertowa-CID3-ID1bfiKN.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsce parkingowe osiedle Koncertowa",
+          "price": 200,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.274216,
+          "lon": 22.542708,
+          "precision": "street",
+          "address": "Koncertowa",
+          "loc_raw": "Lublin - Odświeżono dnia 11 lipca 2026",
+          "date_iso": "2026-07-11",
+          "date_label": "Odświeżono dnia 11 lipca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            200
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
         "lat": 51.2668,
         "lon": 22.5193
       },
@@ -497,6 +247,82 @@
           ],
           "first_seen": "2026-07-01",
           "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2434,
+        "lon": 22.5878
+      },
+      "address": "Przyjaźni",
+      "offers": [
+        {
+          "id": "1080088931",
+          "url": "https://www.olx.pl/d/oferta/garaz-ul-przyjazni-z-kanalem-CID3-ID1b5Vtd.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Garaż ul. Przyjaźni z kanałem",
+          "price": 110000,
+          "negotiable": false,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.243355,
+          "lon": 22.587824,
+          "precision": "street",
+          "address": "Przyjaźni",
+          "loc_raw": "Lublin - 16 czerwca 2026",
+          "date_iso": "2026-06-16",
+          "date_label": "16 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            110000
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2229,
+        "lon": 22.4931
+      },
+      "address": "Jantarowa 6",
+      "offers": [
+        {
+          "id": "1084021287",
+          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-garaz-jantarowa-6-weglinek-CID3-ID1bmrsj.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsce parkingowe | Garaż | Jantarowa 6 | Węglinek",
+          "price": 59000,
+          "negotiable": true,
+          "transaction": "sprzedaz",
+          "type": "miejsce_parkingowe",
+          "lat": 51.222864,
+          "lon": 22.493143,
+          "precision": "exact",
+          "address": "Jantarowa 6",
+          "loc_raw": "Lublin - Dzisiaj o 11:34",
+          "date_iso": "2026-07-12",
+          "date_label": "dzisiaj o 11:34",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_history": [
+            59000
+          ],
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "first_seen": "2026-07-12",
+          "is_new": true,
           "active": true,
           "last_seen": "2026-07-12"
         }
@@ -677,44 +503,6 @@
     },
     {
       "coords": {
-        "lat": 51.2434,
-        "lon": 22.5878
-      },
-      "address": "Przyjaźni",
-      "offers": [
-        {
-          "id": "1080088931",
-          "url": "https://www.olx.pl/d/oferta/garaz-ul-przyjazni-z-kanalem-CID3-ID1b5Vtd.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Garaż ul. Przyjaźni z kanałem",
-          "price": 110000,
-          "negotiable": false,
-          "transaction": "sprzedaz",
-          "type": "garaz",
-          "lat": 51.243355,
-          "lon": 22.587824,
-          "precision": "street",
-          "address": "Przyjaźni",
-          "loc_raw": "Lublin - 16 czerwca 2026",
-          "date_iso": "2026-06-16",
-          "date_label": "16 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            110000
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.2548,
         "lon": 22.5862
       },
@@ -830,36 +618,36 @@
     },
     {
       "coords": {
-        "lat": 51.2547,
-        "lon": 22.5311
+        "lat": 51.2238,
+        "lon": 22.4829
       },
-      "address": "Puławska 31a",
+      "address": "Koralowa 13",
       "offers": [
         {
-          "id": "958190153",
-          "url": "https://www.otodom.pl/pl/oferta/garaze-na-ul-pulawskiej-w-lublinie-ID4tmMD",
-          "source": "otodom",
-          "title": "Garaże na ul. Puławskiej w Lublinie",
-          "price": 105000,
+          "id": "1084330613",
+          "url": "https://www.olx.pl/d/oferta/miejsce-postojowe-w-garazu-podziemnym-koralowa-13-CID3-ID1bnJWr.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsce postojowe w garażu  podziemnym KORALOWA 13",
+          "price": 350,
           "negotiable": false,
-          "transaction": "sprzedaz",
-          "type": "garaz",
-          "lat": 51.25467,
-          "lon": 22.531149,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.223818,
+          "lon": 22.482896,
           "precision": "exact",
-          "address": "Puławska 31a",
-          "loc_raw": "Lublin - 08 czerwca 2026",
-          "date_iso": "2026-06-08",
-          "date_label": "08 czerwca 2026",
+          "address": "Koralowa 13",
+          "loc_raw": "Lublin - 08 lipca 2026",
+          "date_iso": "2026-07-08",
+          "date_label": "08 lipca 2026",
           "area_m2": null,
           "price_per_m2": null,
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
           "price_history": [
-            105000
+            350
           ],
-          "first_seen": "2026-07-01",
+          "first_seen": "2026-07-09",
           "is_new": false,
           "active": true,
           "last_seen": "2026-07-12"
@@ -868,37 +656,37 @@
     },
     {
       "coords": {
-        "lat": 51.2381,
-        "lon": 22.5252
+        "lat": 51.2559,
+        "lon": 22.5336
       },
-      "address": "Jana Sawy 4",
+      "address": "Puławska 31",
       "offers": [
         {
-          "id": "1035087161",
-          "url": "https://www.olx.pl/d/oferta/duzy-garaz-magazyn-25m2-jana-sawy-4-do-wynajecia-lublin-CID3-ID1837sd.html?search_reason=search%7Corganic",
+          "id": "1084928221",
+          "url": "https://www.olx.pl/d/oferta/wynajme-garaz-murowany-pulawska-31-wieniawa-500pln-CID3-ID1bqfoh.html?search_reason=search%7Corganic",
           "source": "olx",
-          "title": "Duży Garaż/Magazyn 25m2.Jana Sawy 4 do wynajęcia Lublin",
-          "price": 850,
+          "title": "Wynajmę garaż murowany Puławska 31 Wieniawa 500PLN",
+          "price": 500,
           "negotiable": false,
           "transaction": "wynajem",
           "type": "garaz",
-          "lat": 51.238074,
-          "lon": 22.525227,
+          "lat": 51.255883,
+          "lon": 22.533594,
           "precision": "exact",
-          "address": "Jana Sawy 4",
-          "loc_raw": "Lublin - 11 lipca 2026",
-          "date_iso": "2026-07-11",
-          "date_label": "11 lipca 2026",
-          "area_m2": 25.0,
+          "address": "Puławska 31",
+          "loc_raw": "Lublin - Dzisiaj o 08:50",
+          "date_iso": "2026-07-12",
+          "date_label": "dzisiaj o 08:50",
+          "area_m2": null,
           "price_per_m2": null,
+          "price_history": [
+            500
+          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
-          "price_history": [
-            850
-          ],
-          "first_seen": "2026-07-11",
-          "is_new": false,
+          "first_seen": "2026-07-12",
+          "is_new": true,
           "active": true,
           "last_seen": "2026-07-12"
         }
@@ -1002,36 +790,36 @@
     },
     {
       "coords": {
-        "lat": 51.2238,
-        "lon": 22.4829
+        "lat": 51.2381,
+        "lon": 22.5252
       },
-      "address": "Koralowa 13",
+      "address": "Jana Sawy 4",
       "offers": [
         {
-          "id": "1084330613",
-          "url": "https://www.olx.pl/d/oferta/miejsce-postojowe-w-garazu-podziemnym-koralowa-13-CID3-ID1bnJWr.html?search_reason=search%7Corganic",
+          "id": "1035087161",
+          "url": "https://www.olx.pl/d/oferta/duzy-garaz-magazyn-25m2-jana-sawy-4-do-wynajecia-lublin-CID3-ID1837sd.html?search_reason=search%7Corganic",
           "source": "olx",
-          "title": "Miejsce postojowe w garażu  podziemnym KORALOWA 13",
-          "price": 350,
+          "title": "Duży Garaż/Magazyn 25m2.Jana Sawy 4 do wynajęcia Lublin",
+          "price": 850,
           "negotiable": false,
           "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.223818,
-          "lon": 22.482896,
+          "type": "garaz",
+          "lat": 51.238074,
+          "lon": 22.525227,
           "precision": "exact",
-          "address": "Koralowa 13",
-          "loc_raw": "Lublin - 08 lipca 2026",
-          "date_iso": "2026-07-08",
-          "date_label": "08 lipca 2026",
-          "area_m2": null,
+          "address": "Jana Sawy 4",
+          "loc_raw": "Lublin - 11 lipca 2026",
+          "date_iso": "2026-07-11",
+          "date_label": "11 lipca 2026",
+          "area_m2": 25.0,
           "price_per_m2": null,
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
           "price_history": [
-            350
+            850
           ],
-          "first_seen": "2026-07-09",
+          "first_seen": "2026-07-11",
           "is_new": false,
           "active": true,
           "last_seen": "2026-07-12"
@@ -1078,6 +866,256 @@
     },
     {
       "coords": {
+        "lat": 51.2502,
+        "lon": 22.5561
+      },
+      "address": "Ogrodowa",
+      "offers": [
+        {
+          "id": "922373320",
+          "url": "https://www.olx.pl/d/oferta/garaz-drewnopodobny-hala-wiata-rolnicza-budka-ogrodowa-magazyn-blaszak-CID3-ID10qbr2.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "GARAŻ Drewnopodobny Hala Wiata Rolnicza Budka ogrodowa Magazyn Blaszak",
+          "price": 11000,
+          "negotiable": false,
+          "transaction": "sprzedaz",
+          "type": "hala_wiata",
+          "lat": 51.25023,
+          "lon": 22.556115,
+          "precision": "street",
+          "address": "Ogrodowa",
+          "loc_raw": "Lublin - 11 lipca 2026",
+          "date_iso": "2026-07-11",
+          "date_label": "11 lipca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            11000
+          ],
+          "first_seen": "2026-07-11",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2477,
+        "lon": 22.5541
+      },
+      "address": "Lublin (lokalizacja nieznana)",
+      "offers": [
+        {
+          "id": "905768205",
+          "url": "https://www.olx.pl/d/oferta/magazyn-samoobslugowy-24-7-przechowalnia-garaz-self-storage-lublin-CID3-IDZiwGB.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Magazyn Samoobsługowy 24/7 przechowalnia garaż self storage LUBLIN",
+          "price": 295,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "garaz",
+          "lat": 51.247708,
+          "lon": 22.55408,
+          "precision": "unknown",
+          "address": "Lublin (lokalizacja nieznana)",
+          "loc_raw": "Lublin - 07 lipca 2026",
+          "date_iso": "2026-07-07",
+          "date_label": "07 lipca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            295
+          ],
+          "first_seen": "2026-07-07",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        },
+        {
+          "id": "1042091736",
+          "url": "https://www.olx.pl/d/oferta/wynajm-placu-w-lublinie-CID3-ID18vwFe.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Wynajm placu w Lublinie",
+          "price": 320,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "garaz",
+          "lat": 51.247708,
+          "lon": 22.55408,
+          "precision": "unknown",
+          "address": "Lublin (lokalizacja nieznana)",
+          "loc_raw": "Lublin - 11 lipca 2026",
+          "date_iso": "2026-07-11",
+          "date_label": "11 lipca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            320
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        },
+        {
+          "id": "1082482938",
+          "url": "https://www.olx.pl/d/oferta/miejsce-postojowe-unia-art-residence-podziemne-wynajme-CID3-ID1bfZge.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsce postojowe-  Unia Art Residence - podziemne - wynajmę",
+          "price": 500,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.247708,
+          "lon": 22.55408,
+          "precision": "unknown",
+          "address": "Lublin (lokalizacja nieznana)",
+          "loc_raw": "Lublin - 28 czerwca 2026",
+          "date_iso": "2026-06-28",
+          "date_label": "28 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            500
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        },
+        {
+          "id": "141458609",
+          "url": "https://www.olx.pl/d/oferta/parking-samochodow-ciezarowych-tir-CID3-ID9zxQt.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Parking samochodów ciężarowych TIR",
+          "price": 320,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.247708,
+          "lon": 22.55408,
+          "precision": "unknown",
+          "address": "Lublin (lokalizacja nieznana)",
+          "loc_raw": "Lublin - 22 czerwca 2026",
+          "date_iso": "2026-06-22",
+          "date_label": "22 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            320
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        },
+        {
+          "id": "1072684898",
+          "url": "https://www.olx.pl/d/oferta/sprzedam-garaz-lublin-CID3-ID1aASlk.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Sprzedam  garaż / Lublin",
+          "price": 105000,
+          "negotiable": false,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.247708,
+          "lon": 22.55408,
+          "precision": "unknown",
+          "address": "Lublin (lokalizacja nieznana)",
+          "loc_raw": "Lublin - Odświeżono dnia 09 czerwca 2026",
+          "date_iso": "2026-06-09",
+          "date_label": "Odświeżono dnia 09 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            105000
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": false,
+          "last_seen": "2026-07-11"
+        },
+        {
+          "id": "1083671557",
+          "url": "https://www.olx.pl/d/oferta/garaz-do-wynajecia-CID3-ID1bkYtw.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Garaż do wynajęcia",
+          "price": 350,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "garaz",
+          "lat": 51.247708,
+          "lon": 22.55408,
+          "precision": "unknown",
+          "address": "Lublin (lokalizacja nieznana)",
+          "loc_raw": "Lublin - 06 lipca 2026",
+          "date_iso": "2026-07-06",
+          "date_label": "06 lipca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            350
+          ],
+          "first_seen": "2026-07-06",
+          "is_new": false,
+          "active": false,
+          "last_seen": "2026-07-09"
+        },
+        {
+          "id": "1081715402",
+          "url": "https://www.olx.pl/d/oferta/miejsce-postojowe-wolinskiego-CID3-ID1bcLAC.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsce postojowe wolinskiego",
+          "price": 200,
+          "negotiable": true,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.247708,
+          "lon": 22.55408,
+          "precision": "unknown",
+          "address": "Lublin (lokalizacja nieznana)",
+          "loc_raw": "Lublin - 24 czerwca 2026",
+          "date_iso": "2026-06-24",
+          "date_label": "24 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            200
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": false,
+          "last_seen": "2026-07-05"
+        }
+      ]
+    },
+    {
+      "coords": {
         "lat": 51.2562,
         "lon": 22.5339
       },
@@ -1116,35 +1154,34 @@
     },
     {
       "coords": {
-        "lat": 51.2683,
-        "lon": 22.5622
+        "lat": 51.2547,
+        "lon": 22.5311
       },
-      "address": "Józefa Mackiewicza 17A",
+      "address": "Puławska 31a",
       "offers": [
         {
-          "id": "1028031503",
-          "url": "https://www.olx.pl/d/oferta/garaz-inwestycyjny-bezczynszowy-z-najemca-400zl-mc-mackiewicza-17a-CID3-ID17zwXh.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Garaż inwestycyjny bezczynszowy z najemcą 400zł/mc Mackiewicza 17A",
-          "price": 109000,
-          "negotiable": true,
+          "id": "958190153",
+          "url": "https://www.otodom.pl/pl/oferta/garaze-na-ul-pulawskiej-w-lublinie-ID4tmMD",
+          "source": "otodom",
+          "title": "Garaże na ul. Puławskiej w Lublinie",
+          "price": 105000,
+          "negotiable": false,
           "transaction": "sprzedaz",
           "type": "garaz",
-          "lat": 51.26835,
-          "lon": 22.562232,
+          "lat": 51.25467,
+          "lon": 22.531149,
           "precision": "exact",
-          "address": "Józefa Mackiewicza 17A",
-          "loc_raw": "Lublin - 12 czerwca 2026",
-          "date_iso": "2026-06-12",
-          "date_label": "12 czerwca 2026",
+          "address": "Puławska 31a",
+          "loc_raw": "Lublin - 08 czerwca 2026",
+          "date_iso": "2026-06-08",
+          "date_label": "08 czerwca 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_trend": "up",
-          "previous_price": 108000,
-          "price_changed_at": "2026-07-07",
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
           "price_history": [
-            108000,
-            109000
+            105000
           ],
           "first_seen": "2026-07-01",
           "is_new": false,
@@ -1307,84 +1344,6 @@
     },
     {
       "coords": {
-        "lat": 51.2605,
-        "lon": 22.569
-      },
-      "address": "Ludwika Hirszfelda",
-      "offers": [
-        {
-          "id": "1084761135",
-          "url": "https://www.olx.pl/d/oferta/sprzedam-garaz-lublin-CID3-ID1bpxWl.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Sprzedam garaż Lublin",
-          "price": 100000,
-          "negotiable": false,
-          "transaction": "sprzedaz",
-          "type": "garaz",
-          "lat": 51.260513,
-          "lon": 22.568976,
-          "precision": "street",
-          "address": "Ludwika Hirszfelda",
-          "loc_raw": "Lublin - 10 lipca 2026",
-          "date_iso": "2026-07-10",
-          "date_label": "10 lipca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            100000
-          ],
-          "first_seen": "2026-07-11",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2453,
-        "lon": 22.5276
-      },
-      "address": "Lesława Pagi",
-      "offers": [
-        {
-          "id": "1083297726",
-          "url": "https://www.olx.pl/d/oferta/pagi-miejsce-parking-w-garazu-podziemnym-CID3-ID1bjpdY.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Pagi miejsce parking. w garażu podziemnym",
-          "price": 250,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.245292,
-          "lon": 22.527646,
-          "precision": "street",
-          "address": "Lesława Pagi",
-          "loc_raw": "Lublin - Odświeżono dnia 10 lipca 2026",
-          "date_iso": "2026-07-10",
-          "date_label": "Odświeżono dnia 10 lipca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": "down",
-          "previous_price": 270,
-          "price_changed_at": "2026-07-10",
-          "price_history": [
-            290,
-            270,
-            250
-          ],
-          "first_seen": "2026-07-03",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.2531,
         "lon": 22.5254
       },
@@ -1413,6 +1372,44 @@
           "price_changed_at": null,
           "price_history": [
             500
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2781,
+        "lon": 22.5827
+      },
+      "address": "Dożynkowa 36",
+      "offers": [
+        {
+          "id": "1081148121",
+          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-pod-blokiem-ul-dozynkowa-36-CID3-ID1bao0W.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsce parkingowe pod blokiem ul. Dożynkowa 36",
+          "price": 300,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.2781,
+          "lon": 22.582668,
+          "precision": "exact",
+          "address": "Dożynkowa 36",
+          "loc_raw": "Lublin - 30 czerwca 2026",
+          "date_iso": "2026-06-30",
+          "date_label": "30 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            300
           ],
           "first_seen": "2026-07-01",
           "is_new": false,
@@ -1500,103 +1497,38 @@
     },
     {
       "coords": {
-        "lat": 51.2314,
-        "lon": 22.5819
+        "lat": 51.2453,
+        "lon": 22.5276
       },
-      "address": "Startowa 13A",
+      "address": "Lesława Pagi",
       "offers": [
         {
-          "id": "1083611999",
-          "url": "https://www.olx.pl/d/oferta/wynajme-miejsce-parkingowe-CID3-ID1bkIYT.html?search_reason=search%7Corganic",
+          "id": "1083297726",
+          "url": "https://www.olx.pl/d/oferta/pagi-miejsce-parking-w-garazu-podziemnym-CID3-ID1bjpdY.html?search_reason=search%7Corganic",
           "source": "olx",
-          "title": "Wynajmę miejsce parkingowe",
-          "price": 270,
+          "title": "Pagi miejsce parking. w garażu podziemnym",
+          "price": 250,
           "negotiable": false,
           "transaction": "wynajem",
           "type": "miejsce_parkingowe",
-          "lat": 51.2314,
-          "lon": 22.581932,
-          "precision": "exact",
-          "address": "Startowa 13A",
-          "loc_raw": "Lublin - 10 lipca 2026",
+          "lat": 51.245292,
+          "lon": 22.527646,
+          "precision": "street",
+          "address": "Lesława Pagi",
+          "loc_raw": "Lublin - Odświeżono dnia 10 lipca 2026",
           "date_iso": "2026-07-10",
-          "date_label": "10 lipca 2026",
+          "date_label": "Odświeżono dnia 10 lipca 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
+          "price_trend": "down",
+          "previous_price": 270,
+          "price_changed_at": "2026-07-10",
           "price_history": [
-            270
+            290,
+            270,
+            250
           ],
-          "first_seen": "2026-07-10",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        },
-        {
-          "id": "1072033233",
-          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-w-garazu-podziemnym-do-wynajecia-lublin-ul-startowa13a-CID3-ID1ay8OB.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Miejsce parkingowe w garażu podziemnym do wynajecia Lublin ul. Startowa13a",
-          "price": 300,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.2314,
-          "lon": 22.581932,
-          "precision": "exact",
-          "address": "Startowa 13a",
-          "loc_raw": "Lublin - 21 czerwca 2026",
-          "date_iso": "2026-06-21",
-          "date_label": "21 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            300
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2781,
-        "lon": 22.5827
-      },
-      "address": "Dożynkowa 36",
-      "offers": [
-        {
-          "id": "1081148121",
-          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-pod-blokiem-ul-dozynkowa-36-CID3-ID1bao0W.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Miejsce parkingowe pod blokiem ul. Dożynkowa 36",
-          "price": 300,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.2781,
-          "lon": 22.582668,
-          "precision": "exact",
-          "address": "Dożynkowa 36",
-          "loc_raw": "Lublin - 30 czerwca 2026",
-          "date_iso": "2026-06-30",
-          "date_label": "30 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            300
-          ],
-          "first_seen": "2026-07-01",
+          "first_seen": "2026-07-03",
           "is_new": false,
           "active": true,
           "last_seen": "2026-07-12"
@@ -1681,76 +1613,65 @@
     },
     {
       "coords": {
-        "lat": 51.2402,
+        "lat": 51.2314,
         "lon": 22.5819
       },
-      "address": "Firlejowska 2A",
+      "address": "Startowa 13A",
       "offers": [
         {
-          "id": "1084048229",
-          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-CID3-ID1bmysR.html?search_reason=search%7Corganic",
+          "id": "1083611999",
+          "url": "https://www.olx.pl/d/oferta/wynajme-miejsce-parkingowe-CID3-ID1bkIYT.html?search_reason=search%7Corganic",
           "source": "olx",
-          "title": "miejsce parkingowe",
-          "price": 36000,
+          "title": "Wynajmę miejsce parkingowe",
+          "price": 270,
           "negotiable": false,
-          "transaction": "sprzedaz",
-          "type": "miejsce_parkingowe",
-          "lat": 51.240193,
-          "lon": 22.581943,
-          "precision": "exact",
-          "address": "Firlejowska 2A",
-          "loc_raw": "Lublin - 07 lipca 2026",
-          "date_iso": "2026-07-07",
-          "date_label": "07 lipca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": "down",
-          "previous_price": 46000,
-          "price_changed_at": "2026-07-09",
-          "price_history": [
-            36000,
-            46000,
-            36000
-          ],
-          "first_seen": "2026-07-07",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2239,
-        "lon": 22.4939
-      },
-      "address": "Kryształowa 7",
-      "offers": [
-        {
-          "id": "1084523060",
-          "url": "https://www.olx.pl/d/oferta/garaz-do-wynajecia-podziemny-krysztalowa-7-CID3-ID1boxZq.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "GARAŻ do wynajęcia- podziemny Kryształowa 7",
-          "price": 480,
-          "negotiable": true,
           "transaction": "wynajem",
-          "type": "garaz",
-          "lat": 51.223919,
-          "lon": 22.493907,
+          "type": "miejsce_parkingowe",
+          "lat": 51.2314,
+          "lon": 22.581932,
           "precision": "exact",
-          "address": "Kryształowa 7",
-          "loc_raw": "Lublin - 09 lipca 2026",
-          "date_iso": "2026-07-09",
-          "date_label": "09 lipca 2026",
+          "address": "Startowa 13A",
+          "loc_raw": "Lublin - 10 lipca 2026",
+          "date_iso": "2026-07-10",
+          "date_label": "10 lipca 2026",
           "area_m2": null,
           "price_per_m2": null,
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
           "price_history": [
-            480
+            270
           ],
-          "first_seen": "2026-07-09",
+          "first_seen": "2026-07-10",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        },
+        {
+          "id": "1072033233",
+          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-w-garazu-podziemnym-do-wynajecia-lublin-ul-startowa13a-CID3-ID1ay8OB.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsce parkingowe w garażu podziemnym do wynajecia Lublin ul. Startowa13a",
+          "price": 300,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.2314,
+          "lon": 22.581932,
+          "precision": "exact",
+          "address": "Startowa 13a",
+          "loc_raw": "Lublin - 21 czerwca 2026",
+          "date_iso": "2026-06-21",
+          "date_label": "21 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            300
+          ],
+          "first_seen": "2026-07-01",
           "is_new": false,
           "active": true,
           "last_seen": "2026-07-12"
@@ -1826,6 +1747,82 @@
     },
     {
       "coords": {
+        "lat": 51.2239,
+        "lon": 22.4939
+      },
+      "address": "Kryształowa 7",
+      "offers": [
+        {
+          "id": "1084523060",
+          "url": "https://www.olx.pl/d/oferta/garaz-do-wynajecia-podziemny-krysztalowa-7-CID3-ID1boxZq.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "GARAŻ do wynajęcia- podziemny Kryształowa 7",
+          "price": 480,
+          "negotiable": true,
+          "transaction": "wynajem",
+          "type": "garaz",
+          "lat": 51.223919,
+          "lon": 22.493907,
+          "precision": "exact",
+          "address": "Kryształowa 7",
+          "loc_raw": "Lublin - 09 lipca 2026",
+          "date_iso": "2026-07-09",
+          "date_label": "09 lipca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            480
+          ],
+          "first_seen": "2026-07-09",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2605,
+        "lon": 22.569
+      },
+      "address": "Ludwika Hirszfelda",
+      "offers": [
+        {
+          "id": "1084761135",
+          "url": "https://www.olx.pl/d/oferta/sprzedam-garaz-lublin-CID3-ID1bpxWl.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Sprzedam garaż Lublin",
+          "price": 100000,
+          "negotiable": false,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.260513,
+          "lon": 22.568976,
+          "precision": "street",
+          "address": "Ludwika Hirszfelda",
+          "loc_raw": "Lublin - 10 lipca 2026",
+          "date_iso": "2026-07-10",
+          "date_label": "10 lipca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            100000
+          ],
+          "first_seen": "2026-07-11",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
         "lat": 51.2576,
         "lon": 22.5545
       },
@@ -1854,44 +1851,6 @@
           "price_changed_at": null,
           "price_history": [
             400
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2429,
-        "lon": 22.5146
-      },
-      "address": "Tomasza Zana 11a",
-      "offers": [
-        {
-          "id": "1080940057",
-          "url": "https://www.olx.pl/d/oferta/miejsce-garazowe-zana-CID3-ID1b9wT3.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Miejsce garażowe Zana",
-          "price": 300,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "garaz",
-          "lat": 51.242903,
-          "lon": 22.514579,
-          "precision": "exact",
-          "address": "Tomasza Zana 11a",
-          "loc_raw": "Lublin - 20 czerwca 2026",
-          "date_iso": "2026-06-20",
-          "date_label": "20 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            300
           ],
           "first_seen": "2026-07-01",
           "is_new": false,
@@ -1978,6 +1937,84 @@
     },
     {
       "coords": {
+        "lat": 51.2402,
+        "lon": 22.5819
+      },
+      "address": "Firlejowska 2A",
+      "offers": [
+        {
+          "id": "1084048229",
+          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-CID3-ID1bmysR.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "miejsce parkingowe",
+          "price": 36000,
+          "negotiable": false,
+          "transaction": "sprzedaz",
+          "type": "miejsce_parkingowe",
+          "lat": 51.240193,
+          "lon": 22.581943,
+          "precision": "exact",
+          "address": "Firlejowska 2A",
+          "loc_raw": "Lublin - 07 lipca 2026",
+          "date_iso": "2026-07-07",
+          "date_label": "07 lipca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": "down",
+          "previous_price": 46000,
+          "price_changed_at": "2026-07-09",
+          "price_history": [
+            36000,
+            46000,
+            36000
+          ],
+          "first_seen": "2026-07-07",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2429,
+        "lon": 22.5146
+      },
+      "address": "Tomasza Zana 11a",
+      "offers": [
+        {
+          "id": "1080940057",
+          "url": "https://www.olx.pl/d/oferta/miejsce-garazowe-zana-CID3-ID1b9wT3.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsce garażowe Zana",
+          "price": 300,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "garaz",
+          "lat": 51.242903,
+          "lon": 22.514579,
+          "precision": "exact",
+          "address": "Tomasza Zana 11a",
+          "loc_raw": "Lublin - 20 czerwca 2026",
+          "date_iso": "2026-06-20",
+          "date_label": "20 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            300
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
         "lat": 51.2429,
         "lon": 22.5588
       },
@@ -2038,44 +2075,6 @@
           "loc_raw": "Lublin - 25 czerwca 2026",
           "date_iso": "2026-06-25",
           "date_label": "25 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            300
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2772,
-        "lon": 22.51
-      },
-      "address": "Bukszpanowa 4",
-      "offers": [
-        {
-          "id": "1079881705",
-          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-na-parkingu-podziemnym-lublin-bukszpanowa-4-CID3-ID1b54yR.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Miejsce parkingowe na parkingu podziemnym.  Lublin, Bukszpanowa 4.",
-          "price": 300,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.277183,
-          "lon": 22.509987,
-          "precision": "exact",
-          "address": "Bukszpanowa 4",
-          "loc_raw": "Lublin - 15 czerwca 2026",
-          "date_iso": "2026-06-15",
-          "date_label": "15 czerwca 2026",
           "area_m2": null,
           "price_per_m2": null,
           "price_trend": null,
@@ -2274,6 +2273,44 @@
     },
     {
       "coords": {
+        "lat": 51.2688,
+        "lon": 22.5425
+      },
+      "address": "Operowa 8",
+      "offers": [
+        {
+          "id": "1050041399",
+          "url": "https://www.olx.pl/d/oferta/wynajme-garaz-na-czechowie-ul-operowa-8-CID3-ID193RJB.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Wynajmę garaż na Czechowie ul Operowa 8",
+          "price": 450,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "garaz",
+          "lat": 51.268818,
+          "lon": 22.542454,
+          "precision": "exact",
+          "address": "Operowa 8",
+          "loc_raw": "Lublin - 14 czerwca 2026",
+          "date_iso": "2026-06-14",
+          "date_label": "14 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            450
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
         "lat": 51.2233,
         "lon": 22.4947
       },
@@ -2370,44 +2407,6 @@
     },
     {
       "coords": {
-        "lat": 51.2688,
-        "lon": 22.5425
-      },
-      "address": "Operowa 8",
-      "offers": [
-        {
-          "id": "1050041399",
-          "url": "https://www.olx.pl/d/oferta/wynajme-garaz-na-czechowie-ul-operowa-8-CID3-ID193RJB.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Wynajmę garaż na Czechowie ul Operowa 8",
-          "price": 450,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "garaz",
-          "lat": 51.268818,
-          "lon": 22.542454,
-          "precision": "exact",
-          "address": "Operowa 8",
-          "loc_raw": "Lublin - 14 czerwca 2026",
-          "date_iso": "2026-06-14",
-          "date_label": "14 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            450
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.2478,
         "lon": 22.5376
       },
@@ -2484,27 +2483,27 @@
     },
     {
       "coords": {
-        "lat": 51.2367,
-        "lon": 22.5281
+        "lat": 51.2772,
+        "lon": 22.51
       },
-      "address": "Pana Balcera 6A",
+      "address": "Bukszpanowa 4",
       "offers": [
         {
-          "id": "1080937525",
-          "url": "https://www.olx.pl/d/oferta/do-wynajecia-miejsce-postojowe-ul-pana-balcera-6a-CID3-ID1b9wed.html?search_reason=search%7Corganic",
+          "id": "1079881705",
+          "url": "https://www.olx.pl/d/oferta/miejsce-parkingowe-na-parkingu-podziemnym-lublin-bukszpanowa-4-CID3-ID1b54yR.html?search_reason=search%7Corganic",
           "source": "olx",
-          "title": "Do wynajęcia miejsce postojowe - ul. Pana Balcera 6A.",
+          "title": "Miejsce parkingowe na parkingu podziemnym.  Lublin, Bukszpanowa 4.",
           "price": 300,
           "negotiable": false,
           "transaction": "wynajem",
           "type": "miejsce_parkingowe",
-          "lat": 51.236665,
-          "lon": 22.528052,
+          "lat": 51.277183,
+          "lon": 22.509987,
           "precision": "exact",
-          "address": "Pana Balcera 6A",
-          "loc_raw": "Lublin - 20 czerwca 2026",
-          "date_iso": "2026-06-20",
-          "date_label": "20 czerwca 2026",
+          "address": "Bukszpanowa 4",
+          "loc_raw": "Lublin - 15 czerwca 2026",
+          "date_iso": "2026-06-15",
+          "date_label": "15 czerwca 2026",
           "area_m2": null,
           "price_per_m2": null,
           "price_trend": null,
@@ -2560,27 +2559,27 @@
     },
     {
       "coords": {
-        "lat": 51.2251,
-        "lon": 22.4852
+        "lat": 51.2367,
+        "lon": 22.5281
       },
-      "address": "Koralowa 31",
+      "address": "Pana Balcera 6A",
       "offers": [
         {
-          "id": "1079721017",
-          "url": "https://www.olx.pl/d/oferta/wynajme-garaz-podziemny-w-bloku-ul-koralowa-31-a-weglinek-CID3-ID1b4oL7.html?search_reason=search%7Corganic",
+          "id": "1080937525",
+          "url": "https://www.olx.pl/d/oferta/do-wynajecia-miejsce-postojowe-ul-pana-balcera-6a-CID3-ID1b9wed.html?search_reason=search%7Corganic",
           "source": "olx",
-          "title": "Wynajmę garaż podziemny w bloku , ul. Koralowa 31 A, Węglinek",
+          "title": "Do wynajęcia miejsce postojowe - ul. Pana Balcera 6A.",
           "price": 300,
           "negotiable": false,
           "transaction": "wynajem",
-          "type": "garaz",
-          "lat": 51.225055,
-          "lon": 22.485222,
+          "type": "miejsce_parkingowe",
+          "lat": 51.236665,
+          "lon": 22.528052,
           "precision": "exact",
-          "address": "Koralowa 31",
-          "loc_raw": "Lublin - 15 czerwca 2026",
-          "date_iso": "2026-06-15",
-          "date_label": "15 czerwca 2026",
+          "address": "Pana Balcera 6A",
+          "loc_raw": "Lublin - 20 czerwca 2026",
+          "date_iso": "2026-06-20",
+          "date_label": "20 czerwca 2026",
           "area_m2": null,
           "price_per_m2": null,
           "price_trend": null,
@@ -2588,6 +2587,44 @@
           "price_changed_at": null,
           "price_history": [
             300
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2516,
+        "lon": 22.5282
+      },
+      "address": "Aleje Racławickie 33",
+      "offers": [
+        {
+          "id": "1077205868",
+          "url": "https://www.olx.pl/d/oferta/garaz-okolo-16m2-w-parkingu-podziemnym-pod-budynkiem-przy-al-raclawickich-33-CID3-ID1aTQsc.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Garaż około 16m2, w parkingu podziemnym pod budynkiem przy al. Racławickich 33",
+          "price": 500,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.251586,
+          "lon": 22.528187,
+          "precision": "exact",
+          "address": "Aleje Racławickie 33",
+          "loc_raw": "Lublin - 09 lipca 2026",
+          "date_iso": "2026-07-09",
+          "date_label": "09 lipca 2026",
+          "area_m2": 16.0,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            500
           ],
           "first_seen": "2026-07-01",
           "is_new": false,
@@ -2636,34 +2673,34 @@
     },
     {
       "coords": {
-        "lat": 51.2516,
-        "lon": 22.5282
+        "lat": 51.2251,
+        "lon": 22.4852
       },
-      "address": "Aleje Racławickie 33",
+      "address": "Koralowa 31",
       "offers": [
         {
-          "id": "1077205868",
-          "url": "https://www.olx.pl/d/oferta/garaz-okolo-16m2-w-parkingu-podziemnym-pod-budynkiem-przy-al-raclawickich-33-CID3-ID1aTQsc.html?search_reason=search%7Corganic",
+          "id": "1079721017",
+          "url": "https://www.olx.pl/d/oferta/wynajme-garaz-podziemny-w-bloku-ul-koralowa-31-a-weglinek-CID3-ID1b4oL7.html?search_reason=search%7Corganic",
           "source": "olx",
-          "title": "Garaż około 16m2, w parkingu podziemnym pod budynkiem przy al. Racławickich 33",
-          "price": 500,
+          "title": "Wynajmę garaż podziemny w bloku , ul. Koralowa 31 A, Węglinek",
+          "price": 300,
           "negotiable": false,
           "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.251586,
-          "lon": 22.528187,
+          "type": "garaz",
+          "lat": 51.225055,
+          "lon": 22.485222,
           "precision": "exact",
-          "address": "Aleje Racławickie 33",
-          "loc_raw": "Lublin - 09 lipca 2026",
-          "date_iso": "2026-07-09",
-          "date_label": "09 lipca 2026",
-          "area_m2": 16.0,
+          "address": "Koralowa 31",
+          "loc_raw": "Lublin - 15 czerwca 2026",
+          "date_iso": "2026-06-15",
+          "date_label": "15 czerwca 2026",
+          "area_m2": null,
           "price_per_m2": null,
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
           "price_history": [
-            500
+            300
           ],
           "first_seen": "2026-07-01",
           "is_new": false,
@@ -3018,6 +3055,44 @@
     },
     {
       "coords": {
+        "lat": 51.2323,
+        "lon": 22.5831
+      },
+      "address": "Startowa",
+      "offers": [
+        {
+          "id": "1066141548",
+          "url": "https://www.olx.pl/d/oferta/wynajme-miejsce-parkingowe-CID3-ID1a9q7q.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Wynajmę miejsce parkingowe",
+          "price": 250,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.23227,
+          "lon": 22.583096,
+          "precision": "street",
+          "address": "Startowa",
+          "loc_raw": "Lublin - 14 czerwca 2026",
+          "date_iso": "2026-06-14",
+          "date_label": "14 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            250
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
         "lat": 51.2465,
         "lon": 22.5292
       },
@@ -3077,44 +3152,6 @@
             300
           ],
           "first_seen": "2026-07-08",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2323,
-        "lon": 22.5831
-      },
-      "address": "Startowa",
-      "offers": [
-        {
-          "id": "1066141548",
-          "url": "https://www.olx.pl/d/oferta/wynajme-miejsce-parkingowe-CID3-ID1a9q7q.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Wynajmę miejsce parkingowe",
-          "price": 250,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.23227,
-          "lon": 22.583096,
-          "precision": "street",
-          "address": "Startowa",
-          "loc_raw": "Lublin - 14 czerwca 2026",
-          "date_iso": "2026-06-14",
-          "date_label": "14 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            250
-          ],
-          "first_seen": "2026-07-01",
           "is_new": false,
           "active": true,
           "last_seen": "2026-07-12"
@@ -3237,44 +3274,6 @@
     },
     {
       "coords": {
-        "lat": 51.2065,
-        "lon": 22.5661
-      },
-      "address": "Zemborzycka",
-      "offers": [
-        {
-          "id": "957138277",
-          "url": "https://www.olx.pl/d/oferta/miejsca-parkingowe-dla-samochodow-ciezarowych-ul-zemborzycka-wrotkow-CID3-ID12M3o9.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Miejsca parkingowe dla samochodów ciężarowych ul. Zemborzycka Wrotków",
-          "price": 700,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.206478,
-          "lon": 22.5661,
-          "precision": "street",
-          "address": "Zemborzycka",
-          "loc_raw": "Lublin - Odświeżono dnia 26 czerwca 2026",
-          "date_iso": "2026-06-26",
-          "date_label": "Odświeżono dnia 26 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            700
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-07-12"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.2488,
         "lon": 22.5341
       },
@@ -3345,6 +3344,83 @@
           "first_seen": "2026-07-01",
           "is_new": false,
           "active": true,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2683,
+        "lon": 22.5622
+      },
+      "address": "Józefa Mackiewicza 17A",
+      "offers": [
+        {
+          "id": "1028031503",
+          "url": "https://www.olx.pl/d/oferta/garaz-inwestycyjny-bezczynszowy-z-najemca-400zl-mc-mackiewicza-17a-CID3-ID17zwXh.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Garaż inwestycyjny bezczynszowy z najemcą 400zł/mc Mackiewicza 17A",
+          "price": 109000,
+          "negotiable": true,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.26835,
+          "lon": 22.562232,
+          "precision": "exact",
+          "address": "Józefa Mackiewicza 17A",
+          "loc_raw": "Lublin - 12 czerwca 2026",
+          "date_iso": "2026-06-12",
+          "date_label": "12 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": "up",
+          "previous_price": 108000,
+          "price_changed_at": "2026-07-07",
+          "price_history": [
+            108000,
+            109000
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": false,
+          "last_seen": "2026-07-12"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2065,
+        "lon": 22.5661
+      },
+      "address": "Zemborzycka",
+      "offers": [
+        {
+          "id": "957138277",
+          "url": "https://www.olx.pl/d/oferta/miejsca-parkingowe-dla-samochodow-ciezarowych-ul-zemborzycka-wrotkow-CID3-ID12M3o9.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsca parkingowe dla samochodów ciężarowych ul. Zemborzycka Wrotków",
+          "price": 700,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.206478,
+          "lon": 22.5661,
+          "precision": "street",
+          "address": "Zemborzycka",
+          "loc_raw": "Lublin - Odświeżono dnia 26 czerwca 2026",
+          "date_iso": "2026-06-26",
+          "date_label": "Odświeżono dnia 26 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            700
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": false,
           "last_seen": "2026-07-12"
         }
       ]
@@ -4208,10 +4284,10 @@
   ],
   "off_map_products": [
     {
-      "id": "947075433",
-      "url": "https://www.olx.pl/d/oferta/garaze-blaszane-blaszak-3x5-konstrukcja-ocynkowana-szybka-realizacja-CID3-ID125PAd.html?search_reason=search%7Corganic",
-      "title": "Garaże Blaszane, Blaszak 3x5, Konstrukcja ocynkowana,Szybka realizacja",
-      "price": 2500
+      "id": "799842987",
+      "url": "https://www.olx.pl/d/oferta/garaz-blaszany-drewnopodobny-nowoczesny-wyglad-profil-zamkniety-CID3-IDS83Hl.html?search_reason=search%7Corganic",
+      "title": "Garaż blaszany drewnopodobny nowoczesny wygląd profil zamknięty",
+      "price": 12300
     },
     {
       "id": "1058679202",
@@ -4236,6 +4312,12 @@
       "url": "https://www.olx.pl/d/oferta/garaz-blaszak-ocynkowany-garaz-blaszany-na-budowe-garaze-blaszane-wzmocnione-producent-garazy-CID3-ID1bj8Gw.html?search_reason=search%7Corganic",
       "title": "Garaż Blaszak Ocynkowany Garaż blaszany na budowę Garaże blaszane WZMOCNIONE producent GARAŻY !!!",
       "price": 1950
+    },
+    {
+      "id": "947075433",
+      "url": "https://www.olx.pl/d/oferta/garaze-blaszane-blaszak-3x5-konstrukcja-ocynkowana-szybka-realizacja-CID3-ID125PAd.html?search_reason=search%7Corganic",
+      "title": "Garaże Blaszane, Blaszak 3x5, Konstrukcja ocynkowana,Szybka realizacja",
+      "price": 2500
     }
   ]
 }
