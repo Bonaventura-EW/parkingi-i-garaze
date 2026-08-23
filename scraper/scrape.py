@@ -5,9 +5,10 @@ re-publishes Otodom listings) and rebuilds data.json used by index.html.
 Otodom.pl is not scraped directly (yet). OLX's own "garaze-parkingi/lublin"
 category already surfaces a large share of Otodom-sourced listings (otodom.pl
 links appear alongside olx.pl ones), which gives partial Otodom coverage.
-An earlier bot-protection block (HTTP 403) no longer reproduces as of 2026-07
-— verified from both the dev environment and a GitHub Actions runner — so
-scraping Otodom search pages directly is a viable future improvement.
+OLX's CloudFront WAF started hard-blocking plain `requests` traffic (HTTP 403)
+again as of 2026-08; `fetch()` now goes through curl_cffi with a Chrome TLS
+fingerprint (impersonate=) to get past it. Nominatim is left on plain
+`requests` since it isn't blocking and doesn't warrant impersonation.
 
 Usage:
     python3 scraper/scrape.py
@@ -23,6 +24,8 @@ from datetime import datetime, timedelta, timezone
 
 import requests
 from bs4 import BeautifulSoup
+from curl_cffi import requests as curl_requests
+from curl_cffi.requests.exceptions import RequestException as CurlRequestException
 
 from streets import find_street
 
@@ -40,6 +43,9 @@ USER_AGENT_BROWSER = (
     "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 )
 USER_AGENT_NOMINATIM = "parkingi-i-garaze-sonar/0.1 (github.com/Bonaventura-EW/parkingi-i-garaze)"
+# Matches USER_AGENT_BROWSER's Chrome/124.0 so the TLS fingerprint (JA3) and
+# the declared User-Agent tell the same story to OLX's WAF.
+CURL_IMPERSONATE = "chrome124"
 
 LUBLIN_BBOX = (22.40, 51.15, 22.70, 51.32)  # lon_min, lat_min, lon_max, lat_max
 LUBLIN_CENTER = (51.2465, 22.5684)
@@ -144,10 +150,15 @@ def fetch(url, retries=3):
     last_err = None
     for attempt in range(retries):
         try:
-            resp = requests.get(url, headers={"User-Agent": USER_AGENT_BROWSER}, timeout=20)
+            resp = curl_requests.get(
+                url,
+                headers={"User-Agent": USER_AGENT_BROWSER},
+                timeout=20,
+                impersonate=CURL_IMPERSONATE,
+            )
             resp.raise_for_status()
             return resp.text
-        except requests.RequestException as e:
+        except CurlRequestException as e:
             last_err = e
             time.sleep(2 * (attempt + 1))
     raise last_err
@@ -182,7 +193,7 @@ def scrape_olx(max_pages=20):
         url = OLX_BASE if page == 1 else f"{OLX_BASE}?page={page}"
         try:
             html = fetch(url)
-        except requests.RequestException as e:
+        except CurlRequestException as e:
             print(f"HTTP error on page {page}: {e}", file=sys.stderr)
             break
         page_items = parse_page(html)
@@ -251,7 +262,7 @@ def fetch_description(link):
         return ""
     try:
         html = fetch(link)
-    except requests.RequestException as e:
+    except CurlRequestException as e:
         print(f"description fetch failed for {link}: {e}", file=sys.stderr)
         return ""
     time.sleep(1.0)
@@ -302,7 +313,7 @@ def otodom_location(link):
     """
     try:
         html = fetch(link)
-    except requests.RequestException as e:
+    except CurlRequestException as e:
         print(f"otodom fetch failed for {link}: {e}", file=sys.stderr)
         return None, "", None
     time.sleep(1.0)
