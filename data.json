@@ -1,20 +1,20 @@
 {
-  "generated_at": "23.08.2026 20:02",
+  "generated_at": "23.08.2026 21:04",
   "sources": [
     "olx.pl",
     "otodom.pl (via OLX)"
   ],
   "city": "Lublin",
   "stats": {
-    "total_offers": 78,
+    "total_offers": 79,
     "garaz_sprzedaz": {
       "count": 21,
-      "avg": 114367,
+      "avg": 112605,
       "min": 85000,
       "max": 165000
     },
     "garaz_wynajem": {
-      "count": 21,
+      "count": 22,
       "avg": 516,
       "min": 199,
       "max": 2117
@@ -33,6 +33,47 @@
     }
   },
   "markers": [
+    {
+      "coords": {
+        "lat": 51.2312,
+        "lon": 22.5811
+      },
+      "address": "Elektryczna",
+      "offers": [
+        {
+          "id": "1086396971",
+          "url": "https://www.olx.pl/d/oferta/garaz-18m2-z-kanalem-ul-elektryczna-CID3-ID1bvptN.html?search_reason=search%7Cpromoted",
+          "source": "olx",
+          "title": "Garaż 18m2  z kanałem ul. Elektryczna",
+          "price": 114900,
+          "negotiable": true,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.231168,
+          "lon": 22.581131,
+          "precision": "street",
+          "address": "Elektryczna",
+          "loc_raw": "Lublin - Odświeżono dzisiaj o 09:21",
+          "date_iso": "2026-08-23",
+          "date_label": "dzisiaj o 09:21",
+          "area_m2": 18.0,
+          "price_per_m2": 6383,
+          "price_trend": "down",
+          "previous_price": 117000,
+          "price_changed_at": "2026-08-23",
+          "price_history": [
+            120000,
+            119000,
+            117000,
+            114900
+          ],
+          "first_seen": "2026-07-20",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-08-23"
+        }
+      ]
+    },
     {
       "coords": {
         "lat": 51.2634,
@@ -74,44 +115,6 @@
     },
     {
       "coords": {
-        "lat": 51.2367,
-        "lon": 22.5281
-      },
-      "address": "Pana Balcera 6a",
-      "offers": [
-        {
-          "id": "1092550046",
-          "url": "https://www.olx.pl/d/oferta/sprzedam-miejsce-parkingowe-CID3-ID1bVeaV.html?search_reason=search%7Cpromoted",
-          "source": "olx",
-          "title": "Sprzedam miejsce parkingowe",
-          "price": 36000,
-          "negotiable": false,
-          "transaction": "sprzedaz",
-          "type": "miejsce_parkingowe",
-          "lat": 51.236665,
-          "lon": 22.528052,
-          "precision": "exact",
-          "address": "Pana Balcera 6a",
-          "loc_raw": "Lublin - 20 sierpnia 2026",
-          "date_iso": "2026-08-20",
-          "date_label": "20 sierpnia 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_history": [
-            36000
-          ],
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "first_seen": "2026-08-23",
-          "is_new": true,
-          "active": true,
-          "last_seen": "2026-08-23"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.2227,
         "lon": 22.5029
       },
@@ -135,54 +138,13 @@
           "date_label": "19 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            115000
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
-          "first_seen": "2026-08-23",
-          "is_new": true,
-          "active": true,
-          "last_seen": "2026-08-23"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2312,
-        "lon": 22.5811
-      },
-      "address": "Elektryczna",
-      "offers": [
-        {
-          "id": "1086396971",
-          "url": "https://www.olx.pl/d/oferta/garaz-18m2-z-kanalem-ul-elektryczna-CID3-ID1bvptN.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Garaż 18m2  z kanałem ul. Elektryczna",
-          "price": 114900,
-          "negotiable": true,
-          "transaction": "sprzedaz",
-          "type": "garaz",
-          "lat": 51.231168,
-          "lon": 22.581131,
-          "precision": "street",
-          "address": "Elektryczna",
-          "loc_raw": "Lublin - Odświeżono dzisiaj o 09:21",
-          "date_iso": "2026-08-23",
-          "date_label": "dzisiaj o 09:21",
-          "area_m2": 18.0,
-          "price_per_m2": 6383,
-          "price_trend": "down",
-          "previous_price": 117000,
-          "price_changed_at": "2026-08-23",
           "price_history": [
-            120000,
-            119000,
-            117000,
-            114900
+            115000
           ],
-          "first_seen": "2026-07-20",
+          "first_seen": "2026-08-23",
           "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
@@ -214,8 +176,46 @@
           "date_label": "22 sierpnia 2026",
           "area_m2": 16.3,
           "price_per_m2": 7546,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
           "price_history": [
             123000
+          ],
+          "first_seen": "2026-08-23",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-08-23"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2262,
+        "lon": 22.5633
+      },
+      "address": "Nowy Świat 23b",
+      "offers": [
+        {
+          "id": "1093376103",
+          "url": "https://www.olx.pl/d/oferta/sprzedam-garaz-w-lublinoe-CID3-ID1bZH4r.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Sprzedam garaz w lublinoe",
+          "price": 88000,
+          "negotiable": false,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.226215,
+          "lon": 22.563306,
+          "precision": "exact",
+          "address": "Nowy Świat 23b",
+          "loc_raw": "Lublin - Dzisiaj o 20:07",
+          "date_iso": "2026-08-23",
+          "date_label": "dzisiaj o 20:07",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_history": [
+            88000
           ],
           "price_trend": null,
           "previous_price": null,
@@ -260,6 +260,44 @@
           ],
           "first_seen": "2026-07-01",
           "is_new": false,
+          "active": true,
+          "last_seen": "2026-08-23"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.252,
+        "lon": 22.5218
+      },
+      "address": "Bajkowa",
+      "offers": [
+        {
+          "id": "1093375623",
+          "url": "https://www.olx.pl/d/oferta/ul-bajkowa-brama-na-pilota-CID3-ID1bZGVH.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Ul.Bajkowa ,brama na pilota",
+          "price": 500,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "garaz",
+          "lat": 51.251956,
+          "lon": 22.521803,
+          "precision": "street",
+          "address": "Bajkowa",
+          "loc_raw": "Lublin - Dzisiaj o 20:07",
+          "date_iso": "2026-08-23",
+          "date_label": "dzisiaj o 20:07",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_history": [
+            500
+          ],
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "first_seen": "2026-08-23",
+          "is_new": true,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -344,6 +382,44 @@
     },
     {
       "coords": {
+        "lat": 51.2367,
+        "lon": 22.5281
+      },
+      "address": "Pana Balcera 6a",
+      "offers": [
+        {
+          "id": "1092550046",
+          "url": "https://www.olx.pl/d/oferta/sprzedam-miejsce-parkingowe-CID3-ID1bVeaV.html?search_reason=search%7Cpromoted",
+          "source": "olx",
+          "title": "Sprzedam miejsce parkingowe",
+          "price": 36000,
+          "negotiable": false,
+          "transaction": "sprzedaz",
+          "type": "miejsce_parkingowe",
+          "lat": 51.236665,
+          "lon": 22.528052,
+          "precision": "exact",
+          "address": "Pana Balcera 6a",
+          "loc_raw": "Lublin - 20 sierpnia 2026",
+          "date_iso": "2026-08-20",
+          "date_label": "20 sierpnia 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            36000
+          ],
+          "first_seen": "2026-08-23",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-08-23"
+        }
+      ]
+    },
+    {
+      "coords": {
         "lat": 51.2222,
         "lon": 22.4788
       },
@@ -407,14 +483,14 @@
           "date_label": "dzisiaj o 09:54",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            500
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            500
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -552,14 +628,14 @@
           "date_label": "14 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            93000
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            93000
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -590,14 +666,14 @@
           "date_label": "dzisiaj o 14:35",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            450
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            450
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -628,14 +704,14 @@
           "date_label": "12 sierpnia 2026",
           "area_m2": 17.0,
           "price_per_m2": 7059,
-          "price_history": [
-            120000
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            120000
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -666,14 +742,14 @@
           "date_label": "13 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            105000
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            105000
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         },
@@ -1052,52 +1128,13 @@
           "date_label": "13 sierpnia 2026",
           "area_m2": 18.0,
           "price_per_m2": null,
-          "price_history": [
-            480
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
-          "first_seen": "2026-08-23",
-          "is_new": true,
-          "active": true,
-          "last_seen": "2026-08-23"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2462,
-        "lon": 22.5212
-      },
-      "address": "Balladyny",
-      "offers": [
-        {
-          "id": "1081847203",
-          "url": "https://www.olx.pl/d/oferta/sprzedam-garaz-balladyny-os-slowackiego-CID3-ID1bdjSr.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Sprzedam garaż Balladyny os. Słowackiego",
-          "price": 125000,
-          "negotiable": true,
-          "transaction": "sprzedaz",
-          "type": "garaz",
-          "lat": 51.246203,
-          "lon": 22.521234,
-          "precision": "street",
-          "address": "Balladyny",
-          "loc_raw": "Lublin - 24 czerwca 2026",
-          "date_iso": "2026-06-24",
-          "date_label": "24 czerwca 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": "down",
-          "previous_price": 130000,
-          "price_changed_at": "2026-07-07",
           "price_history": [
-            130000,
-            125000
+            480
           ],
-          "first_seen": "2026-07-01",
+          "first_seen": "2026-08-23",
           "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
@@ -1211,82 +1248,6 @@
     },
     {
       "coords": {
-        "lat": 51.2206,
-        "lon": 22.5012
-      },
-      "address": "Onyksowa 16",
-      "offers": [
-        {
-          "id": "1057708339",
-          "url": "https://www.olx.pl/d/oferta/garaz-w-budynku-wielostanowiskowym-idealna-lokalizacja-ul-onyksowa16-CID3-ID19A2fW.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Garaż w budynku wielostanowiskowym-idealna lokalizacja ul.Onyksowa16",
-          "price": 120000,
-          "negotiable": false,
-          "transaction": "sprzedaz",
-          "type": "garaz",
-          "lat": 51.220618,
-          "lon": 22.50117,
-          "precision": "exact",
-          "address": "Onyksowa 16",
-          "loc_raw": "Lublin - Odświeżono dnia 22 sierpnia 2026",
-          "date_iso": "2026-08-22",
-          "date_label": "Odświeżono dnia 22 sierpnia 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_history": [
-            120000
-          ],
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "first_seen": "2026-08-23",
-          "is_new": true,
-          "active": true,
-          "last_seen": "2026-08-23"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2395,
-        "lon": 22.5391
-      },
-      "address": "Bolesława Śmiałego 8",
-      "offers": [
-        {
-          "id": "1092701152",
-          "url": "https://www.olx.pl/d/oferta/garaz-wynajme-lsm-lublin-CID3-ID1bVRu8.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "GARAŻ wynajmę LSM  Lublin",
-          "price": 400,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "garaz",
-          "lat": 51.239499,
-          "lon": 22.539141,
-          "precision": "exact",
-          "address": "Bolesława Śmiałego 8",
-          "loc_raw": "Lublin - 20 sierpnia 2026",
-          "date_iso": "2026-08-20",
-          "date_label": "20 sierpnia 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_history": [
-            400
-          ],
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "first_seen": "2026-08-23",
-          "is_new": true,
-          "active": true,
-          "last_seen": "2026-08-23"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.247,
         "lon": 22.5034
       },
@@ -1317,6 +1278,82 @@
             400
           ],
           "first_seen": "2026-07-27",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-08-23"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2395,
+        "lon": 22.5391
+      },
+      "address": "Bolesława Śmiałego 8",
+      "offers": [
+        {
+          "id": "1092701152",
+          "url": "https://www.olx.pl/d/oferta/garaz-wynajme-lsm-lublin-CID3-ID1bVRu8.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "GARAŻ wynajmę LSM  Lublin",
+          "price": 400,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "garaz",
+          "lat": 51.239499,
+          "lon": 22.539141,
+          "precision": "exact",
+          "address": "Bolesława Śmiałego 8",
+          "loc_raw": "Lublin - 20 sierpnia 2026",
+          "date_iso": "2026-08-20",
+          "date_label": "20 sierpnia 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            400
+          ],
+          "first_seen": "2026-08-23",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-08-23"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2206,
+        "lon": 22.5012
+      },
+      "address": "Onyksowa 16",
+      "offers": [
+        {
+          "id": "1057708339",
+          "url": "https://www.olx.pl/d/oferta/garaz-w-budynku-wielostanowiskowym-idealna-lokalizacja-ul-onyksowa16-CID3-ID19A2fW.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Garaż w budynku wielostanowiskowym-idealna lokalizacja ul.Onyksowa16",
+          "price": 120000,
+          "negotiable": false,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.220618,
+          "lon": 22.50117,
+          "precision": "exact",
+          "address": "Onyksowa 16",
+          "loc_raw": "Lublin - Odświeżono dnia 22 sierpnia 2026",
+          "date_iso": "2026-08-22",
+          "date_label": "Odświeżono dnia 22 sierpnia 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            120000
+          ],
+          "first_seen": "2026-08-23",
           "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
@@ -1750,14 +1787,14 @@
           "date_label": "11 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            370
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            370
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -1893,14 +1930,14 @@
           "date_label": "21 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            100000
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            100000
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -2065,14 +2102,14 @@
           "date_label": "22 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            700
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            700
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -2172,14 +2209,14 @@
           "date_label": "12 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            350
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            350
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -2210,14 +2247,14 @@
           "date_label": "17 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            250
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            250
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         },
@@ -2317,14 +2354,14 @@
           "date_label": "21 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            200
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            200
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         },
@@ -2346,14 +2383,14 @@
           "date_label": "21 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            270
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            270
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -2413,14 +2450,14 @@
           "date_label": "11 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            320
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            320
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         },
@@ -2480,14 +2517,14 @@
           "date_label": "22 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            350
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            350
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -2518,14 +2555,14 @@
           "date_label": "19 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            300
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            300
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -2632,14 +2669,14 @@
           "date_label": "13 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            320
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            320
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -2840,44 +2877,6 @@
     },
     {
       "coords": {
-        "lat": 51.2659,
-        "lon": 22.5639
-      },
-      "address": "Generała Augusta Fieldorfa 11",
-      "offers": [
-        {
-          "id": "1088142405",
-          "url": "https://www.olx.pl/d/oferta/wynajme-miejsce-parkingowe-w-garazu-podziemnym-fieldorfa-11-czechow-CID3-ID1bDJxX.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Wynajmę miejsce parkingowe w garażu podziemnym, Fieldorfa 11, Czechów",
-          "price": 300,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.265883,
-          "lon": 22.563946,
-          "precision": "exact",
-          "address": "Generała Augusta Fieldorfa 11",
-          "loc_raw": "Lublin - Odświeżono dnia 12 sierpnia 2026",
-          "date_iso": "2026-08-12",
-          "date_label": "Odświeżono dnia 12 sierpnia 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            300
-          ],
-          "first_seen": "2026-07-29",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-08-23"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.2364,
         "lon": 22.5275
       },
@@ -2901,14 +2900,14 @@
           "date_label": "18 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            300
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            300
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         },
@@ -2968,14 +2967,52 @@
           "date_label": "20 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            55350
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            55350
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-08-23"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2659,
+        "lon": 22.5639
+      },
+      "address": "Generała Augusta Fieldorfa 11",
+      "offers": [
+        {
+          "id": "1088142405",
+          "url": "https://www.olx.pl/d/oferta/wynajme-miejsce-parkingowe-w-garazu-podziemnym-fieldorfa-11-czechow-CID3-ID1bDJxX.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Wynajmę miejsce parkingowe w garażu podziemnym, Fieldorfa 11, Czechów",
+          "price": 300,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.265883,
+          "lon": 22.563946,
+          "precision": "exact",
+          "address": "Generała Augusta Fieldorfa 11",
+          "loc_raw": "Lublin - Odświeżono dnia 12 sierpnia 2026",
+          "date_iso": "2026-08-12",
+          "date_label": "Odświeżono dnia 12 sierpnia 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            300
+          ],
+          "first_seen": "2026-07-29",
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -3045,14 +3082,14 @@
           "date_label": "16 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            400
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            400
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -3121,14 +3158,14 @@
           "date_label": "21 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            300
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            300
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-08-23"
         }
@@ -3264,15 +3301,54 @@
           "date_label": "15 sierpnia 2026",
           "area_m2": null,
           "price_per_m2": null,
-          "price_history": [
-            300
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            300
+          ],
           "first_seen": "2026-08-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
+          "last_seen": "2026-08-23"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2462,
+        "lon": 22.5212
+      },
+      "address": "Balladyny",
+      "offers": [
+        {
+          "id": "1081847203",
+          "url": "https://www.olx.pl/d/oferta/sprzedam-garaz-balladyny-os-slowackiego-CID3-ID1bdjSr.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Sprzedam garaż Balladyny os. Słowackiego",
+          "price": 125000,
+          "negotiable": true,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.246203,
+          "lon": 22.521234,
+          "precision": "street",
+          "address": "Balladyny",
+          "loc_raw": "Lublin - 24 czerwca 2026",
+          "date_iso": "2026-06-24",
+          "date_label": "24 czerwca 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "price_trend": "down",
+          "previous_price": 130000,
+          "price_changed_at": "2026-07-07",
+          "price_history": [
+            130000,
+            125000
+          ],
+          "first_seen": "2026-07-01",
+          "is_new": false,
+          "active": false,
           "last_seen": "2026-08-23"
         }
       ]
