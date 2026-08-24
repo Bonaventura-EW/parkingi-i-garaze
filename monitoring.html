@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SONAR GARAŻOWY - Monitoring skanów</title>
+    <meta name="description" content="Kondycja scrapera: czas wykonania skanów, oferty pobierane z OLX i Otodomu, stan bazy ofert.">
+    <meta name="theme-color" content="#16222e">
+    <link rel="canonical" href="https://bonaventura-ew.github.io/parkingi-i-garaze/monitoring.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="SONAR GARAŻOWY">
+    <meta property="og:title" content="SONAR GARAŻOWY - Monitoring skanów">
+    <meta property="og:description" content="Kondycja scrapera: czas wykonania skanów, oferty pobierane z OLX i Otodomu, stan bazy ofert.">
+    <meta property="og:url" content="https://bonaventura-ew.github.io/parkingi-i-garaze/monitoring.html">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="stylesheet" href="assets/style.css?v=1">
+</head>
+<body>
+    <div id="app">
+        <header class="sg-header">
+            <div class="sg-brand">
+                <svg class="sg-brand-svg" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="sgRb" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#233b52"/>
+                            <stop offset="100%" stop-color="#0a141f"/>
+                        </radialGradient>
+                    </defs>
+                    <circle cx="32" cy="32" r="32" fill="url(#sgRb)"/>
+                    <circle cx="32" cy="32" r="30" fill="none" stroke="#ffb300" stroke-width="0.5" opacity="0.6"/>
+                </svg>
+                <h1>
+                    <span class="sg-b">SONAR GARAŻOWY</span>
+                    <span class="sg-s">·</span>
+                    <span class="sg-p">📊 Monitoring</span>
+                </h1>
+            </div>
+            <nav class="sg-nav">
+                <a href="index.html">🗺️ Mapa</a>
+                <a href="ostatnie.html">🆕 Ostatnie</a>
+                <a href="top5.html">🏆 Top 5</a>
+                <a href="analityka.html">📈 Analityka</a>
+                <a href="monitoring.html" class="active">📊 Monitoring</a>
+                <a href="pominiete.html">🐛 Pominięte</a>
+            </nav>
+        </header>
+
+        <main class="list-page">
+            <p style="color:#6b7280;font-size:13px;margin-top:0;">
+                Kondycja samego scrapera — nie rynku. Ile trwa skan, ile ofert zwraca każde źródło
+                i jak rośnie baza. Jeśli któreś źródło przestanie oddawać oferty, zobaczysz tu alert.
+                Ostatni skan: <strong id="last-scan">—</strong>
+            </p>
+
+            <div class="source-alert" id="source-alert" role="alert" hidden></div>
+
+            <div class="kpi-row">
+                <div class="kpi-card">
+                    <h3>Skanów łącznie</h3>
+                    <div class="kpi-value" id="kpi-total">—</div>
+                    <div class="kpi-sub" id="kpi-span">—</div>
+                </div>
+                <div class="kpi-card">
+                    <h3>Średni czas skanu</h3>
+                    <div class="kpi-value" id="kpi-avg">—</div>
+                    <div class="kpi-sub" id="kpi-last-dur">ostatni: —</div>
+                </div>
+                <div class="kpi-card">
+                    <h3>Aktywne oferty</h3>
+                    <div class="kpi-value" id="kpi-active">—</div>
+                    <div class="kpi-sub" id="kpi-sources">OLX — / Otodom —</div>
+                </div>
+                <div class="kpi-card">
+                    <h3>Nowe w ostatnim skanie</h3>
+                    <div class="kpi-value" id="kpi-new">—</div>
+                    <div class="kpi-sub" id="kpi-churn">znikło: — · zmiany cen: —</div>
+                </div>
+            </div>
+
+            <section class="filter-group">
+                <h3>⏱️ Czas wykonania skanu</h3>
+                <div id="chart-duration"></div>
+            </section>
+
+            <section class="filter-group">
+                <h3>📡 Oferty ze skanu — OLX vs Otodom</h3>
+                <div id="chart-sources"></div>
+            </section>
+
+            <section class="filter-group">
+                <h3>📦 Stan bazy (aktywne / łącznie)</h3>
+                <div id="chart-db"></div>
+            </section>
+
+            <section class="filter-group">
+                <h3>🔄 Ruch ofert (nowe / zniknięte)</h3>
+                <div id="chart-churn"></div>
+            </section>
+
+            <section class="filter-group">
+                <h3>🗒️ Ostatnie skany</h3>
+                <div class="table-scroll">
+                    <table class="scan-table" id="monitoring-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th><th>Czas</th><th>OLX</th><th>Otodom</th>
+                                <th>Nowe</th><th>Znikło</th><th>Zmiany cen</th>
+                                <th>Aktywne</th><th>W bazie</th><th>Adresy</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <p class="empty-state" style="font-style:normal;font-size:12px;">
+                    Puste komórki (—) to skany sprzed wprowadzenia danej metryki.
+                </p>
+            </section>
+        </main>
+    </div>
+
+    <script src="assets/common.js?v=1"></script>
+    <script src="assets/monitoring.js?v=1"></script>
+</body>
+</html>

@@ -22,6 +22,10 @@ zbieranych z OLX i Otodom — w tym samym duchu co pozostałe sonary:
   oraz najniższa cena za m² dla garaży na sprzedaż.
 - `analityka.html` — trend liczby aktywnych ofert i średnich cen w czasie (na podstawie
   historii skanów), ranking lokalizacji wg liczby ofert, tabela historii skanów.
+- `monitoring.html` — kondycja scrapera (nie rynku): czas wykonania skanu, ile ofert
+  zwraca OLX vs Otodom, stan bazy (aktywne / łącznie z karencją), ruch ofert i tabela
+  ostatnich 30 skanów. Gdy któreś źródło nie zwróci ani jednej oferty przez 3 skany
+  z rzędu, na górze pojawia się alert — tak wyglądałaby np. blokada WAF portalu.
 - `pominiete.html` — pełna przejrzystość: ogłoszenia z kategorii OLX, które klasyfikator
   odrzucił, wraz z powodem (inny temat / inna miejscowość / produkt-blaszak bez adresu).
 
@@ -32,13 +36,15 @@ Ulubione oferty (⭐) są zapisywane w localStorage przeglądarki i działają n
 - `assets/common.js` — helpery współdzielone przez wszystkie strony (kolory, etykiety,
   wczytywanie `data.json`, ulubione, eksport CSV, badge statusu oferty).
 - `assets/script.js`, `assets/ostatnie.js`, `assets/top5.js`, `assets/analityka.js`,
-  `assets/pominiete.js` — logika poszczególnych stron.
+  `assets/monitoring.js`, `assets/pominiete.js` — logika poszczególnych stron.
 - `assets/vendor/` — Leaflet i Leaflet.markercluster zvendorowane lokalnie (bez CDN).
 - `data.json` — aktywne (i niedawno zniknięte) oferty, generowane przez scraper.
 - `skipped.json` — ogłoszenia pominięte przez klasyfikator, z powodem (dla `pominiete.html`).
 - `scraper/history.jsonl` — jedna linia JSON na każde uruchomienie scrapera (liczba
-  aktywnych/nowych/zniknionych ofert, średnie ceny, % adresów dokładnych) — źródło danych
-  dla `analityka.html`.
+  aktywnych/nowych/zniknionych ofert, średnie ceny, % adresów dokładnych, a także czas
+  skanu i liczba ofert per źródło) — źródło danych dla `analityka.html` i `monitoring.html`.
+  Plik jest append-only: starsze linie nie mają pól dodanych później i strony to znoszą
+  (brakująca metryka pokazuje się jako „—”).
 - `scraper/scrape.py` — scraper OLX, klasyfikacja ofert, geokodowanie, śledzenie historii
   cen/dat między uruchomieniami, zapis `data.json` / `skipped.json` / `history.jsonl`.
 - `scraper/streets.py` + `scraper/lublin_streets.json` — dopasowywanie nazw ulic z

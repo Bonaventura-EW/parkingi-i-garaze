@@ -502,11 +502,12 @@ def merge_with_history(on_map, previous_offers, now):
     while, so the map can show a "recently delisted" layer instead of
     listings just vanishing between runs.
 
-    Returns (merged_offers, new_count, newly_inactive_count).
+    Returns (merged_offers, new_count, newly_inactive_count, price_change_count).
     """
     today = now.strftime("%Y-%m-%d")
     seen_ids = set()
     new_count = 0
+    price_change_count = 0
     for o in on_map:
         seen_ids.add(o["id"])
         prev = previous_offers.get(o["id"])
@@ -515,6 +516,7 @@ def merge_with_history(on_map, previous_offers, now):
             last_price = price_history[-1] if price_history else None
             if o["price"] is not None and o["price"] != last_price:
                 price_history.append(o["price"])
+                price_change_count += 1
                 o["price_trend"] = "up" if (last_price is not None and o["price"] > last_price) else (
                     "down" if last_price is not None else None)
                 o["previous_price"] = last_price
@@ -555,7 +557,7 @@ def merge_with_history(on_map, previous_offers, now):
         inactive["is_new"] = False
         on_map.append(inactive)
 
-    return on_map, new_count, newly_inactive_count
+    return on_map, new_count, newly_inactive_count, price_change_count
 
 
 def assemble(items, previous_offers, now, cache):
@@ -588,7 +590,14 @@ def assemble(items, previous_offers, now, cache):
             "area_m2": it["area_m2"], "price_per_m2": it["price_per_m2"],
         })
 
-    on_map, new_count, newly_inactive_count = merge_with_history(on_map, previous_offers, now)
+    # Counted before the merge, so these are offers actually seen in THIS scrape
+    # (after the merge on_map also holds retained-but-gone offers from earlier runs).
+    scraped_by_source = {"olx": 0, "otodom": 0}
+    for o in on_map:
+        scraped_by_source[o["source"]] = scraped_by_source.get(o["source"], 0) + 1
+
+    on_map, new_count, newly_inactive_count, price_change_count = merge_with_history(
+        on_map, previous_offers, now)
     active = [o for o in on_map if o["active"]]
 
     markers = {}
@@ -627,6 +636,13 @@ def assemble(items, previous_offers, now, cache):
         "avg_garaz_sprzedaz": data["stats"]["garaz_sprzedaz"]["avg"],
         "avg_parking_wynajem": data["stats"]["parking_wynajem"]["avg"],
         "avg_parking_sprzedaz": data["stats"]["parking_sprzedaz"]["avg"],
+        # Monitoring (monitoring.html): health of the scan itself, not of the market.
+        "scraped_olx": scraped_by_source.get("olx", 0),
+        "scraped_otodom": scraped_by_source.get("otodom", 0),
+        "active_olx": sum(1 for o in active if o["source"] == "olx"),
+        "active_otodom": sum(1 for o in active if o["source"] == "otodom"),
+        "updated_count": price_change_count,
+        "total_in_db": len(on_map),
     }
     return data, scan_meta
 
@@ -637,6 +653,7 @@ def append_history(scan_meta):
 
 
 def main():
+    started = time.monotonic()
     print("Scraping OLX (garaze-parkingi/lublin)...", file=sys.stderr)
     raw_items = scrape_olx()
     print(f"Fetched {len(raw_items)} raw cards", file=sys.stderr)
@@ -654,10 +671,15 @@ def main():
         json.dump(cache, f, ensure_ascii=False, indent=2)
     with open(DATA_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    append_history(scan_meta)
 
     for p in data["off_map_products"]:
         skipped.append({"id": p["id"], "title": p["title"], "link": p["url"], "reason": "produkt_blaszak"})
+
+    scan_meta["raw_cards"] = len(raw_items)
+    scan_meta["skipped_count"] = len(skipped)
+    scan_meta["duration_s"] = round(time.monotonic() - started, 1)
+    append_history(scan_meta)
+
     with open(SKIPPED_PATH, "w", encoding="utf-8") as f:
         json.dump({"generated_at": data["generated_at"], "skipped": skipped}, f, ensure_ascii=False, indent=2)
 
