@@ -21,6 +21,7 @@ import re
 import sys
 import time
 from datetime import datetime, timedelta, timezone
+from urllib.parse import parse_qs, urlparse
 
 import requests
 from bs4 import BeautifulSoup
@@ -164,6 +165,25 @@ def fetch(url, retries=3):
     raise last_err
 
 
+def search_reason(link):
+    """OLX attribution token on a listing tile's href — "promoted", "organic",
+    or "" when absent.
+
+    OLX appends ?search_reason=search|promoted (paid placement) or
+    search|organic (a normal result) to each tile link; the pipe arrives
+    URL-encoded as %7C. Reading placement from this param is sturdier than
+    card CSS classes or data-testid, which churn between OLX front-end
+    releases. Unknown/missing attribution → "".
+    """
+    if not link:
+        return ""
+    try:
+        qs = parse_qs(urlparse(link).query)
+    except ValueError:
+        return ""
+    return (qs.get("search_reason") or [""])[0].split("|")[-1].strip().lower()
+
+
 def parse_page(html):
     soup = BeautifulSoup(html, "html.parser")
     cards = soup.find_all(attrs={"data-cy": "l-card"})
@@ -182,7 +202,11 @@ def parse_page(html):
         loc_el = c.find(attrs={"data-testid": "location-date"})
         loc_raw = loc_el.get_text(strip=True) if loc_el else None
         if c.get("id") and title:
-            out.append({"id": c["id"], "title": title, "link": link, "price_raw": price_raw, "loc_raw": loc_raw})
+            reason = search_reason(link)
+            out.append({
+                "id": c["id"], "title": title, "link": link, "price_raw": price_raw,
+                "loc_raw": loc_raw, "promoted": reason == "promoted", "attributed": bool(reason),
+            })
     return out
 
 
@@ -204,6 +228,12 @@ def scrape_olx(max_pages=20):
             if it["id"] not in items:
                 items[it["id"]] = it
                 new_count += 1
+            else:
+                # The same listing can appear twice (a promoted block above the
+                # listing + its organic slot). Deduplication must RAISE the
+                # promoted flag, not keep whichever occurrence came first.
+                items[it["id"]]["promoted"] = items[it["id"]]["promoted"] or it["promoted"]
+                items[it["id"]]["attributed"] = items[it["id"]]["attributed"] or it["attributed"]
         if new_count == 0:
             break
         page += 1
@@ -388,6 +418,7 @@ def classify_items(raw_items):
             "addr_kind": kind, "geo_direct": geo_direct,
             "loc_raw": r["loc_raw"], "area_m2": area, "price_per_m2": price_per_m2,
             "source": "otodom" if "otodom.pl" in (r["link"] or "") else "olx",
+            "promoted": bool(r.get("promoted")),
         })
     return items, skipped
 
@@ -588,6 +619,7 @@ def assemble(items, previous_offers, now, cache):
             "precision": precision, "address": address, "loc_raw": it["loc_raw"],
             "date_iso": date_iso, "date_label": date_label,
             "area_m2": it["area_m2"], "price_per_m2": it["price_per_m2"],
+            "promoted": it["promoted"],
         })
 
     # Counted before the merge, so these are offers actually seen in THIS scrape
@@ -629,6 +661,10 @@ def assemble(items, previous_offers, now, cache):
         "ts": now.isoformat(),
         "date": now.strftime("%Y-%m-%d %H:%M"),
         "active_total": len(active),
+        # Paid-promoted active offers (analityka.html plots the daily share).
+        # Older history.jsonl lines predate this field — readers treat a
+        # missing value as a gap, never zero.
+        "promoted_count": sum(1 for o in active if o.get("promoted")),
         "new_count": new_count,
         "newly_inactive_count": newly_inactive_count,
         "address_match_pct": round(100 * address_matched / len(active), 1) if active else None,
@@ -657,6 +693,17 @@ def main():
     print("Scraping OLX (garaze-parkingi/lublin)...", file=sys.stderr)
     raw_items = scrape_olx()
     print(f"Fetched {len(raw_items)} raw cards", file=sys.stderr)
+
+    # Guard the promoted metric: if OLX ever stops appending search_reason to
+    # tile hrefs, every offer silently reads as organic and the metric dies
+    # unnoticed. A whole scan with cards but zero attribution means the signal
+    # moved — warn loudly rather than record a false 0%.
+    if raw_items and not any(r.get("attributed") for r in raw_items):
+        print(
+            "WARNING: no OLX search_reason attribution on any tile — "
+            "promoted-listings metric may be broken",
+            file=sys.stderr,
+        )
 
     items, skipped = classify_items(raw_items)
     print(f"Classified {len(items)} garage/parking offers, skipped {len(skipped)}", file=sys.stderr)

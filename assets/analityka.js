@@ -5,6 +5,7 @@
         opts = opts || {};
         var w = opts.width || 480;
         var h = opts.height || 90;
+        var suffix = opts.suffix || "";
         var pad = 8;
         var clean = values.map(function (v) { return v == null ? null : v; });
         var nums = clean.filter(function (v) { return v != null; });
@@ -12,7 +13,7 @@
             return '<p class="empty-state">Brak jeszcze danych historycznych — pojawią się po kolejnych skanach.</p>';
         }
         if (nums.length === 1) {
-            return '<p class="empty-state">Tylko jeden skan w historii jak dotąd (' + nums[0].toLocaleString("pl-PL") + '). Wykres pojawi się po kolejnych.</p>';
+            return '<p class="empty-state">Tylko jeden skan w historii jak dotąd (' + nums[0].toLocaleString("pl-PL") + suffix + '). Wykres pojawi się po kolejnych.</p>';
         }
         var min = Math.min.apply(null, nums);
         var max = Math.max.apply(null, nums);
@@ -33,8 +34,17 @@
             '<svg viewBox="0 0 ' + w + " " + h + '" class="sparkline" preserveAspectRatio="none">' +
             '<polyline fill="none" stroke="' + color + '" stroke-width="2" points="' + points.join(" ") + '"/>' +
             "</svg>" +
-            '<div class="sparkline-range"><span>min ' + min.toLocaleString("pl-PL") + "</span><span>max " + max.toLocaleString("pl-PL") + "</span></div>"
+            '<div class="sparkline-range"><span>min ' + min.toLocaleString("pl-PL") + suffix + "</span><span>max " + max.toLocaleString("pl-PL") + suffix + "</span></div>"
         );
+    }
+
+    // Daily share of paid-promoted offers, in %, from each scan's promoted_count
+    // vs active_total. Scans predating the promoted metric lack promoted_count —
+    // those stay gaps (null), never 0%, so the line doesn't fake a market with
+    // no promotion. Days without a scan are gaps too.
+    function promotedShare(h) {
+        if (h.promoted_count == null || !h.active_total) return null;
+        return Math.round((h.promoted_count / h.active_total) * 1000) / 10;
     }
 
     function loadHistory() {
@@ -107,6 +117,9 @@
         document.getElementById("chart-garaz-sprzedaz").innerHTML = sparkline(history.map(function (h) { return h.avg_garaz_sprzedaz; }));
         document.getElementById("chart-parking-wynajem").innerHTML = sparkline(history.map(function (h) { return h.avg_parking_wynajem; }));
         document.getElementById("chart-parking-sprzedaz").innerHTML = sparkline(history.map(function (h) { return h.avg_parking_sprzedaz; }));
+
+        document.getElementById("chart-promoted-count").innerHTML = sparkline(history.map(function (h) { return h.promoted_count == null ? null : h.promoted_count; }));
+        document.getElementById("chart-promoted-share").innerHTML = sparkline(history.map(promotedShare), { suffix: "%" });
 
         renderDistrictBars(data);
         renderScanTable(history);
