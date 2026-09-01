@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SONAR GARAŻOWY - Ostatnio dodane / odświeżone</title>
-    <meta name="description" content="Najnowsze oferty garaży i miejsc parkingowych w Lublinie.">
+    <title>SONAR GARAŻOWY - Okazje</title>
+    <meta name="description" content="Oferty garaży i miejsc parkingowych w Lublinie wyraźnie tańsze od mediany porównywalnej grupy.">
     <meta name="theme-color" content="#16222e">
-    <link rel="canonical" href="https://bonaventura-ew.github.io/parkingi-i-garaze/ostatnie.html">
+    <link rel="canonical" href="https://bonaventura-ew.github.io/parkingi-i-garaze/okazje.html">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="SONAR GARAŻOWY">
-    <meta property="og:title" content="SONAR GARAŻOWY - Ostatnio dodane / odświeżone">
-    <meta property="og:description" content="Najnowsze oferty garaży i miejsc parkingowych w Lublinie.">
-    <meta property="og:url" content="https://bonaventura-ew.github.io/parkingi-i-garaze/ostatnie.html">
+    <meta property="og:title" content="SONAR GARAŻOWY - Okazje">
+    <meta property="og:description" content="Oferty garaży i miejsc parkingowych w Lublinie wyraźnie tańsze od mediany porównywalnej grupy.">
+    <meta property="og:url" content="https://bonaventura-ew.github.io/parkingi-i-garaze/okazje.html">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="stylesheet" href="assets/style.css?v=1">
 </head>
@@ -32,14 +32,14 @@
                 <h1>
                     <span class="sg-b">SONAR GARAŻOWY</span>
                     <span class="sg-s">·</span>
-                    <span class="sg-p">🆕 Ostatnie</span>
+                    <span class="sg-p">💎 Okazje</span>
                 </h1>
             </div>
             <nav class="sg-nav">
                 <a href="index.html">🗺️ Mapa</a>
-                <a href="ostatnie.html" class="active">🆕 Ostatnie</a>
+                <a href="ostatnie.html">🆕 Ostatnie</a>
                 <a href="top5.html">🏆 Top 5</a>
-                <a href="okazje.html">💎 Okazje</a>
+                <a href="okazje.html" class="active">💎 Okazje</a>
                 <a href="analityka.html">📈 Analityka</a>
                 <a href="monitoring.html">📊 Monitoring</a>
                 <a href="pominiete.html">🐛 Pominięte</a>
@@ -47,6 +47,13 @@
         </header>
 
         <main class="list-page">
+            <p style="color:#6b7280;font-size:13px;margin-top:0;">
+                Oferty wyraźnie <strong>tańsze od mediany porównywalnej grupy</strong> (ten sam typ i rodzaj
+                transakcji), a nie od całego rynku — dzięki temu ranking pokazuje realnie zaniżone ceny, a nie
+                po prostu najtańsze kategorie. Przy każdej ofercie widać, z czym ją porównaliśmy (etykieta grupy
+                i jej liczebność). Oferty <strong>nietypowe</strong> (udziały, licytacje, ceny podejrzanie niskie)
+                są wykluczone z liczenia median i domyślnie ukryte — checkbox je przywraca z ostrzeżeniem.
+            </p>
             <div class="list-page-toolbar">
                 <label>Pokaż: <select id="list-filter-type">
                     <option value="all">Wszystkie typy</option>
@@ -59,7 +66,12 @@
                     <option value="sprzedaz">Tylko sprzedaż</option>
                     <option value="wynajem">Tylko wynajem</option>
                 </select></label>
+                <label>Sortuj: <select id="list-sort">
+                    <option value="discount">Największy rabat %</option>
+                    <option value="saving">Największa oszczędność zł</option>
+                </select></label>
                 <label><input type="checkbox" id="list-filter-favorites"> ⭐ Tylko ulubione</label>
+                <label><input type="checkbox" id="list-filter-atypical"> ⚠️ Pokaż nietypowe</label>
                 <button id="export-csv-btn" class="btn-secondary">⬇️ CSV</button>
                 <span id="list-count" class="list-count" aria-live="polite"></span>
             </div>
@@ -68,6 +80,6 @@
     </div>
 
     <script src="assets/common.js?v=1"></script>
-    <script src="assets/ostatnie.js?v=1"></script>
+    <script src="assets/okazje.js?v=1"></script>
 </body>
 </html>

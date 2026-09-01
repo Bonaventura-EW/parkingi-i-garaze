@@ -7,6 +7,26 @@ Projekt nie ma numerów wersji — wpisy są datowane, najnowsze na górze.
 Automatyczne commity odświeżające dane (`chore: refresh scraped offers`)
 nie są tu odnotowywane.
 
+## 2026-09-01
+
+### Dodane
+
+- Nowa strona **`okazje.html`** — ranking ofert wyraźnie tańszych od **mediany
+  porównywalnej grupy** (ten sam typ i rodzaj transakcji), a nie od całego rynku.
+  Dotąd `top5.html` sortował po surowej cenie / cenie za m², przez co na górze
+  lądowały po prostu najtańsze kategorie, a nie realnie zaniżone oferty. Przy
+  każdej ofercie widać, z czym ją porównano (etykieta grupy i jej liczebność).
+  Oferty nietypowe (udziały, licytacje, cesje, ceny podejrzanie niskie) są
+  wykluczone z liczenia median i domyślnie ukryte — checkbox przywraca je z
+  ostrzeżeniem. Pomysł zaadaptowany z repo-brata (`sprzedaz-mieszkan`); u nas
+  porównujemy cenę surową (garaż / miejsce to produkt jednorodny, a powierzchnia
+  w danych jest rzadka), a nie cenę za m² jak przy mieszkaniach.
+
+### Zmienione
+
+- Nawigacja na wszystkich stronach zawiera link do Okazji; `sitemap.xml`
+  uzupełniony o `okazje.html`.
+
 ## 2026-08-24
 
 ### Dodane
