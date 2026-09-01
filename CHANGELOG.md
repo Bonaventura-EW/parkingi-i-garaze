@@ -7,6 +7,17 @@ Projekt nie ma numerów wersji — wpisy są datowane, najnowsze na górze.
 Automatyczne commity odświeżające dane (`chore: refresh scraped offers`)
 nie są tu odnotowywane.
 
+## 2026-09-01
+
+### Dodane
+
+- `monitoring.html` alarmuje teraz również o **degradacji źródła**, a nie tylko
+  o jego całkowitej śmierci: gdy OLX lub Otodom nadal zwraca oferty, ale spada
+  poniżej 30% swojej zwykłej liczby (mediana ostatnich niezerowych skanów),
+  pojawia się bursztynowe ostrzeżenie o możliwym throttlingu / częściowej
+  blokadzie. Pełny brak ofert przez 3 skany wciąż daje czerwony alarm krytyczny.
+  Propagacja z repo-brata (`SONAR---DZIA-KOWY`).
+
 ## 2026-08-24
 
 ### Dodane
