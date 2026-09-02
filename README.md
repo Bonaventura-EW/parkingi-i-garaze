@@ -20,6 +20,10 @@ zbieranych z OLX i Otodom — w tym samym duchu co pozostałe sonary:
   typu/transakcji/ulubionych, eksportem CSV i statusami (N/↑/↓) przy każdej pozycji.
 - `top5.html` — najtańsze oferty w każdej kategorii (garaż/parking × sprzedaż/wynajem)
   oraz najniższa cena za m² dla garaży na sprzedaż.
+- `okazje.html` — oferty wyraźnie tańsze od **mediany porównywalnej grupy** (typ +
+  transakcja), a nie od całego rynku; przy każdej widać, z czym ją porównano (grupa
+  i jej liczebność). Oferty nietypowe (udziały, licytacje, ceny podejrzanie niskie)
+  są wykluczone z liczenia median i domyślnie ukryte, checkbox przywraca je z ostrzeżeniem.
 - `analityka.html` — trend liczby aktywnych ofert i średnich cen w czasie (na podstawie
   historii skanów), ranking lokalizacji wg liczby ofert, tabela historii skanów.
 - `monitoring.html` — kondycja scrapera (nie rynku): czas wykonania skanu, ile ofert
@@ -35,8 +39,9 @@ Ulubione oferty (⭐) są zapisywane w localStorage przeglądarki i działają n
 
 - `assets/common.js` — helpery współdzielone przez wszystkie strony (kolory, etykiety,
   wczytywanie `data.json`, ulubione, eksport CSV, badge statusu oferty).
-- `assets/script.js`, `assets/ostatnie.js`, `assets/top5.js`, `assets/analityka.js`,
-  `assets/monitoring.js`, `assets/pominiete.js` — logika poszczególnych stron.
+- `assets/script.js`, `assets/ostatnie.js`, `assets/top5.js`, `assets/okazje.js`,
+  `assets/analityka.js`, `assets/monitoring.js`, `assets/pominiete.js` — logika
+  poszczególnych stron.
 - `assets/vendor/` — Leaflet i Leaflet.markercluster zvendorowane lokalnie (bez CDN).
 - `data.json` — aktywne (i niedawno zniknięte) oferty, generowane przez scraper.
 - `skipped.json` — ogłoszenia pominięte przez klasyfikator, z powodem (dla `pominiete.html`).
