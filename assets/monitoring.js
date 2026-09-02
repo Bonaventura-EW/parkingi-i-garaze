@@ -21,6 +21,16 @@
 
     // A scan counts as "source is dead" once it yields nothing this many times in a row.
     var DEAD_SOURCE_SCANS = 3;
+    // A source that still returns *something* but drops below this fraction of its
+    // usual yield is flagged as "degraded" (throttling / partial WAF block, not death).
+    var DEGRADED_RATIO = 0.3;
+    // The usual yield = median of this many recent non-zero scans, searched this deep.
+    // We look for non-zero readings rather than a fixed window so a long outage doesn't
+    // blank the baseline and silence the alarm exactly when a source recovers then fails again.
+    var BASELINE_SCANS = 10;
+    var BASELINE_LOOKBACK = 40;
+    // With fewer non-zero scans than this we have no trustworthy norm — stay quiet.
+    var MIN_BASELINE_SCANS = 3;
     var MAX_POINTS = 60;
     var MAX_TABLE_ROWS = 30;
 
@@ -181,10 +191,20 @@
         return svgWrap(body) + legendHtml(series);
     }
 
-    // Trailing run of scans in which a source returned nothing at all.
-    function deadSourceAlerts(history) {
+    function median(nums) {
+        var s = nums.slice().sort(function (a, b) { return a - b; });
+        var mid = Math.floor(s.length / 2);
+        return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
+    }
+
+    // Per-source health: at most one alert per source, most severe wins.
+    //   "dead"     — 0 offers for DEAD_SOURCE_SCANS scans in a row (full block / dead scraper).
+    //   "degraded" — still returns something, but below DEGRADED_RATIO of its usual yield.
+    function sourceAlerts(history) {
         return ["olx", "otodom"].map(function (source) {
             var key = "scraped_" + source;
+
+            // Trailing run of scans in which the source returned nothing at all.
             var streak = 0;
             for (var i = history.length - 1; i >= 0; i--) {
                 var v = history[i][key];
@@ -192,23 +212,59 @@
                 if (v !== 0) break;
                 streak++;
             }
-            return { source: source, streak: streak };
-        }).filter(function (a) { return a.streak >= DEAD_SOURCE_SCANS; });
+            if (streak >= DEAD_SOURCE_SCANS) {
+                return { source: source, level: "dead", streak: streak };
+            }
+
+            var last = history.length ? history[history.length - 1][key] : null;
+            if (last == null) return null;   // no per-source data on the latest scan
+
+            // Baseline from earlier scans only, so an anomalous last reading doesn't
+            // drag down the norm it's being compared against.
+            var yields = [];
+            for (var j = history.length - 2;
+                 j >= 0 && (history.length - 1 - j) <= BASELINE_LOOKBACK && yields.length < BASELINE_SCANS;
+                 j--) {
+                var y = history[j][key];
+                if (y != null && y > 0) yields.push(y);
+            }
+            if (yields.length < MIN_BASELINE_SCANS) return null;   // too little history — no false alarm
+
+            var baseline = median(yields);
+            if (last < DEGRADED_RATIO * baseline) {
+                return { source: source, level: "degraded", last: last, baseline: baseline };
+            }
+            return null;
+        }).filter(Boolean);
     }
 
     function renderAlerts(history, last) {
         var box = document.getElementById("source-alert");
-        var alerts = deadSourceAlerts(history);
+        var alerts = sourceAlerts(history);
         if (!alerts.length) {
             box.hidden = true;
+            box.className = "source-alert";
             return;
         }
-        box.innerHTML = "🚨 " + alerts.map(function (a) {
-            var stillActive = last ? last["active_" + a.source] : null;
-            return "Źródło <strong>" + a.source.toUpperCase() + "</strong> nie zwraca ofert (0 od " +
-                a.streak + " skanów" +
-                (stillActive != null ? "; " + stillActive + " wciąż aktywnych w bazie z karencji" : "") + ").";
-        }).join("<br>") + "<br>Sprawdź scraper — możliwa blokada portalu (WAF / zmiana HTML).";
+        // A single dead source makes the whole bar critical (red); otherwise it's a warning (amber).
+        var hasDead = alerts.some(function (a) { return a.level === "dead"; });
+        box.className = "source-alert" + (hasDead ? "" : " is-warning");
+
+        var lines = alerts.map(function (a) {
+            if (a.level === "dead") {
+                var stillActive = last ? last["active_" + a.source] : null;
+                return "🚨 Źródło <strong>" + a.source.toUpperCase() + "</strong> nie zwraca ofert (0 od " +
+                    a.streak + " skanów" +
+                    (stillActive != null ? "; " + stillActive + " wciąż aktywnych w bazie z karencji" : "") + ").";
+            }
+            return "⚠️ Źródło <strong>" + a.source.toUpperCase() +
+                "</strong> zwraca wyraźnie mniej ofert niż zwykle (" + a.last +
+                " zamiast ~" + Math.round(a.baseline) + " z ostatnich skanów).";
+        });
+        var advice = hasDead
+            ? "Sprawdź scraper — możliwa blokada portalu (WAF / zmiana HTML)."
+            : "Możliwy throttling lub częściowa blokada portalu — warto sprawdzić scraper.";
+        box.innerHTML = lines.join("<br>") + "<br>" + advice;
         box.hidden = false;
     }
 

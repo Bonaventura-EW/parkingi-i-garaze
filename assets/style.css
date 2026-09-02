@@ -451,6 +451,12 @@ html, body {
     font-size: 14px;
     line-height: 1.5;
 }
+/* Degradacja źródła (nie pełna śmierć) — łagodniejszy, bursztynowy wariant. */
+.source-alert.is-warning {
+    background: #fffbeb;
+    border-color: #d97706;
+    color: #92400e;
+}
 
 .kpi-row {
     display: grid;

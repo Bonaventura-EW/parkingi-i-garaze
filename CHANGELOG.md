@@ -11,6 +11,12 @@ nie są tu odnotowywane.
 
 ### Dodane
 
+- `monitoring.html` alarmuje teraz również o **degradacji źródła**, a nie tylko
+  o jego całkowitej śmierci: gdy OLX lub Otodom nadal zwraca oferty, ale spada
+  poniżej 30% swojej zwykłej liczby (mediana ostatnich niezerowych skanów),
+  pojawia się bursztynowe ostrzeżenie o możliwym throttlingu / częściowej
+  blokadzie. Pełny brak ofert przez 3 skany wciąż daje czerwony alarm krytyczny.
+  Propagacja z repo-brata (`SONAR---DZIA-KOWY`).
 - **Analityka**: nowa sekcja „Wyróżnione (promowane) oferty w czasie" —
   wykresy liczby płatnie promowanych ofert OLX i ich udziału w rynku.
   Scraper czyta status promowania z atrybucji, którą OLX dokleja do linku
