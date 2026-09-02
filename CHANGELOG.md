@@ -11,6 +11,13 @@ nie są tu odnotowywane.
 
 ### Dodane
 
+- **Analityka**: nowa sekcja „Wyróżnione (promowane) oferty w czasie" —
+  wykresy liczby płatnie promowanych ofert OLX i ich udziału w rynku.
+  Scraper czyta status promowania z atrybucji, którą OLX dokleja do linku
+  kafelka (`search_reason=search|promoted`), i zapisuje dzienny licznik
+  w `scraper/history.jsonl` (`promoted_count`). Gdy OLX przestanie zwracać
+  atrybucję, skan ostrzega w logach, zamiast po cichu raportować 0%.
+  (Propagacja z repo-brata `SONAR-POKOJOWY`.)
 - Nowa strona **`okazje.html`** — ranking ofert wyraźnie tańszych od **mediany
   porównywalnej grupy** (ten sam typ i rodzaj transakcji), a nie od całego rynku.
   Dotąd `top5.html` sortował po surowej cenie / cenie za m², przez co na górze
