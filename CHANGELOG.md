@@ -7,6 +7,17 @@ Projekt nie ma numerów wersji — wpisy są datowane, najnowsze na górze.
 Automatyczne commity odświeżające dane (`chore: refresh scraped offers`)
 nie są tu odnotowywane.
 
+## 2026-09-08
+
+### Naprawione
+
+- **Okazje**: samo słowo „zamiana / zamienię" w tytule nie oznacza już oferty
+  jako nietypowej. Zwykłe ogłoszenia sprzedaży w normalnej cenie („sprzedam
+  lub zamienię garaż") były przez to ukrywane z rankingu. Teraz „zamiana" liczy
+  się jako sygnał nietypowości dopiero w połączeniu z ceną wyraźnie poniżej
+  mediany grupy; jednoznaczne słowa (licytacja, syndyk, udział, cesja…) flagują
+  ofertę tak jak dotąd. Propagacja z repo-brata (`Sprzedaz-mieszkan`).
+
 ## 2026-09-01
 
 ### Dodane
