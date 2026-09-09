@@ -6,9 +6,11 @@ Otodom.pl is not scraped directly (yet). OLX's own "garaze-parkingi/lublin"
 category already surfaces a large share of Otodom-sourced listings (otodom.pl
 links appear alongside olx.pl ones), which gives partial Otodom coverage.
 OLX's CloudFront WAF started hard-blocking plain `requests` traffic (HTTP 403)
-again as of 2026-08; `fetch()` now goes through curl_cffi with a Chrome TLS
-fingerprint (impersonate=) to get past it. Nominatim is left on plain
-`requests` since it isn't blocking and doesn't warrant impersonation.
+again as of 2026-08; `fetch()` now goes through curl_cffi with a browser TLS
+fingerprint (impersonate=) to get past it, trying a chain of profiles so one
+fingerprint falling out of favour with the WAF doesn't zero out the scan.
+Nominatim is left on plain `requests` since it isn't blocking and doesn't
+warrant impersonation.
 
 Usage:
     python3 scraper/scrape.py
@@ -25,8 +27,18 @@ from urllib.parse import parse_qs, urlparse
 
 import requests
 from bs4 import BeautifulSoup
-from curl_cffi import requests as curl_requests
-from curl_cffi.requests.exceptions import RequestException as CurlRequestException
+
+try:
+    from curl_cffi import requests as curl_requests
+    from curl_cffi.requests.exceptions import RequestException as CurlRequestException
+except ImportError:
+    # curl_cffi is optional as a safety net: if it isn't installed, fetch()
+    # degrades to plain `requests` (which the WAF will likely still 403) rather
+    # than letting an ImportError kill the whole scan. Aliasing the exception to
+    # requests.RequestException keeps every `except CurlRequestException` caller
+    # working unchanged on the fallback path.
+    curl_requests = None
+    CurlRequestException = requests.RequestException
 
 from streets import find_street
 
@@ -44,9 +56,15 @@ USER_AGENT_BROWSER = (
     "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 )
 USER_AGENT_NOMINATIM = "parkingi-i-garaze-sonar/0.1 (github.com/Bonaventura-EW/parkingi-i-garaze)"
-# Matches USER_AGENT_BROWSER's Chrome/124.0 so the TLS fingerprint (JA3) and
-# the declared User-Agent tell the same story to OLX's WAF.
-CURL_IMPERSONATE = "chrome124"
+# TLS-impersonation profiles for curl_cffi, tried in order. OLX's WAF blocks by
+# TLS fingerprint (JA3), so a single hardcoded profile is a single point of
+# failure: when it stops getting past the WAF (e.g. newer builds add TLS
+# extensions some proxies strip), the scan silently drops to 0 OLX offers, as it
+# did for 26 runs before impersonation landed. chrome124 stays first — it is our
+# verified-working profile, so the healthy path costs nothing (we only reach the
+# rest after it fails). curl_cffi supplies headers matching each profile, so the
+# declared User-Agent and the fingerprint tell the WAF the same story.
+CURL_IMPERSONATE_PROFILES = ["chrome124", "chrome131", "chrome110", "safari17_0", "edge101"]
 
 LUBLIN_BBOX = (22.40, 51.15, 22.70, 51.32)  # lon_min, lat_min, lon_max, lat_max
 LUBLIN_CENTER = (51.2465, 22.5684)
@@ -149,19 +167,37 @@ def parse_loc_date(loc_raw, now=None):
 
 def fetch(url, retries=3):
     last_err = None
-    for attempt in range(retries):
-        try:
-            resp = curl_requests.get(
-                url,
-                headers={"User-Agent": USER_AGENT_BROWSER},
-                timeout=20,
-                impersonate=CURL_IMPERSONATE,
-            )
-            resp.raise_for_status()
-            return resp.text
-        except CurlRequestException as e:
-            last_err = e
-            time.sleep(2 * (attempt + 1))
+    if curl_requests is None:
+        # Fallback path: curl_cffi unavailable, best-effort plain requests.
+        for attempt in range(retries):
+            try:
+                resp = requests.get(
+                    url,
+                    headers={"User-Agent": USER_AGENT_BROWSER},
+                    timeout=20,
+                )
+                resp.raise_for_status()
+                return resp.text
+            except requests.RequestException as e:
+                last_err = e
+                time.sleep(2 * (attempt + 1))
+        raise last_err
+    # Try each impersonation profile in turn; exhaust the retries on one profile
+    # before moving to the next, so a WAF change that kills a single fingerprint
+    # doesn't take the whole scan down with it.
+    for profile in CURL_IMPERSONATE_PROFILES:
+        for attempt in range(retries):
+            try:
+                resp = curl_requests.get(
+                    url,
+                    timeout=20,
+                    impersonate=profile,
+                )
+                resp.raise_for_status()
+                return resp.text
+            except CurlRequestException as e:
+                last_err = e
+                time.sleep(2 * (attempt + 1))
     raise last_err
 
 
