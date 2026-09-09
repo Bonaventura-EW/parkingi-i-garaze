@@ -7,6 +7,21 @@ Projekt nie ma numerów wersji — wpisy są datowane, najnowsze na górze.
 Automatyczne commity odświeżające dane (`chore: refresh scraped offers`)
 nie są tu odnotowywane.
 
+## 2026-09-09
+
+### Dodane
+
+- **Analityka**: nowa sekcja „Ruch na rynku w czasie" — wykresy napływu (nowe
+  oferty), odpływu (oferty, które zniknęły) i reaktywacji (oferty wracające po
+  zniknięciu) na skan. Odpowiada na pytanie „czy podaż rośnie czy maleje i ile
+  z ruchu to recykling ogłoszeń", którego sam przekrój „tu i teraz" nie pokrywał.
+  Napływ i odpływ pochodzą z liczników, które scraper już zapisywał; doszedł
+  tylko licznik reaktywacji (`reactivated_count` w `scraper/history.jsonl`),
+  liczony w tym samym przebiegu scalania, żeby trzy przepływy bilansowały się
+  z jednego źródła. Starsze skany bez tego pola zostają luką, nie zerem.
+  Propagacja z repo-brata (`SONAR---DZIA-KOWY`); u nas bez zewnętrznej biblioteki
+  wykresów — te same inline'owe SVG, co reszta analityki.
+
 ## 2026-09-01
 
 ### Dodane
