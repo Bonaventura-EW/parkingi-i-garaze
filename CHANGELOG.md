@@ -7,6 +7,18 @@ Projekt nie ma numerów wersji — wpisy są datowane, najnowsze na górze.
 Automatyczne commity odświeżające dane (`chore: refresh scraped offers`)
 nie są tu odnotowywane.
 
+## 2026-09-22
+
+### Dodane
+
+- **Analityka**: nowa sekcja „Zmiany cen: podrożenia i potanienia" — dwa
+  wykresy pokazujące, ile ofert w danym skanie obniżyło, a ile podniosło cenę.
+  Dotąd `history.jsonl` liczył tylko sumę zmian cen (bez kierunku); scraper
+  teraz rozbija ją na `price_drop_count`/`price_increase_count`, licząc
+  zdarzenia, nie oferty (dwie obniżki jednej oferty w jednym skanie to dwa
+  punkty). Suma obu (`updated_count` w monitoringu) zostaje bez zmian.
+  (Propagacja z repo-brata `SONAR-POKOJOWY`.)
+
 ## 2026-09-01
 
 ### Dodane

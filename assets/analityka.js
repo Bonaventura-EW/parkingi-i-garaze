@@ -121,6 +121,9 @@
         document.getElementById("chart-promoted-count").innerHTML = sparkline(history.map(function (h) { return h.promoted_count == null ? null : h.promoted_count; }));
         document.getElementById("chart-promoted-share").innerHTML = sparkline(history.map(promotedShare), { suffix: "%" });
 
+        document.getElementById("chart-price-drops").innerHTML = sparkline(history.map(function (h) { return h.price_drop_count; }));
+        document.getElementById("chart-price-increases").innerHTML = sparkline(history.map(function (h) { return h.price_increase_count; }));
+
         renderDistrictBars(data);
         renderScanTable(history);
     });
