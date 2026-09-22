@@ -35,6 +35,9 @@ never_touch:
 # MODELE: decyzje = Sonnet (claude-sonnet-5), programowanie = Opus (claude-opus-4-8).
 default_autonomy: ask
 
+# 2026-09-22 distill-policy: feature ma 5 rozstrzygniętych wpisów, bugfix ma
+# 4 (obie 100% accepted, 0 odrzuceń bezpieczeństwa) — obie wciąż poniżej
+# progu awansu (≥8). Za mało danych. Zobacz PR dla scorecardu.
 categories: {}
   # css-refactor:   draft
   # a11y-fix:       draft
@@ -43,7 +46,7 @@ categories: {}
 # Reguły destylowane z Twoich decyzji — dopisuje je skill `distill-policy`
 # przez PR, który zatwierdzasz. Ręcznie też możesz.
 learned_rules:
-  - "Wyżej oceniaj propozycje ograniczone do jednego pliku/modułu, nie wymagające zmian w scraperze/architekturze (nie 'portuj' całego obcego modułu 1:1) — 5/7 dotychczasowych rozstrzygnięć (wszystkie accepted) explicite chwali ten scoped/niskokosztowy charakter: issue#3, #5, #9, #10, #11 (distill 2026-09-09)."
-  - "Gdy ≥2 niezależne repo rodziny sonary niezależnie doszły do tego samego wzorca/funkcji, traktuj to jako silniejszy sygnał zasadności — nawet przy niższej pewności pojedynczego manifestu (np. propagate:maybe od autora) — potwierdzone w issue#4 i issue#13 (distill 2026-09-09)."
+  - "Wyżej oceniaj propozycje ograniczone do jednego pliku/modułu, nie wymagające zmian w scraperze/architekturze (nie 'portuj' całego obcego modułu 1:1) — dotychczasowe rozstrzygnięcia to explicite chwalą jako scoped/niskokosztowe: issue#3, #5, #9, #10, #11 (distill 2026-09-09), a także nowsze issue#19 (skoordynowane z otwartymi draftami, scoped do atrybucji odpływu) i issue#20 (prosta integracja z istniejącą pętlą merge_with_history())."
+  - "Gdy ≥2 niezależne repo rodziny sonary niezależnie doszły do tego samego wzorca/funkcji, traktuj to jako silniejszy sygnał zasadności — nawet przy niższej pewności pojedynczego manifestu (np. propagate:maybe od autora) — potwierdzone w issue#4 i issue#13 (distill 2026-09-09), a wzorzec price-change-series (issue#20) powtórzył się niezależnie w SONAR-MIESZKANIOWY#54/Sprzedaz-mieszkan#24/SONAR---DZIA-KOWY#27."
   #  - "Nie propaguj niczego, co rusza moduł auth (dotąd 0/6 przyjętych)."
   #  - "Zmiany typu css-refactor przyjmowane w 11/12 → kandydat do awansu na 'draft'."
