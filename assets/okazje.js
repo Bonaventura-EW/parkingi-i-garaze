@@ -28,7 +28,15 @@
     // (regexy brata dotyczyły mieszkań: TBS, SIM, prawo lokatorskie…). Skanujemy
     // TYLKO tytuł: w opisie „udział" bywa niewinny, a fałszywy alarm psuje zaufanie
     // do rankingu bardziej niż przeoczenie, które i tak złapie próg cenowy.
-    var ATYPICAL_RE = /udzia[łl]|wsp[óo][łl]w[łl]asn|licytac|komornicz|syndyk|przetarg|cesj[aeię]|zamieni|zamian[aę]|dzier[żz]aw[aeęy]\s+grunt/i;
+    //
+    // Dwa progi pewności (nauka od brata Bonaventura-EW/sprzedaz-mieszkan, manifest
+    // „jakość danych mapy"): sam sygnał tekstowy dawał u niego fałszywe trafienia na
+    // zwykłych sprzedażach. Słowa MOCNE są jednoznaczne (licytacja, syndyk, udział…)
+    // i flagują ofertę samodzielnie. Słowo SŁABE — „zamiana" — pojawia się też w
+    // normalnych ogłoszeniach („sprzedam lub zamienię garaż"), więc uznajemy je za
+    // nietypowe dopiero w KONIUNKCJI z ceną wyraźnie poniżej mediany grupy.
+    var STRONG_ATYPICAL_RE = /udzia[łl]|wsp[óo][łl]w[łl]asn|licytac|komornicz|syndyk|przetarg|cesj[aeię]|dzier[żz]aw[aeęy]\s+grunt/i;
+    var WEAK_ATYPICAL_RE = /zamieni|zamian[aę]/i;
 
     var allOffers = [];
     var currentFiltered = [];
@@ -40,18 +48,24 @@
         return s.length % 2 ? s[mid] : (s[mid - 1] + s[mid]) / 2;
     }
 
-    function keywordAtypical(o) {
-        return ATYPICAL_RE.test(o.title || "");
+    function strongAtypical(o) {
+        return STRONG_ATYPICAL_RE.test(o.title || "");
+    }
+
+    function weakAtypical(o) {
+        return WEAK_ATYPICAL_RE.test(o.title || "");
     }
 
     // Medianę grupy liczymy tak, żeby oferty nietypowe jej NIE zaniżały —
     // dwuprzebiegowo, bo próg cenowy sam potrzebuje mediany (jajko i kura):
-    //   1. mediana wstępna z ofert bez nietypowych słów-kluczy,
+    //   1. mediana wstępna z ofert bez MOCNYCH słów-kluczy,
     //   2. odrzucamy dodatkowo te poniżej progu ATYPICAL_RATIO tej mediany i
     //      liczymy medianę finalną. Dzięki temu deklaracja w UI („wykluczona
-    //      z liczenia mediany") jest prawdziwa dla OBU rodzajów nietypowości.
+    //      z liczenia mediany") jest prawdziwa dla każdej nietypowości: mocne
+    //      słowa wypadają w kroku 1, a słabe („zamiana") razem z ceną odstającą
+    //      wypadają w kroku 2 (są nietypowe tylko wtedy, gdy są też tanie).
     function groupMedian(group) {
-        var clean = group.filter(function (p) { return p.price != null && !keywordAtypical(p); });
+        var clean = group.filter(function (p) { return p.price != null && !strongAtypical(p); });
         if (clean.length < MIN_SAMPLE) return null;
         var prelim = median(clean.map(function (p) { return p.price; }));
         var trimmed = clean.filter(function (p) { return p.price >= prelim * ATYPICAL_RATIO; });
@@ -80,9 +94,11 @@
         var cmp = comparisonFor(o, pool);
         if (!cmp || !cmp.median) return null;
         var discount = (cmp.median - o.price) / cmp.median; // >0 = taniej niż mediana
+        var below = o.price < cmp.median * ATYPICAL_RATIO;
         var reason = null;
-        if (keywordAtypical(o)) reason = "słowa-klucze (udział / licytacja / cesja itp.)";
-        else if (o.price < cmp.median * ATYPICAL_RATIO) reason = "cena podejrzanie niska (< " + Math.round(ATYPICAL_RATIO * 100) + "% mediany grupy)";
+        if (strongAtypical(o)) reason = "słowa-klucze (udział / licytacja / cesja itp.)";
+        else if (weakAtypical(o) && below) reason = "możliwa zamiana + cena poniżej " + Math.round(ATYPICAL_RATIO * 100) + "% mediany grupy";
+        else if (below) reason = "cena podejrzanie niska (< " + Math.round(ATYPICAL_RATIO * 100) + "% mediany grupy)";
         return {
             offer: o,
             median: cmp.median,
