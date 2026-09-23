@@ -598,6 +598,14 @@ def merge_with_history(on_map, previous_offers, now):
         o["last_seen"] = today
 
     cutoff = now - timedelta(days=INACTIVE_RETENTION_DAYS)
+    # An offer whose last confirmed sighting is more than a day old didn't just
+    # leave "now" — we simply failed to notice earlier, almost always because
+    # the source was unreachable for a stretch (see coverage_gap in assemble()).
+    # Crediting the whole backlog to the scan that finally notices it fakes a
+    # market-wide delisting spike on the day the source recovers. Which day it
+    # actually left isn't recoverable from here, so it's left out of the count
+    # instead of misattributed to today.
+    recent_cutoff = (now - timedelta(days=1)).strftime("%Y-%m-%d")
     newly_inactive_count = 0
     for oid, prev in previous_offers.items():
         if oid in seen_ids:
@@ -608,7 +616,7 @@ def merge_with_history(on_map, previous_offers, now):
             last_seen_dt = now
         if last_seen_dt < cutoff:
             continue  # dropped for good after ~30 days of being gone
-        if prev.get("active", True):
+        if prev.get("active", True) and prev.get("last_seen", "") >= recent_cutoff:
             newly_inactive_count += 1
         inactive = dict(prev)
         inactive["active"] = False
@@ -655,6 +663,14 @@ def assemble(items, previous_offers, now, cache):
     for o in on_map:
         scraped_by_source[o["source"]] = scraped_by_source.get(o["source"], 0) + 1
 
+    # A scan that comes back with nothing while we already had offers on record
+    # is almost always our own pipeline failing (WAF block, TLS fingerprint
+    # change, network timeout), not the whole market disappearing overnight.
+    # Flag it so history readers can tell "we didn't measure" from "nothing
+    # moved" — new_count/newly_inactive_count/reactivated_count are not a real
+    # market reading for a run like this.
+    coverage_gap = not on_map and bool(previous_offers)
+
     on_map, new_count, newly_inactive_count, reactivated_count, price_change_count = merge_with_history(
         on_map, previous_offers, now)
     active = [o for o in on_map if o["active"]]
@@ -699,6 +715,11 @@ def assemble(items, previous_offers, now, cache):
         # Older history.jsonl lines predate this field — readers treat a
         # missing value as a gap, never zero.
         "reactivated_count": reactivated_count,
+        # True when this scan had nothing to compare against a non-empty
+        # previous state (see coverage_gap above). Raw flow values stay as
+        # computed; analityka.html masks them into gaps for the flow charts —
+        # that's a presentation concern, not something baked into the log.
+        "coverage_gap": coverage_gap,
         "address_match_pct": round(100 * address_matched / len(active), 1) if active else None,
         "avg_garaz_wynajem": data["stats"]["garaz_wynajem"]["avg"],
         "avg_garaz_sprzedaz": data["stats"]["garaz_sprzedaz"]["avg"],

@@ -7,6 +7,19 @@ Projekt nie ma numerów wersji — wpisy są datowane, najnowsze na górze.
 Automatyczne commity odświeżające dane (`chore: refresh scraped offers`)
 nie są tu odnotowywane.
 
+## 2026-09-22
+
+### Naprawione
+
+- Wykresy „Ruch na rynku w czasie" (`analityka.html`) nie liczą już fałszywego
+  odpływu, gdy OLX był przez dłuższy czas niedostępny: zaległość dezaktywacji
+  z blokady nie ląduje jednym wielkim skokiem w dniu powrotu źródła. Skan, po
+  którym nic nie dało się porównać z poprzednim stanem, jest teraz oznaczany
+  jako `coverage_gap` w `scraper/history.jsonl` — napływ/odpływ/reaktywacje z
+  takiego skanu rysują się jako przerwa na wykresie, nie jako zero (cisza na
+  rynku) ani jako sztuczny rekord. (Propagacja z repo-brata `Sprzedaz-mieszkan`,
+  uzupełnienie #18 przed wystawieniem sekcji „Ruch na rynku" na produkcję.)
+
 ## 2026-09-09
 
 ### Dodane
