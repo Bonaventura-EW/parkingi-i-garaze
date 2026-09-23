@@ -45,6 +45,18 @@ nie są tu odnotowywane.
   Propagacja z repo-brata (`SONAR---DZIA-KOWY`); u nas bez zewnętrznej biblioteki
   wykresów — te same inline'owe SVG, co reszta analityki.
 
+### Zmienione
+
+- Scraper próbuje teraz **łańcucha profili impersonacji TLS** (`chrome124` →
+  `chrome131` → `chrome110` → `safari17_0` → `edge101`) zamiast jednego zaszytego
+  na sztywno. Gdy OLX zablokuje pojedynczy fingerprint JA3 (np. po zmianie po
+  stronie WAF), skan sięga po kolejny profil zamiast po cichu spaść do zera ofert
+  — jak zdarzyło się na 26 przebiegów przed wdrożeniem impersonacji. Sprawny
+  profil jest próbowany pierwszy, więc zdrowy skan nic nie kosztuje. Dodatkowo
+  `curl_cffi` jest teraz importem opcjonalnym: jego brak degraduje `fetch()` do
+  gołego `requests`, zamiast wywalać cały skan `ImportError`-em. Propagacja z
+  repo-brata (`SONAR---DZIA-KOWY`).
+
 ### Naprawione
 
 - Nieudany skan OLX (blokada WAF, zmiana odcisku TLS, timeout sieci) nie
