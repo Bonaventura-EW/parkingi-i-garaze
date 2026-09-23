@@ -1,5 +1,5 @@
 {
-  "generated_at": "23.09.2026 07:53",
+  "generated_at": "23.09.2026 08:03",
   "sources": [
     "olx.pl",
     "otodom.pl (via OLX)"
@@ -8,14 +8,14 @@
   "stats": {
     "total_offers": 95,
     "garaz_sprzedaz": {
-      "count": 20,
-      "avg": 108990,
+      "count": 21,
+      "avg": 108562,
       "min": 27900,
       "max": 149000
     },
     "garaz_wynajem": {
-      "count": 29,
-      "avg": 510,
+      "count": 28,
+      "avg": 518,
       "min": 250,
       "max": 2117
     },
@@ -284,14 +284,14 @@
           "area_m2": null,
           "price_per_m2": null,
           "promoted": false,
-          "price_history": [
-            300
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            300
+          ],
           "first_seen": "2026-09-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-09-23"
         },
@@ -1152,14 +1152,14 @@
           "area_m2": null,
           "price_per_m2": null,
           "promoted": false,
-          "price_history": [
-            450
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            450
+          ],
           "first_seen": "2026-09-23",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-09-23"
         }
@@ -1748,6 +1748,45 @@
             500
           ],
           "first_seen": "2026-09-18",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-09-23"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2547,
+        "lon": 22.5408
+      },
+      "address": "Mieczysławy Ćwiklińskiej 2",
+      "offers": [
+        {
+          "id": "1066867110",
+          "url": "https://www.olx.pl/d/oferta/garaz-pod-blokiem-cwiklinskiej-2-w-lublinie-CID3-ID1acsS2.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "garaż pod blokiem Ćwiklińskiej 2 w Lublinie",
+          "price": 100000,
+          "negotiable": true,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.254726,
+          "lon": 22.540776,
+          "precision": "exact",
+          "address": "Mieczysławy Ćwiklińskiej 2",
+          "loc_raw": "Lublin - 21 sierpnia 2026",
+          "date_iso": "2026-08-21",
+          "date_label": "21 sierpnia 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "promoted": false,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            100000
+          ],
+          "first_seen": "2026-08-23",
           "is_new": false,
           "active": true,
           "last_seen": "2026-09-23"
@@ -3269,45 +3308,6 @@
     },
     {
       "coords": {
-        "lat": 51.2251,
-        "lon": 22.4852
-      },
-      "address": "Koralowa 31",
-      "offers": [
-        {
-          "id": "1079721017",
-          "url": "https://www.olx.pl/d/oferta/wynajme-garaz-podziemny-w-bloku-ul-koralowa-31-a-weglinek-CID3-ID1b4oL7.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Wynajmę garaż podziemny w bloku , ul. Koralowa 31 A, Węglinek",
-          "price": 300,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "garaz",
-          "lat": 51.225055,
-          "lon": 22.485222,
-          "precision": "exact",
-          "address": "Koralowa 31",
-          "loc_raw": "Lublin - 13 września 2026",
-          "date_iso": "2026-09-13",
-          "date_label": "13 września 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "promoted": false,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            300
-          ],
-          "first_seen": "2026-07-01",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-09-23"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.2672,
         "lon": 22.5723
       },
@@ -4076,27 +4076,27 @@
     },
     {
       "coords": {
-        "lat": 51.2547,
-        "lon": 22.5408
+        "lat": 51.2251,
+        "lon": 22.4852
       },
-      "address": "Mieczysławy Ćwiklińskiej 2",
+      "address": "Koralowa 31",
       "offers": [
         {
-          "id": "1066867110",
-          "url": "https://www.olx.pl/d/oferta/garaz-pod-blokiem-cwiklinskiej-2-w-lublinie-CID3-ID1acsS2.html?search_reason=search%7Corganic",
+          "id": "1079721017",
+          "url": "https://www.olx.pl/d/oferta/wynajme-garaz-podziemny-w-bloku-ul-koralowa-31-a-weglinek-CID3-ID1b4oL7.html?search_reason=search%7Corganic",
           "source": "olx",
-          "title": "garaż pod blokiem Ćwiklińskiej 2 w Lublinie",
-          "price": 100000,
-          "negotiable": true,
-          "transaction": "sprzedaz",
+          "title": "Wynajmę garaż podziemny w bloku , ul. Koralowa 31 A, Węglinek",
+          "price": 300,
+          "negotiable": false,
+          "transaction": "wynajem",
           "type": "garaz",
-          "lat": 51.254726,
-          "lon": 22.540776,
+          "lat": 51.225055,
+          "lon": 22.485222,
           "precision": "exact",
-          "address": "Mieczysławy Ćwiklińskiej 2",
-          "loc_raw": "Lublin - 21 sierpnia 2026",
-          "date_iso": "2026-08-21",
-          "date_label": "21 sierpnia 2026",
+          "address": "Koralowa 31",
+          "loc_raw": "Lublin - 13 września 2026",
+          "date_iso": "2026-09-13",
+          "date_label": "13 września 2026",
           "area_m2": null,
           "price_per_m2": null,
           "promoted": false,
@@ -4104,12 +4104,12 @@
           "previous_price": null,
           "price_changed_at": null,
           "price_history": [
-            100000
+            300
           ],
-          "first_seen": "2026-08-23",
+          "first_seen": "2026-07-01",
           "is_new": false,
           "active": false,
-          "last_seen": "2026-09-22"
+          "last_seen": "2026-09-23"
         }
       ]
     },
