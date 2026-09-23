@@ -6,9 +6,11 @@ Otodom.pl is not scraped directly (yet). OLX's own "garaze-parkingi/lublin"
 category already surfaces a large share of Otodom-sourced listings (otodom.pl
 links appear alongside olx.pl ones), which gives partial Otodom coverage.
 OLX's CloudFront WAF started hard-blocking plain `requests` traffic (HTTP 403)
-again as of 2026-08; `fetch()` now goes through curl_cffi with a Chrome TLS
-fingerprint (impersonate=) to get past it. Nominatim is left on plain
-`requests` since it isn't blocking and doesn't warrant impersonation.
+again as of 2026-08; `fetch()` now goes through curl_cffi with a browser TLS
+fingerprint (impersonate=) to get past it, trying a chain of profiles so one
+fingerprint falling out of favour with the WAF doesn't zero out the scan.
+Nominatim is left on plain `requests` since it isn't blocking and doesn't
+warrant impersonation.
 
 Usage:
     python3 scraper/scrape.py
@@ -25,8 +27,18 @@ from urllib.parse import parse_qs, urlparse
 
 import requests
 from bs4 import BeautifulSoup
-from curl_cffi import requests as curl_requests
-from curl_cffi.requests.exceptions import RequestException as CurlRequestException
+
+try:
+    from curl_cffi import requests as curl_requests
+    from curl_cffi.requests.exceptions import RequestException as CurlRequestException
+except ImportError:
+    # curl_cffi is optional as a safety net: if it isn't installed, fetch()
+    # degrades to plain `requests` (which the WAF will likely still 403) rather
+    # than letting an ImportError kill the whole scan. Aliasing the exception to
+    # requests.RequestException keeps every `except CurlRequestException` caller
+    # working unchanged on the fallback path.
+    curl_requests = None
+    CurlRequestException = requests.RequestException
 
 from streets import find_street
 
@@ -44,9 +56,15 @@ USER_AGENT_BROWSER = (
     "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
 )
 USER_AGENT_NOMINATIM = "parkingi-i-garaze-sonar/0.1 (github.com/Bonaventura-EW/parkingi-i-garaze)"
-# Matches USER_AGENT_BROWSER's Chrome/124.0 so the TLS fingerprint (JA3) and
-# the declared User-Agent tell the same story to OLX's WAF.
-CURL_IMPERSONATE = "chrome124"
+# TLS-impersonation profiles for curl_cffi, tried in order. OLX's WAF blocks by
+# TLS fingerprint (JA3), so a single hardcoded profile is a single point of
+# failure: when it stops getting past the WAF (e.g. newer builds add TLS
+# extensions some proxies strip), the scan silently drops to 0 OLX offers, as it
+# did for 26 runs before impersonation landed. chrome124 stays first — it is our
+# verified-working profile, so the healthy path costs nothing (we only reach the
+# rest after it fails). curl_cffi supplies headers matching each profile, so the
+# declared User-Agent and the fingerprint tell the WAF the same story.
+CURL_IMPERSONATE_PROFILES = ["chrome124", "chrome131", "chrome110", "safari17_0", "edge101"]
 
 LUBLIN_BBOX = (22.40, 51.15, 22.70, 51.32)  # lon_min, lat_min, lon_max, lat_max
 LUBLIN_CENTER = (51.2465, 22.5684)
@@ -149,19 +167,37 @@ def parse_loc_date(loc_raw, now=None):
 
 def fetch(url, retries=3):
     last_err = None
-    for attempt in range(retries):
-        try:
-            resp = curl_requests.get(
-                url,
-                headers={"User-Agent": USER_AGENT_BROWSER},
-                timeout=20,
-                impersonate=CURL_IMPERSONATE,
-            )
-            resp.raise_for_status()
-            return resp.text
-        except CurlRequestException as e:
-            last_err = e
-            time.sleep(2 * (attempt + 1))
+    if curl_requests is None:
+        # Fallback path: curl_cffi unavailable, best-effort plain requests.
+        for attempt in range(retries):
+            try:
+                resp = requests.get(
+                    url,
+                    headers={"User-Agent": USER_AGENT_BROWSER},
+                    timeout=20,
+                )
+                resp.raise_for_status()
+                return resp.text
+            except requests.RequestException as e:
+                last_err = e
+                time.sleep(2 * (attempt + 1))
+        raise last_err
+    # Try each impersonation profile in turn; exhaust the retries on one profile
+    # before moving to the next, so a WAF change that kills a single fingerprint
+    # doesn't take the whole scan down with it.
+    for profile in CURL_IMPERSONATE_PROFILES:
+        for attempt in range(retries):
+            try:
+                resp = curl_requests.get(
+                    url,
+                    timeout=20,
+                    impersonate=profile,
+                )
+                resp.raise_for_status()
+                return resp.text
+            except CurlRequestException as e:
+                last_err = e
+                time.sleep(2 * (attempt + 1))
     raise last_err
 
 
@@ -533,21 +569,55 @@ def merge_with_history(on_map, previous_offers, now):
     while, so the map can show a "recently delisted" layer instead of
     listings just vanishing between runs.
 
-    Returns (merged_offers, new_count, newly_inactive_count, price_change_count).
+    Returns (merged_offers, new_count, newly_inactive_count, reactivated_count,
+    price_change_count, price_drop_count, price_increase_count).
     """
+    # A scan that returns nothing while the previous run had offers is almost
+    # always our own pipeline failing, not the whole market disappearing:
+    # scrape_olx() swallows a first-page CurlRequestException with a bare
+    # `break` and returns [], so a WAF block, a changed TLS fingerprint or a
+    # network timeout all surface here as an empty on_map. Left unguarded, the
+    # deactivation loop below would flip EVERY retained offer to inactive in a
+    # single run, fabricating a market-wide "delisting" out of our own outage.
+    # Freeze the last known-good state instead: carry previous offers forward
+    # untouched, mark nothing newly inactive, and warn loudly (monitoring.html
+    # still sees scraped_* == 0 and raises its dead-source alarm independently).
+    if not on_map and previous_offers:
+        print(
+            f"WARNING: scan produced 0 mappable offers but previous run had "
+            f"{len(previous_offers)} — treating as a blind scan (source outage), "
+            f"skipping deactivation and keeping previous offers unchanged",
+            file=sys.stderr,
+        )
+        return [dict(o) for o in previous_offers.values()], 0, 0, 0, 0, 0, 0
+
     today = now.strftime("%Y-%m-%d")
     seen_ids = set()
     new_count = 0
+    # An offer we kept around as inactive (delisted, still within the retention
+    # window) that shows up again in this scrape. Counted from the SAME pass as
+    # new_count / newly_inactive_count so the three flows balance against one
+    # source of truth — a reactivation is neither "new" nor "newly inactive".
+    reactivated_count = 0
     price_change_count = 0
+    price_drop_count = 0
+    price_increase_count = 0
     for o in on_map:
         seen_ids.add(o["id"])
         prev = previous_offers.get(o["id"])
         if prev:
+            if not prev.get("active", True):
+                reactivated_count += 1
             price_history = list(prev.get("price_history") or ([prev["price"]] if prev.get("price") is not None else []))
             last_price = price_history[-1] if price_history else None
             if o["price"] is not None and o["price"] != last_price:
                 price_history.append(o["price"])
                 price_change_count += 1
+                if last_price is not None:
+                    if o["price"] > last_price:
+                        price_increase_count += 1
+                    else:
+                        price_drop_count += 1
                 o["price_trend"] = "up" if (last_price is not None and o["price"] > last_price) else (
                     "down" if last_price is not None else None)
                 o["previous_price"] = last_price
@@ -571,6 +641,14 @@ def merge_with_history(on_map, previous_offers, now):
         o["last_seen"] = today
 
     cutoff = now - timedelta(days=INACTIVE_RETENTION_DAYS)
+    # An offer whose last confirmed sighting is more than a day old didn't just
+    # leave "now" — we simply failed to notice earlier, almost always because
+    # the source was unreachable for a stretch (see coverage_gap in assemble()).
+    # Crediting the whole backlog to the scan that finally notices it fakes a
+    # market-wide delisting spike on the day the source recovers. Which day it
+    # actually left isn't recoverable from here, so it's left out of the count
+    # instead of misattributed to today.
+    recent_cutoff = (now - timedelta(days=1)).strftime("%Y-%m-%d")
     newly_inactive_count = 0
     for oid, prev in previous_offers.items():
         if oid in seen_ids:
@@ -581,14 +659,14 @@ def merge_with_history(on_map, previous_offers, now):
             last_seen_dt = now
         if last_seen_dt < cutoff:
             continue  # dropped for good after ~30 days of being gone
-        if prev.get("active", True):
+        if prev.get("active", True) and prev.get("last_seen", "") >= recent_cutoff:
             newly_inactive_count += 1
         inactive = dict(prev)
         inactive["active"] = False
         inactive["is_new"] = False
         on_map.append(inactive)
 
-    return on_map, new_count, newly_inactive_count, price_change_count
+    return on_map, new_count, newly_inactive_count, reactivated_count, price_change_count, price_drop_count, price_increase_count
 
 
 def assemble(items, previous_offers, now, cache):
@@ -628,7 +706,15 @@ def assemble(items, previous_offers, now, cache):
     for o in on_map:
         scraped_by_source[o["source"]] = scraped_by_source.get(o["source"], 0) + 1
 
-    on_map, new_count, newly_inactive_count, price_change_count = merge_with_history(
+    # A scan that comes back with nothing while we already had offers on record
+    # is almost always our own pipeline failing (WAF block, TLS fingerprint
+    # change, network timeout), not the whole market disappearing overnight.
+    # Flag it so history readers can tell "we didn't measure" from "nothing
+    # moved" — new_count/newly_inactive_count/reactivated_count are not a real
+    # market reading for a run like this.
+    coverage_gap = not on_map and bool(previous_offers)
+
+    on_map, new_count, newly_inactive_count, reactivated_count, price_change_count, price_drop_count, price_increase_count = merge_with_history(
         on_map, previous_offers, now)
     active = [o for o in on_map if o["active"]]
 
@@ -667,6 +753,24 @@ def assemble(items, previous_offers, now, cache):
         "promoted_count": sum(1 for o in active if o.get("promoted")),
         "new_count": new_count,
         "newly_inactive_count": newly_inactive_count,
+        # Delisted offers (retained as inactive) that reappeared this scan.
+        # analityka.html plots inflow/outflow/reactivation as market movement.
+        # Older history.jsonl lines predate this field — readers treat a
+        # missing value as a gap, never zero.
+        "reactivated_count": reactivated_count,
+        # True when this scan had nothing to compare against a non-empty
+        # previous state (see coverage_gap above). Raw flow values stay as
+        # computed; analityka.html masks them into gaps for the flow charts —
+        # that's a presentation concern, not something baked into the log.
+        "coverage_gap": coverage_gap,
+        # Direction of price changes this scan (analityka.html: czy rynek się
+        # obniża czy podnosi). Events, not offers — an offer cut twice in one
+        # scan is two events. Older history.jsonl lines predate these fields —
+        # a missing value is a gap, never zero. `updated_count` below stays the
+        # sum of both, unchanged, since monitoring.html only cares that
+        # something moved, not which direction.
+        "price_drop_count": price_drop_count,
+        "price_increase_count": price_increase_count,
         "address_match_pct": round(100 * address_matched / len(active), 1) if active else None,
         "avg_garaz_wynajem": data["stats"]["garaz_wynajem"]["avg"],
         "avg_garaz_sprzedaz": data["stats"]["garaz_sprzedaz"]["avg"],

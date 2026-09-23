@@ -42,6 +42,8 @@ categories: {}
 
 # Reguły destylowane z Twoich decyzji — dopisuje je skill `distill-policy`
 # przez PR, który zatwierdzasz. Ręcznie też możesz.
-learned_rules: []
+learned_rules:
+  - "Wyżej oceniaj propozycje ograniczone do jednego pliku/modułu, nie wymagające zmian w scraperze/architekturze (nie 'portuj' całego obcego modułu 1:1) — 5/7 dotychczasowych rozstrzygnięć (wszystkie accepted) explicite chwali ten scoped/niskokosztowy charakter: issue#3, #5, #9, #10, #11 (distill 2026-09-09)."
+  - "Gdy ≥2 niezależne repo rodziny sonary niezależnie doszły do tego samego wzorca/funkcji, traktuj to jako silniejszy sygnał zasadności — nawet przy niższej pewności pojedynczego manifestu (np. propagate:maybe od autora) — potwierdzone w issue#4 i issue#13 (distill 2026-09-09)."
   #  - "Nie propaguj niczego, co rusza moduł auth (dotąd 0/6 przyjętych)."
   #  - "Zmiany typu css-refactor przyjmowane w 11/12 → kandydat do awansu na 'draft'."
