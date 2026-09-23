@@ -22,6 +22,17 @@ nie są tu odnotowywane.
   Propagacja z repo-brata (`SONAR---DZIA-KOWY`); u nas bez zewnętrznej biblioteki
   wykresów — te same inline'owe SVG, co reszta analityki.
 
+### Naprawione
+
+- Nieudany skan OLX (blokada WAF, zmiana odcisku TLS, timeout sieci) nie
+  oznacza już wszystkich aktywnych ofert jako „zniknęłe". Gdy skan nie zwróci
+  ani jednej oferty do naniesienia na mapę, a poprzedni przebieg je miał,
+  scraper traktuje to jako awarię źródła: zamraża ostatni znany stan zamiast
+  masowo dezaktywować oferty i głośno ostrzega w logach. Dotychczasowy alarm
+  martwego źródła w `monitoring.html` działa niezależnie i nadal się odpala.
+  (Propagacja z repo-brata `SONAR---DZIA-KOWY` — jedna z lekcji z audytu
+  wykresów rynku, zaadaptowana do naszego pipeline'u.)
+
 ## 2026-09-01
 
 ### Dodane
