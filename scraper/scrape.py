@@ -534,7 +534,7 @@ def merge_with_history(on_map, previous_offers, now):
     listings just vanishing between runs.
 
     Returns (merged_offers, new_count, newly_inactive_count, reactivated_count,
-    price_change_count).
+    price_change_count, price_drop_count, price_increase_count).
     """
     # A scan that returns nothing while the previous run had offers is almost
     # always our own pipeline failing, not the whole market disappearing:
@@ -553,7 +553,7 @@ def merge_with_history(on_map, previous_offers, now):
             f"skipping deactivation and keeping previous offers unchanged",
             file=sys.stderr,
         )
-        return [dict(o) for o in previous_offers.values()], 0, 0, 0, 0
+        return [dict(o) for o in previous_offers.values()], 0, 0, 0, 0, 0, 0
 
     today = now.strftime("%Y-%m-%d")
     seen_ids = set()
@@ -564,6 +564,8 @@ def merge_with_history(on_map, previous_offers, now):
     # source of truth — a reactivation is neither "new" nor "newly inactive".
     reactivated_count = 0
     price_change_count = 0
+    price_drop_count = 0
+    price_increase_count = 0
     for o in on_map:
         seen_ids.add(o["id"])
         prev = previous_offers.get(o["id"])
@@ -575,6 +577,11 @@ def merge_with_history(on_map, previous_offers, now):
             if o["price"] is not None and o["price"] != last_price:
                 price_history.append(o["price"])
                 price_change_count += 1
+                if last_price is not None:
+                    if o["price"] > last_price:
+                        price_increase_count += 1
+                    else:
+                        price_drop_count += 1
                 o["price_trend"] = "up" if (last_price is not None and o["price"] > last_price) else (
                     "down" if last_price is not None else None)
                 o["previous_price"] = last_price
@@ -623,7 +630,7 @@ def merge_with_history(on_map, previous_offers, now):
         inactive["is_new"] = False
         on_map.append(inactive)
 
-    return on_map, new_count, newly_inactive_count, reactivated_count, price_change_count
+    return on_map, new_count, newly_inactive_count, reactivated_count, price_change_count, price_drop_count, price_increase_count
 
 
 def assemble(items, previous_offers, now, cache):
@@ -671,7 +678,7 @@ def assemble(items, previous_offers, now, cache):
     # market reading for a run like this.
     coverage_gap = not on_map and bool(previous_offers)
 
-    on_map, new_count, newly_inactive_count, reactivated_count, price_change_count = merge_with_history(
+    on_map, new_count, newly_inactive_count, reactivated_count, price_change_count, price_drop_count, price_increase_count = merge_with_history(
         on_map, previous_offers, now)
     active = [o for o in on_map if o["active"]]
 
@@ -720,6 +727,14 @@ def assemble(items, previous_offers, now, cache):
         # computed; analityka.html masks them into gaps for the flow charts —
         # that's a presentation concern, not something baked into the log.
         "coverage_gap": coverage_gap,
+        # Direction of price changes this scan (analityka.html: czy rynek się
+        # obniża czy podnosi). Events, not offers — an offer cut twice in one
+        # scan is two events. Older history.jsonl lines predate these fields —
+        # a missing value is a gap, never zero. `updated_count` below stays the
+        # sum of both, unchanged, since monitoring.html only cares that
+        # something moved, not which direction.
+        "price_drop_count": price_drop_count,
+        "price_increase_count": price_increase_count,
         "address_match_pct": round(100 * address_matched / len(active), 1) if active else None,
         "avg_garaz_wynajem": data["stats"]["garaz_wynajem"]["avg"],
         "avg_garaz_sprzedaz": data["stats"]["garaz_sprzedaz"]["avg"],
