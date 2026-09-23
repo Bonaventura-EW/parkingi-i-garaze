@@ -118,6 +118,14 @@
         document.getElementById("chart-parking-wynajem").innerHTML = sparkline(history.map(function (h) { return h.avg_parking_wynajem; }));
         document.getElementById("chart-parking-sprzedaz").innerHTML = sparkline(history.map(function (h) { return h.avg_parking_sprzedaz; }));
 
+        // Market movement: inflow / outflow / reactivation per scan, measured
+        // by the scraper's merge pass — not reconstructed from first_seen /
+        // last_seen after the fact. reactivated_count postdates the other two,
+        // so older scans stay gaps (null), never a fake 0.
+        document.getElementById("chart-inflow").innerHTML = sparkline(history.map(function (h) { return h.new_count == null ? null : h.new_count; }));
+        document.getElementById("chart-outflow").innerHTML = sparkline(history.map(function (h) { return h.newly_inactive_count == null ? null : h.newly_inactive_count; }));
+        document.getElementById("chart-reactivated").innerHTML = sparkline(history.map(function (h) { return h.reactivated_count == null ? null : h.reactivated_count; }));
+
         document.getElementById("chart-promoted-count").innerHTML = sparkline(history.map(function (h) { return h.promoted_count == null ? null : h.promoted_count; }));
         document.getElementById("chart-promoted-share").innerHTML = sparkline(history.map(promotedShare), { suffix: "%" });
 

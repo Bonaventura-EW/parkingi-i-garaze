@@ -533,7 +533,8 @@ def merge_with_history(on_map, previous_offers, now):
     while, so the map can show a "recently delisted" layer instead of
     listings just vanishing between runs.
 
-    Returns (merged_offers, new_count, newly_inactive_count, price_change_count).
+    Returns (merged_offers, new_count, newly_inactive_count, reactivated_count,
+    price_change_count).
     """
     # A scan that returns nothing while the previous run had offers is almost
     # always our own pipeline failing, not the whole market disappearing:
@@ -552,16 +553,23 @@ def merge_with_history(on_map, previous_offers, now):
             f"skipping deactivation and keeping previous offers unchanged",
             file=sys.stderr,
         )
-        return [dict(o) for o in previous_offers.values()], 0, 0, 0
+        return [dict(o) for o in previous_offers.values()], 0, 0, 0, 0
 
     today = now.strftime("%Y-%m-%d")
     seen_ids = set()
     new_count = 0
+    # An offer we kept around as inactive (delisted, still within the retention
+    # window) that shows up again in this scrape. Counted from the SAME pass as
+    # new_count / newly_inactive_count so the three flows balance against one
+    # source of truth — a reactivation is neither "new" nor "newly inactive".
+    reactivated_count = 0
     price_change_count = 0
     for o in on_map:
         seen_ids.add(o["id"])
         prev = previous_offers.get(o["id"])
         if prev:
+            if not prev.get("active", True):
+                reactivated_count += 1
             price_history = list(prev.get("price_history") or ([prev["price"]] if prev.get("price") is not None else []))
             last_price = price_history[-1] if price_history else None
             if o["price"] is not None and o["price"] != last_price:
@@ -607,7 +615,7 @@ def merge_with_history(on_map, previous_offers, now):
         inactive["is_new"] = False
         on_map.append(inactive)
 
-    return on_map, new_count, newly_inactive_count, price_change_count
+    return on_map, new_count, newly_inactive_count, reactivated_count, price_change_count
 
 
 def assemble(items, previous_offers, now, cache):
@@ -647,7 +655,7 @@ def assemble(items, previous_offers, now, cache):
     for o in on_map:
         scraped_by_source[o["source"]] = scraped_by_source.get(o["source"], 0) + 1
 
-    on_map, new_count, newly_inactive_count, price_change_count = merge_with_history(
+    on_map, new_count, newly_inactive_count, reactivated_count, price_change_count = merge_with_history(
         on_map, previous_offers, now)
     active = [o for o in on_map if o["active"]]
 
@@ -686,6 +694,11 @@ def assemble(items, previous_offers, now, cache):
         "promoted_count": sum(1 for o in active if o.get("promoted")),
         "new_count": new_count,
         "newly_inactive_count": newly_inactive_count,
+        # Delisted offers (retained as inactive) that reappeared this scan.
+        # analityka.html plots inflow/outflow/reactivation as market movement.
+        # Older history.jsonl lines predate this field — readers treat a
+        # missing value as a gap, never zero.
+        "reactivated_count": reactivated_count,
         "address_match_pct": round(100 * address_matched / len(active), 1) if active else None,
         "avg_garaz_wynajem": data["stats"]["garaz_wynajem"]["avg"],
         "avg_garaz_sprzedaz": data["stats"]["garaz_sprzedaz"]["avg"],

@@ -53,6 +53,25 @@
             </section>
 
             <section class="filter-group">
+                <h3>🔄 Ruch na rynku w czasie</h3>
+                <p class="hint">Ile ofert dochodzi, znika i wraca między skanami. Napływ liczy tylko oferty naprawdę nowe; wracające po zniknięciu (recykling) idą osobno jako reaktywacje. Wartości są mierzone przy każdym skanie (2×/dobę), nie odtwarzane wstecz — starsze skany bez licznika reaktywacji zostają luką, nie zerem.</p>
+                <div class="analytics-charts-grid">
+                    <div>
+                        <h4>Napływ – nowe oferty / skan</h4>
+                        <div id="chart-inflow"></div>
+                    </div>
+                    <div>
+                        <h4>Odpływ – zniknęły / skan</h4>
+                        <div id="chart-outflow"></div>
+                    </div>
+                    <div>
+                        <h4>Reaktywacje – wróciły / skan</h4>
+                        <div id="chart-reactivated"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="filter-group">
                 <h3>💰 Średnia cena w czasie</h3>
                 <div class="analytics-charts-grid">
                     <div>
