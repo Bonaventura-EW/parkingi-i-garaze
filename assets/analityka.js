@@ -118,8 +118,27 @@
         document.getElementById("chart-parking-wynajem").innerHTML = sparkline(history.map(function (h) { return h.avg_parking_wynajem; }));
         document.getElementById("chart-parking-sprzedaz").innerHTML = sparkline(history.map(function (h) { return h.avg_parking_sprzedaz; }));
 
+        // Market movement: inflow / outflow / reactivation per scan, measured
+        // by the scraper's merge pass — not reconstructed from first_seen /
+        // last_seen after the fact. reactivated_count postdates the other two,
+        // so older scans stay gaps (null), never a fake 0. A scan flagged
+        // coverage_gap (source unreachable, previous state carried forward
+        // untouched) isn't a real market reading either — it's masked to a
+        // gap the same way, so a blocked-source stretch draws as a break in
+        // the line instead of a fake 0-movement flatline or, once the source
+        // recovers, a fake backlog spike.
+        function flowValue(h, field) {
+            return h.coverage_gap || h[field] == null ? null : h[field];
+        }
+        document.getElementById("chart-inflow").innerHTML = sparkline(history.map(function (h) { return flowValue(h, "new_count"); }));
+        document.getElementById("chart-outflow").innerHTML = sparkline(history.map(function (h) { return flowValue(h, "newly_inactive_count"); }));
+        document.getElementById("chart-reactivated").innerHTML = sparkline(history.map(function (h) { return flowValue(h, "reactivated_count"); }));
+
         document.getElementById("chart-promoted-count").innerHTML = sparkline(history.map(function (h) { return h.promoted_count == null ? null : h.promoted_count; }));
         document.getElementById("chart-promoted-share").innerHTML = sparkline(history.map(promotedShare), { suffix: "%" });
+
+        document.getElementById("chart-price-drops").innerHTML = sparkline(history.map(function (h) { return h.price_drop_count; }));
+        document.getElementById("chart-price-increases").innerHTML = sparkline(history.map(function (h) { return h.price_increase_count; }));
 
         renderDistrictBars(data);
         renderScanTable(history);

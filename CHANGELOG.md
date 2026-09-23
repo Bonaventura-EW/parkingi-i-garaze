@@ -7,7 +7,43 @@ Projekt nie ma numerów wersji — wpisy są datowane, najnowsze na górze.
 Automatyczne commity odświeżające dane (`chore: refresh scraped offers`)
 nie są tu odnotowywane.
 
+## 2026-09-22
+
+### Dodane
+
+- **Analityka**: nowa sekcja „Zmiany cen: podrożenia i potanienia" — dwa
+  wykresy pokazujące, ile ofert w danym skanie obniżyło, a ile podniosło cenę.
+  Dotąd `history.jsonl` liczył tylko sumę zmian cen (bez kierunku); scraper
+  teraz rozbija ją na `price_drop_count`/`price_increase_count`, licząc
+  zdarzenia, nie oferty (dwie obniżki jednej oferty w jednym skanie to dwa
+  punkty). Suma obu (`updated_count` w monitoringu) zostaje bez zmian.
+  (Propagacja z repo-brata `SONAR-POKOJOWY`.)
+
+### Naprawione
+
+- Wykresy „Ruch na rynku w czasie" (`analityka.html`) nie liczą już fałszywego
+  odpływu, gdy OLX był przez dłuższy czas niedostępny: zaległość dezaktywacji
+  z blokady nie ląduje jednym wielkim skokiem w dniu powrotu źródła. Skan, po
+  którym nic nie dało się porównać z poprzednim stanem, jest teraz oznaczany
+  jako `coverage_gap` w `scraper/history.jsonl` — napływ/odpływ/reaktywacje z
+  takiego skanu rysują się jako przerwa na wykresie, nie jako zero (cisza na
+  rynku) ani jako sztuczny rekord. (Propagacja z repo-brata `Sprzedaz-mieszkan`,
+  uzupełnienie #18 przed wystawieniem sekcji „Ruch na rynku" na produkcję.)
+
 ## 2026-09-09
+
+### Dodane
+
+- **Analityka**: nowa sekcja „Ruch na rynku w czasie" — wykresy napływu (nowe
+  oferty), odpływu (oferty, które zniknęły) i reaktywacji (oferty wracające po
+  zniknięciu) na skan. Odpowiada na pytanie „czy podaż rośnie czy maleje i ile
+  z ruchu to recykling ogłoszeń", którego sam przekrój „tu i teraz" nie pokrywał.
+  Napływ i odpływ pochodzą z liczników, które scraper już zapisywał; doszedł
+  tylko licznik reaktywacji (`reactivated_count` w `scraper/history.jsonl`),
+  liczony w tym samym przebiegu scalania, żeby trzy przepływy bilansowały się
+  z jednego źródła. Starsze skany bez tego pola zostają luką, nie zerem.
+  Propagacja z repo-brata (`SONAR---DZIA-KOWY`); u nas bez zewnętrznej biblioteki
+  wykresów — te same inline'owe SVG, co reszta analityki.
 
 ### Zmienione
 
@@ -20,6 +56,17 @@ nie są tu odnotowywane.
   `curl_cffi` jest teraz importem opcjonalnym: jego brak degraduje `fetch()` do
   gołego `requests`, zamiast wywalać cały skan `ImportError`-em. Propagacja z
   repo-brata (`SONAR---DZIA-KOWY`).
+
+### Naprawione
+
+- Nieudany skan OLX (blokada WAF, zmiana odcisku TLS, timeout sieci) nie
+  oznacza już wszystkich aktywnych ofert jako „zniknęłe". Gdy skan nie zwróci
+  ani jednej oferty do naniesienia na mapę, a poprzedni przebieg je miał,
+  scraper traktuje to jako awarię źródła: zamraża ostatni znany stan zamiast
+  masowo dezaktywować oferty i głośno ostrzega w logach. Dotychczasowy alarm
+  martwego źródła w `monitoring.html` działa niezależnie i nadal się odpala.
+  (Propagacja z repo-brata `SONAR---DZIA-KOWY` — jedna z lekcji z audytu
+  wykresów rynku, zaadaptowana do naszego pipeline'u.)
 
 ## 2026-09-01
 
