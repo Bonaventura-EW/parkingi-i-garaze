@@ -535,6 +535,25 @@ def merge_with_history(on_map, previous_offers, now):
 
     Returns (merged_offers, new_count, newly_inactive_count, price_change_count).
     """
+    # A scan that returns nothing while the previous run had offers is almost
+    # always our own pipeline failing, not the whole market disappearing:
+    # scrape_olx() swallows a first-page CurlRequestException with a bare
+    # `break` and returns [], so a WAF block, a changed TLS fingerprint or a
+    # network timeout all surface here as an empty on_map. Left unguarded, the
+    # deactivation loop below would flip EVERY retained offer to inactive in a
+    # single run, fabricating a market-wide "delisting" out of our own outage.
+    # Freeze the last known-good state instead: carry previous offers forward
+    # untouched, mark nothing newly inactive, and warn loudly (monitoring.html
+    # still sees scraped_* == 0 and raises its dead-source alarm independently).
+    if not on_map and previous_offers:
+        print(
+            f"WARNING: scan produced 0 mappable offers but previous run had "
+            f"{len(previous_offers)} — treating as a blind scan (source outage), "
+            f"skipping deactivation and keeping previous offers unchanged",
+            file=sys.stderr,
+        )
+        return [dict(o) for o in previous_offers.values()], 0, 0, 0
+
     today = now.strftime("%Y-%m-%d")
     seen_ids = set()
     new_count = 0
