@@ -142,14 +142,23 @@ MONTHS_PL = {
 
 
 def parse_loc_date(loc_raw, now=None):
-    """Best-effort parse of OLX's 'location-date' string into an ISO date + label."""
+    """Best-effort parse of OLX's 'location-date' string into an ISO date +
+    label + refresh flag.
+
+    OLX prefixes the date with "Odświeżono" when a listing was bumped, and
+    with nothing at all when it's just showing the original listing date —
+    there's no literal "Dodano" verb to match against, its absence IS the
+    signal. Returns (date_iso, date_label, is_refresh).
+    """
     if not loc_raw:
-        return None, None
+        return None, None, False
     now = now or datetime.now(timezone.utc)
     text = loc_raw.split(" - ", 1)[-1].strip()
+    is_refresh = bool(re.match(r"odświeżono", text, re.I))
     m = re.search(r"Dzisiaj\s+o\s+(\d{1,2}):(\d{2})", text, re.I)
     if m:
-        return now.strftime("%Y-%m-%d"), "dzisiaj o " + m.group(0).split(" o ")[-1]
+        label = ("odświeżono " if is_refresh else "") + "dzisiaj o " + m.group(0).split(" o ")[-1]
+        return now.strftime("%Y-%m-%d"), label, is_refresh
     m = re.search(r"(\d{1,2})\s+([a-zżźćńółęąś]+)\s+(\d{4})", text, re.I)
     if m:
         day, month_name, year = m.group(1), m.group(2).lower(), m.group(3)
@@ -157,10 +166,10 @@ def parse_loc_date(loc_raw, now=None):
         if month:
             try:
                 dt = datetime(int(year), month, int(day), tzinfo=timezone.utc)
-                return dt.strftime("%Y-%m-%d"), text
+                return dt.strftime("%Y-%m-%d"), text, is_refresh
             except ValueError:
                 pass
-    return None, text
+    return None, text, is_refresh
 
 
 
@@ -629,6 +638,7 @@ def merge_with_history(on_map, previous_offers, now):
             o["price_history"] = price_history
             o["first_seen"] = prev.get("first_seen") or today
             o["is_new"] = False
+            prev_refreshed_at = prev.get("last_refreshed_at")
         else:
             o["price_history"] = [o["price"]] if o["price"] is not None else []
             o["price_trend"] = None
@@ -637,6 +647,13 @@ def merge_with_history(on_map, previous_offers, now):
             o["first_seen"] = today
             o["is_new"] = True
             new_count += 1
+            prev_refreshed_at = None
+        # OLX only shows "Odświeżono" when it applies to THIS scrape; carry the
+        # most recent known refresh date forward otherwise, same as price_trend —
+        # a scan where the bump has scrolled off OLX's display shouldn't erase
+        # that it happened.
+        o["last_refreshed_at"] = o["date_iso"] if (o.get("is_refresh") and o.get("date_iso")) else prev_refreshed_at
+        del o["is_refresh"]
         o["active"] = True
         o["last_seen"] = today
 
@@ -666,6 +683,13 @@ def merge_with_history(on_map, previous_offers, now):
         inactive["is_new"] = False
         on_map.append(inactive)
 
+    # A single closing pass over EVERY offer (freshly scraped and retained-inactive
+    # alike): "recently" is relative to this run's `today`, so it can't be decided
+    # once inside the loop above and then carried on retained dicts from an older
+    # run without going stale.
+    for o in on_map:
+        o["refreshed_recently"] = o.get("last_refreshed_at") == today
+
     return on_map, new_count, newly_inactive_count, reactivated_count, price_change_count, price_drop_count, price_increase_count
 
 
@@ -689,13 +713,13 @@ def assemble(items, previous_offers, now, cache):
             precision = "unknown"
             address = "Lublin (lokalizacja nieznana)"
 
-        date_iso, date_label = parse_loc_date(it["loc_raw"])
+        date_iso, date_label, is_refresh = parse_loc_date(it["loc_raw"])
         on_map.append({
             "id": it["id"], "url": it["link"], "source": it["source"], "title": it["title"],
             "price": it["price"], "negotiable": it["negotiable"], "transaction": it["transaction"],
             "type": it["type"], "lat": round(lat, 6), "lon": round(lon, 6),
             "precision": precision, "address": address, "loc_raw": it["loc_raw"],
-            "date_iso": date_iso, "date_label": date_label,
+            "date_iso": date_iso, "date_label": date_label, "is_refresh": is_refresh,
             "area_m2": it["area_m2"], "price_per_m2": it["price_per_m2"],
             "promoted": it["promoted"],
         })

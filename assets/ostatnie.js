@@ -12,6 +12,7 @@
             '<div class="offer-row-left">' +
             '<div class="offer-row-main">' +
             SG.statusBadgeHtml(o) +
+            (o.refreshed_recently ? SG.refreshBadgeHtml(o) : "") +
             '<span class="offer-tag">' + typeLabel + "</span>" +
             '<span class="offer-tag">' + txLabel + "</span>" +
             '<span class="offer-tag">' + o.source + "</span>" +

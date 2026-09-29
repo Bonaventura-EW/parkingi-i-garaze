@@ -7,6 +7,19 @@ Projekt nie ma numerów wersji — wpisy są datowane, najnowsze na górze.
 Automatyczne commity odświeżające dane (`chore: refresh scraped offers`)
 nie są tu odnotowywane.
 
+## 2026-09-29
+
+### Dodane
+
+- Mapa i lista „Ostatnie" rozróżniają teraz ogłoszenie **odświeżone** (podbite
+  przez ogłoszeniodawcę) od zwyczajnie dodanego — karta listingu OLX, którą i
+  tak pobieramy, już to mówi w treści daty („Odświeżono..." vs sama data bez
+  czasownika), tylko dotąd nikt tego nie sprawdzał. Odświeżone niedawno
+  ogłoszenia dostają nowy znacznik ⟳ w karcie oferty i na liście „Ostatnie".
+  Data ostatniego odświeżenia (`last_refreshed_at`) jest zapamiętywana między
+  skanami, bo OLX pokazuje czasownik „Odświeżono" tylko dopóki data jest
+  aktualna. (Propagacja z repo-brata `SONAR-POKOJOWY`.)
+
 ## 2026-09-22
 
 ### Dodane

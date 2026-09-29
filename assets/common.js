@@ -52,6 +52,15 @@ var SG = (function () {
         return STATUS_BADGES[offerStatus(o)] || "";
     }
 
+    // Independent of statusBadgeHtml: an offer can be both "new"/price-changed
+    // AND recently bumped by its owner — these are separate signals, not a
+    // priority ordering, so both render side by side rather than one hiding the other.
+    function refreshBadgeHtml(o) {
+        return o.refreshed_recently
+            ? '<span class="badge-pill badge-blue" title="Odświeżona przez ogłoszeniodawcę">⟳</span>'
+            : "";
+    }
+
     function precisionLabel(o) {
         return o.precision === "exact" || o.precision === "street"
             ? "adres dokładny"
@@ -172,6 +181,7 @@ var SG = (function () {
         escapeHtml: escapeHtml,
         offerStatus: offerStatus,
         statusBadgeHtml: statusBadgeHtml,
+        refreshBadgeHtml: refreshBadgeHtml,
         precisionLabel: precisionLabel,
         flattenOffers: flattenOffers,
         loadData: loadData,
