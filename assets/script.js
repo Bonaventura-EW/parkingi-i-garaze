@@ -60,7 +60,11 @@
         var trendLine = "";
         if (o.price_trend && o.previous_price != null) {
             var arrow = o.price_trend === "up" ? "podrożało" : "potaniało";
-            trendLine = '<div class="offer-meta">' + SG.statusBadgeHtml(o) + " " + arrow + " z " +
+            // Reactivation (and is_new) outrank the price arrow in offerStatus(), so the badge
+            // already appears in the card header above — avoid showing it twice here.
+            var status = SG.offerStatus(o);
+            var trendBadge = (status === "up" || status === "down") ? SG.statusBadgeHtml(o) + " " : "";
+            trendLine = '<div class="offer-meta">' + trendBadge + arrow + " z " +
                 o.previous_price.toLocaleString("pl-PL") + " zł (" + (o.price_changed_at || "") + ")</div>";
         }
         var inactiveLine = o.active === false
@@ -75,7 +79,7 @@
         return (
             '<div class="offer-card' + (o.active === false ? " offer-card-inactive" : "") + '">' +
             SG.favoriteBtnHtml(o.id, "offer-card-fav") +
-            (o.is_new ? SG.statusBadgeHtml(o) + " " : "") +
+            ((o.is_new || o.reactivated) ? SG.statusBadgeHtml(o) + " " : "") +
             '<span class="offer-tag">' + typeLabel + "</span>" +
             '<span class="offer-tag">' + txLabel + "</span>" +
             '<span class="offer-tag">' + o.source + "</span>" +
@@ -96,7 +100,8 @@
     var FILTER_CHECKBOX_DEFAULTS = {
         "filter-sprzedaz": true, "filter-wynajem": true, "filter-garaz": true, "filter-parking": true, "filter-hala": true,
         "filter-olx": true, "filter-otodom": true, "filter-precise": true, "filter-approx": true,
-        "filter-status-new": true, "filter-status-up": true, "filter-status-down": true, "filter-status-unchanged": true,
+        "filter-status-new": true, "filter-status-up": true, "filter-status-down": true,
+        "filter-status-reactivated": true, "filter-status-unchanged": true,
         "filter-show-inactive": false,
     };
 
@@ -164,6 +169,7 @@
             statusNew: document.getElementById("filter-status-new").checked,
             statusUp: document.getElementById("filter-status-up").checked,
             statusDown: document.getElementById("filter-status-down").checked,
+            statusReactivated: document.getElementById("filter-status-reactivated").checked,
             statusUnchanged: document.getElementById("filter-status-unchanged").checked,
             showInactive: document.getElementById("filter-show-inactive").checked,
             priceMin: parseFloat(document.getElementById("price-min").value) || 0,
@@ -187,7 +193,10 @@
     }
 
     var TYPE_KEY = { garaz: "garaz", miejsce_parkingowe: "parking", hala_wiata: "hala" };
-    var STATUS_FILTER_KEY = { new: "statusNew", up: "statusUp", down: "statusDown", unchanged: "statusUnchanged" };
+    var STATUS_FILTER_KEY = {
+        new: "statusNew", up: "statusUp", down: "statusDown",
+        reactivated: "statusReactivated", unchanged: "statusUnchanged",
+    };
 
     function offerPasses(o, f) {
         if (f.refPoint) {
@@ -362,7 +371,8 @@
     [
         "filter-sprzedaz", "filter-wynajem", "filter-garaz", "filter-parking", "filter-hala",
         "filter-olx", "filter-otodom", "filter-precise", "filter-approx",
-        "filter-status-new", "filter-status-up", "filter-status-down", "filter-status-unchanged",
+        "filter-status-new", "filter-status-up", "filter-status-down",
+        "filter-status-reactivated", "filter-status-unchanged",
         "filter-show-inactive", "date-quick-filter", "filter-favorites-only",
     ].forEach(function (id) {
         document.getElementById(id).addEventListener("change", applyFilters);
