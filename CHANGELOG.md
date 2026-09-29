@@ -7,6 +7,18 @@ Projekt nie ma numerów wersji — wpisy są datowane, najnowsze na górze.
 Automatyczne commity odświeżające dane (`chore: refresh scraped offers`)
 nie są tu odnotowywane.
 
+## 2026-09-29
+
+### Dodane
+
+- **Mapa**: nowy filtr statusu „Reaktywowane (wróciły)" — oferta, która
+  zniknęła z listingu i po jakimś czasie znów się pojawiła, dostaje własną
+  odznakę (↩) zamiast wpadać po cichu do „Bez zmian" albo „Cena
+  wzrosła/spadła". Dane o reaktywacji scraper liczył od dawna jako agregat do
+  `history.jsonl`, ale nie zapisywał tego per ofertę w `data.json` — teraz
+  każda oferta ma pole `reactivated`. (Propagacja z repo-brata
+  `SONAR-POKOJOWY`.)
+
 ## 2026-09-22
 
 ### Dodane

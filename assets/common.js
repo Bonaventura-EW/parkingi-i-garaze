@@ -36,6 +36,7 @@ var SG = (function () {
 
     function offerStatus(o) {
         if (o.is_new) return "new";
+        if (o.reactivated) return "reactivated";
         if (o.price_trend === "up") return "up";
         if (o.price_trend === "down") return "down";
         return "unchanged";
@@ -43,6 +44,7 @@ var SG = (function () {
 
     var STATUS_BADGES = {
         new: '<span class="badge-pill badge-crimson" title="Nowa oferta">N</span>',
+        reactivated: '<span class="badge-pill badge-blue" title="Wróciła po zniknięciu z listingu">↩</span>',
         up: '<span class="badge-pill badge-red" title="Cena wzrosła">↑</span>',
         down: '<span class="badge-pill badge-green" title="Cena spadła">↓</span>',
         unchanged: "",
