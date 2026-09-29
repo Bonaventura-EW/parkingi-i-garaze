@@ -615,7 +615,8 @@ def merge_with_history(on_map, previous_offers, now):
         seen_ids.add(o["id"])
         prev = previous_offers.get(o["id"])
         if prev:
-            if not prev.get("active", True):
+            o["reactivated"] = not prev.get("active", True)
+            if o["reactivated"]:
                 reactivated_count += 1
             price_history = list(prev.get("price_history") or ([prev["price"]] if prev.get("price") is not None else []))
             last_price = price_history[-1] if price_history else None
@@ -646,6 +647,7 @@ def merge_with_history(on_map, previous_offers, now):
             o["price_changed_at"] = None
             o["first_seen"] = today
             o["is_new"] = True
+            o["reactivated"] = False
             new_count += 1
             prev_refreshed_at = None
         # OLX only shows "Odświeżono" when it applies to THIS scrape; carry the
@@ -681,6 +683,7 @@ def merge_with_history(on_map, previous_offers, now):
         inactive = dict(prev)
         inactive["active"] = False
         inactive["is_new"] = False
+        inactive["reactivated"] = False
         on_map.append(inactive)
 
     # A single closing pass over EVERY offer (freshly scraped and retained-inactive
