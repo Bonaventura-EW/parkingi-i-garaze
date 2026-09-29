@@ -1,5 +1,5 @@
 {
-  "generated_at": "29.09.2026 18:19",
+  "generated_at": "29.09.2026 19:11",
   "sources": [
     "olx.pl",
     "otodom.pl (via OLX)"
@@ -33,75 +33,6 @@
     }
   },
   "markers": [
-    {
-      "coords": {
-        "lat": 51.2605,
-        "lon": 22.569
-      },
-      "address": "Ludwika Hirszfelda",
-      "offers": [
-        {
-          "id": "1100909669",
-          "url": "https://www.olx.pl/d/oferta/garaz-17-20m2-na-sprzedaz-przy-ulicy-hirszfelda-CID3-ID1cwiTz.html?search_reason=search%7Cpromoted",
-          "source": "olx",
-          "title": "GARAZ 17,20m2 na sprzedaz przy ulicy Hirszfelda",
-          "price": 110000,
-          "negotiable": false,
-          "transaction": "sprzedaz",
-          "type": "garaz",
-          "lat": 51.260513,
-          "lon": 22.568976,
-          "precision": "street",
-          "address": "Ludwika Hirszfelda",
-          "loc_raw": "Lublin - 26 września 2026",
-          "date_iso": "2026-09-26",
-          "date_label": "26 września 2026",
-          "area_m2": 17.2,
-          "price_per_m2": 6395,
-          "promoted": true,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            110000
-          ],
-          "first_seen": "2026-09-27",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-09-29"
-        },
-        {
-          "id": "1096626542",
-          "url": "https://www.olx.pl/d/oferta/miejsce-postojowe-hirszfelda-CID3-ID1cdkES.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Miejsce postojowe Hirszfelda",
-          "price": 300,
-          "negotiable": true,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.260513,
-          "lon": 22.568976,
-          "precision": "street",
-          "address": "Ludwika Hirszfelda",
-          "loc_raw": "Lublin - 07 września 2026",
-          "date_iso": "2026-09-07",
-          "date_label": "07 września 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "promoted": false,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            300
-          ],
-          "first_seen": "2026-09-07",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-09-29"
-        }
-      ]
-    },
     {
       "coords": {
         "lat": 51.2589,
@@ -314,14 +245,14 @@
           "area_m2": null,
           "price_per_m2": null,
           "promoted": false,
-          "price_history": [
-            75000
-          ],
           "price_trend": null,
           "previous_price": null,
           "price_changed_at": null,
+          "price_history": [
+            75000
+          ],
           "first_seen": "2026-09-29",
-          "is_new": true,
+          "is_new": false,
           "active": true,
           "last_seen": "2026-09-29"
         }
@@ -368,45 +299,6 @@
     },
     {
       "coords": {
-        "lat": 51.2317,
-        "lon": 22.5823
-      },
-      "address": "Startowa 13",
-      "offers": [
-        {
-          "id": "1100202252",
-          "url": "https://www.olx.pl/d/oferta/wynajme-miejsce-postojowe-ul-startowa-13-CID3-ID1cskRC.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Wynajmę miejsce postojowe ul.Startowa 13",
-          "price": 300,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.231719,
-          "lon": 22.582293,
-          "precision": "exact",
-          "address": "Startowa 13",
-          "loc_raw": "Lublin - Dzisiaj o 11:53",
-          "date_iso": "2026-09-29",
-          "date_label": "dzisiaj o 11:53",
-          "area_m2": null,
-          "price_per_m2": null,
-          "promoted": false,
-          "price_history": [
-            300
-          ],
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "first_seen": "2026-09-29",
-          "is_new": true,
-          "active": true,
-          "last_seen": "2026-09-29"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.2432,
         "lon": 22.5608
       },
@@ -438,6 +330,45 @@
             100000
           ],
           "first_seen": "2026-09-28",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2317,
+        "lon": 22.5823
+      },
+      "address": "Startowa 13",
+      "offers": [
+        {
+          "id": "1100202252",
+          "url": "https://www.olx.pl/d/oferta/wynajme-miejsce-postojowe-ul-startowa-13-CID3-ID1cskRC.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Wynajmę miejsce postojowe ul.Startowa 13",
+          "price": 300,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.231719,
+          "lon": 22.582293,
+          "precision": "exact",
+          "address": "Startowa 13",
+          "loc_raw": "Lublin - Dzisiaj o 11:53",
+          "date_iso": "2026-09-29",
+          "date_label": "dzisiaj o 11:53",
+          "area_m2": null,
+          "price_per_m2": null,
+          "promoted": false,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            300
+          ],
+          "first_seen": "2026-09-29",
           "is_new": false,
           "active": true,
           "last_seen": "2026-09-29"
@@ -587,6 +518,75 @@
     },
     {
       "coords": {
+        "lat": 51.2605,
+        "lon": 22.569
+      },
+      "address": "Ludwika Hirszfelda",
+      "offers": [
+        {
+          "id": "1100909669",
+          "url": "https://www.olx.pl/d/oferta/garaz-17-20m2-na-sprzedaz-przy-ulicy-hirszfelda-CID3-ID1cwiTz.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "GARAZ 17,20m2 na sprzedaz przy ulicy Hirszfelda",
+          "price": 110000,
+          "negotiable": false,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.260513,
+          "lon": 22.568976,
+          "precision": "street",
+          "address": "Ludwika Hirszfelda",
+          "loc_raw": "Lublin - 26 września 2026",
+          "date_iso": "2026-09-26",
+          "date_label": "26 września 2026",
+          "area_m2": 17.2,
+          "price_per_m2": 6395,
+          "promoted": false,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            110000
+          ],
+          "first_seen": "2026-09-27",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-09-29"
+        },
+        {
+          "id": "1096626542",
+          "url": "https://www.olx.pl/d/oferta/miejsce-postojowe-hirszfelda-CID3-ID1cdkES.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsce postojowe Hirszfelda",
+          "price": 300,
+          "negotiable": true,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.260513,
+          "lon": 22.568976,
+          "precision": "street",
+          "address": "Ludwika Hirszfelda",
+          "loc_raw": "Lublin - 07 września 2026",
+          "date_iso": "2026-09-07",
+          "date_label": "07 września 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "promoted": false,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            300
+          ],
+          "first_seen": "2026-09-07",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "coords": {
         "lat": 51.2477,
         "lon": 22.6055
       },
@@ -683,6 +683,45 @@
           "is_new": false,
           "active": false,
           "last_seen": "2026-09-15"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2298,
+        "lon": 22.5273
+      },
+      "address": "Sympatyczna",
+      "offers": [
+        {
+          "id": "1096205945",
+          "url": "https://www.olx.pl/d/oferta/garaz-lublin-sympatyczna-CID3-ID1cbzf3.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Garaż Lublin sympatyczna",
+          "price": 130000,
+          "negotiable": false,
+          "transaction": "sprzedaz",
+          "type": "garaz",
+          "lat": 51.229804,
+          "lon": 22.527301,
+          "precision": "street",
+          "address": "Sympatyczna",
+          "loc_raw": "Lublin - Odświeżono dnia 18 września 2026",
+          "date_iso": "2026-09-18",
+          "date_label": "Odświeżono dnia 18 września 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "promoted": false,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            130000
+          ],
+          "first_seen": "2026-09-05",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-09-29"
         }
       ]
     },
@@ -1032,45 +1071,6 @@
           "is_new": false,
           "active": false,
           "last_seen": "2026-09-06"
-        }
-      ]
-    },
-    {
-      "coords": {
-        "lat": 51.2298,
-        "lon": 22.5273
-      },
-      "address": "Sympatyczna",
-      "offers": [
-        {
-          "id": "1096205945",
-          "url": "https://www.olx.pl/d/oferta/garaz-lublin-sympatyczna-CID3-ID1cbzf3.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Garaż Lublin sympatyczna",
-          "price": 130000,
-          "negotiable": false,
-          "transaction": "sprzedaz",
-          "type": "garaz",
-          "lat": 51.229804,
-          "lon": 22.527301,
-          "precision": "street",
-          "address": "Sympatyczna",
-          "loc_raw": "Lublin - Odświeżono dnia 18 września 2026",
-          "date_iso": "2026-09-18",
-          "date_label": "Odświeżono dnia 18 września 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "promoted": false,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            130000
-          ],
-          "first_seen": "2026-09-05",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-09-29"
         }
       ]
     },
@@ -1970,45 +1970,6 @@
     },
     {
       "coords": {
-        "lat": 51.2694,
-        "lon": 22.5138
-      },
-      "address": "Kasztelańska",
-      "offers": [
-        {
-          "id": "1101308465",
-          "url": "https://www.olx.pl/d/oferta/miejsce-garazowe-botanik-CID3-ID1cvYDL.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Miejsce garażowe Botanik",
-          "price": 300,
-          "negotiable": false,
-          "transaction": "wynajem",
-          "type": "garaz",
-          "lat": 51.269426,
-          "lon": 22.513809,
-          "precision": "street",
-          "address": "Kasztelańska",
-          "loc_raw": "Lublin - 28 września 2026",
-          "date_iso": "2026-09-28",
-          "date_label": "28 września 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "promoted": false,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            300
-          ],
-          "first_seen": "2026-09-28",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-09-29"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.2502,
         "lon": 22.5561
       },
@@ -2235,6 +2196,45 @@
             350
           ],
           "first_seen": "2026-09-02",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2694,
+        "lon": 22.5138
+      },
+      "address": "Kasztelańska",
+      "offers": [
+        {
+          "id": "1101308465",
+          "url": "https://www.olx.pl/d/oferta/miejsce-garazowe-botanik-CID3-ID1cvYDL.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Miejsce garażowe Botanik",
+          "price": 300,
+          "negotiable": false,
+          "transaction": "wynajem",
+          "type": "garaz",
+          "lat": 51.269426,
+          "lon": 22.513809,
+          "precision": "street",
+          "address": "Kasztelańska",
+          "loc_raw": "Lublin - 28 września 2026",
+          "date_iso": "2026-09-28",
+          "date_label": "28 września 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "promoted": false,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            300
+          ],
+          "first_seen": "2026-09-28",
           "is_new": false,
           "active": true,
           "last_seen": "2026-09-29"
@@ -3787,45 +3787,6 @@
     },
     {
       "coords": {
-        "lat": 51.2508,
-        "lon": 22.5495
-      },
-      "address": "Stanisława Leszczyńskiego 15a",
-      "offers": [
-        {
-          "id": "1076606697",
-          "url": "https://www.olx.pl/d/oferta/wynajme-miejsce-postojowe-w-garazu-podziemnym-ul-leszczynskiego-15a-CID3-ID1aRkA9.html?search_reason=search%7Corganic",
-          "source": "olx",
-          "title": "Wynajmę miejsce postojowe w garażu podziemnym ul. Leszczyńskiego 15a",
-          "price": 55350,
-          "negotiable": true,
-          "transaction": "wynajem",
-          "type": "miejsce_parkingowe",
-          "lat": 51.250765,
-          "lon": 22.549465,
-          "precision": "exact",
-          "address": "Stanisława Leszczyńskiego 15a",
-          "loc_raw": "Lublin - 20 sierpnia 2026",
-          "date_iso": "2026-08-20",
-          "date_label": "20 sierpnia 2026",
-          "area_m2": null,
-          "price_per_m2": null,
-          "promoted": false,
-          "price_trend": null,
-          "previous_price": null,
-          "price_changed_at": null,
-          "price_history": [
-            55350
-          ],
-          "first_seen": "2026-08-23",
-          "is_new": false,
-          "active": true,
-          "last_seen": "2026-09-29"
-        }
-      ]
-    },
-    {
-      "coords": {
         "lat": 51.2707,
         "lon": 22.5587
       },
@@ -3857,6 +3818,45 @@
             350
           ],
           "first_seen": "2026-08-31",
+          "is_new": false,
+          "active": true,
+          "last_seen": "2026-09-29"
+        }
+      ]
+    },
+    {
+      "coords": {
+        "lat": 51.2508,
+        "lon": 22.5495
+      },
+      "address": "Stanisława Leszczyńskiego 15a",
+      "offers": [
+        {
+          "id": "1076606697",
+          "url": "https://www.olx.pl/d/oferta/wynajme-miejsce-postojowe-w-garazu-podziemnym-ul-leszczynskiego-15a-CID3-ID1aRkA9.html?search_reason=search%7Corganic",
+          "source": "olx",
+          "title": "Wynajmę miejsce postojowe w garażu podziemnym ul. Leszczyńskiego 15a",
+          "price": 55350,
+          "negotiable": true,
+          "transaction": "wynajem",
+          "type": "miejsce_parkingowe",
+          "lat": 51.250765,
+          "lon": 22.549465,
+          "precision": "exact",
+          "address": "Stanisława Leszczyńskiego 15a",
+          "loc_raw": "Lublin - 20 sierpnia 2026",
+          "date_iso": "2026-08-20",
+          "date_label": "20 sierpnia 2026",
+          "area_m2": null,
+          "price_per_m2": null,
+          "promoted": false,
+          "price_trend": null,
+          "previous_price": null,
+          "price_changed_at": null,
+          "price_history": [
+            55350
+          ],
+          "first_seen": "2026-08-23",
           "is_new": false,
           "active": true,
           "last_seen": "2026-09-29"
