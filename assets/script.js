@@ -80,6 +80,7 @@
             '<div class="offer-card' + (o.active === false ? " offer-card-inactive" : "") + '">' +
             SG.favoriteBtnHtml(o.id, "offer-card-fav") +
             ((o.is_new || o.reactivated) ? SG.statusBadgeHtml(o) + " " : "") +
+            (o.refreshed_recently ? SG.refreshBadgeHtml(o) + " " : "") +
             '<span class="offer-tag">' + typeLabel + "</span>" +
             '<span class="offer-tag">' + txLabel + "</span>" +
             '<span class="offer-tag">' + o.source + "</span>" +

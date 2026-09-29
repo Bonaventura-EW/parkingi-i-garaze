@@ -11,6 +11,14 @@ nie są tu odnotowywane.
 
 ### Dodane
 
+- Mapa i lista „Ostatnie" rozróżniają teraz ogłoszenie **odświeżone** (podbite
+  przez ogłoszeniodawcę) od zwyczajnie dodanego — karta listingu OLX, którą i
+  tak pobieramy, już to mówi w treści daty („Odświeżono..." vs sama data bez
+  czasownika), tylko dotąd nikt tego nie sprawdzał. Odświeżone niedawno
+  ogłoszenia dostają nowy znacznik ⟳ w karcie oferty i na liście „Ostatnie".
+  Data ostatniego odświeżenia (`last_refreshed_at`) jest zapamiętywana między
+  skanami, bo OLX pokazuje czasownik „Odświeżono" tylko dopóki data jest
+  aktualna. (Propagacja z repo-brata `SONAR-POKOJOWY`.)
 - **Mapa**: nowy filtr statusu „Reaktywowane (wróciły)" — oferta, która
   zniknęła z listingu i po jakimś czasie znów się pojawiła, dostaje własną
   odznakę (↩) zamiast wpadać po cichu do „Bez zmian" albo „Cena
