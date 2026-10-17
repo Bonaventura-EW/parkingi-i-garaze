@@ -430,41 +430,50 @@ def classify_items(raw_items):
     items = []
     skipped = []
     for r in raw_items:
-        title = r["title"] or ""
-        if any(k in title.lower() for k in EXCLUDE_KEYWORDS):
-            skipped.append({"id": r["id"], "title": title, "link": r["link"], "reason": "inny_temat"})
-            continue
-        other_city = other_city_mentioned(title)
-        if other_city:
-            skipped.append({"id": r["id"], "title": title, "link": r["link"], "reason": "inna_miejscowosc", "detail": other_city})
-            continue
-        price, negotiable = clean_price(r["price_raw"])
-        street, number, kind = find_address(title)
-        transaction, typ, is_product = classify(title, price, has_street=bool(street))
-        geo_direct = None
-        if not is_product and "otodom.pl" in (r["link"] or ""):
-            o_street, o_number, o_geo = otodom_location(r["link"])
-            if kind != "street" and o_street:
-                street, number, kind = o_street, o_number, "street"
-            elif kind == "street" and o_street == street and o_number and not number:
-                number = o_number
-            if kind == "street":
-                geo_direct = o_geo
-        elif not is_product and kind != "street":
-            d_street, d_number = street_from_description(r["link"])
-            if d_street:
-                street, number, kind = d_street, d_number, "street"
-        area = find_area(title)
-        price_per_m2 = round(price / area) if (price and area and transaction == "sprzedaz") else None
-        items.append({
-            "id": r["id"], "title": title, "link": r["link"], "price": price,
-            "negotiable": negotiable, "transaction": transaction, "type": typ,
-            "is_product": is_product, "street": street, "number": number,
-            "addr_kind": kind, "geo_direct": geo_direct,
-            "loc_raw": r["loc_raw"], "area_m2": area, "price_per_m2": price_per_m2,
-            "source": "otodom" if "otodom.pl" in (r["link"] or "") else "olx",
-            "promoted": bool(r.get("promoted")),
-        })
+        try:
+            title = r["title"] or ""
+            if any(k in title.lower() for k in EXCLUDE_KEYWORDS):
+                skipped.append({"id": r["id"], "title": title, "link": r["link"], "reason": "inny_temat"})
+                continue
+            other_city = other_city_mentioned(title)
+            if other_city:
+                skipped.append({"id": r["id"], "title": title, "link": r["link"], "reason": "inna_miejscowosc", "detail": other_city})
+                continue
+            price, negotiable = clean_price(r["price_raw"])
+            street, number, kind = find_address(title)
+            transaction, typ, is_product = classify(title, price, has_street=bool(street))
+            geo_direct = None
+            if not is_product and "otodom.pl" in (r["link"] or ""):
+                o_street, o_number, o_geo = otodom_location(r["link"])
+                if kind != "street" and o_street:
+                    street, number, kind = o_street, o_number, "street"
+                elif kind == "street" and o_street == street and o_number and not number:
+                    number = o_number
+                if kind == "street":
+                    geo_direct = o_geo
+            elif not is_product and kind != "street":
+                d_street, d_number = street_from_description(r["link"])
+                if d_street:
+                    street, number, kind = d_street, d_number, "street"
+            area = find_area(title)
+            price_per_m2 = round(price / area) if (price and area and transaction == "sprzedaz") else None
+            items.append({
+                "id": r["id"], "title": title, "link": r["link"], "price": price,
+                "negotiable": negotiable, "transaction": transaction, "type": typ,
+                "is_product": is_product, "street": street, "number": number,
+                "addr_kind": kind, "geo_direct": geo_direct,
+                "loc_raw": r["loc_raw"], "area_m2": area, "price_per_m2": price_per_m2,
+                "source": "otodom" if "otodom.pl" in (r["link"] or "") else "olx",
+                "promoted": bool(r.get("promoted")),
+            })
+        except Exception as e:
+            # A single malformed offer (unexpected title/link shape, a flaky
+            # per-offer fetch in otodom_location/street_from_description, …)
+            # must not abort classify_items() and cost the whole scan its
+            # data.json write — same risk class as issue #9/#10, one level
+            # down (per-offer instead of per-source/per-scan).
+            print(f"classify error for {r.get('link')!r}: {e}", file=sys.stderr)
+            skipped.append({"id": r.get("id"), "title": r.get("title") or "", "link": r.get("link"), "reason": "blad_klasyfikacji", "detail": str(e)})
     return items, skipped
 
 
