@@ -7,6 +7,15 @@ Projekt nie ma numerów wersji — wpisy są datowane, najnowsze na górze.
 Automatyczne commity odświeżające dane (`chore: refresh scraped offers`)
 nie są tu odnotowywane.
 
+## 2026-10-13
+
+### Naprawione
+
+- Scraper: nietypowa, niezaklasyfikowana oferta w skanie nie przerywa już
+  całego przetwarzania — jest logowana i trafia do „Pominiętych" (nowy powód:
+  „Błąd klasyfikacji") zamiast wywalać cały skan przed zapisem `data.json`.
+  (Propagacja z repo-brata `SONAR---DZIA-KOWY`.)
+
 ## 2026-09-29
 
 ### Dodane

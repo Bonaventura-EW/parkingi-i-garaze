@@ -5,6 +5,7 @@
         inny_temat: "Inny temat",
         inna_miejscowosc: "Inna miejscowość",
         produkt_blaszak: "Produkt (blaszak)",
+        blad_klasyfikacji: "Błąd klasyfikacji",
     };
 
     var all = [];
