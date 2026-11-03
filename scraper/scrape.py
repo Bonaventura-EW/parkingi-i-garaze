@@ -473,7 +473,7 @@ def classify_items(raw_items):
             # data.json write — same risk class as issue #9/#10, one level
             # down (per-offer instead of per-source/per-scan).
             print(f"classify error for {r.get('link')!r}: {e}", file=sys.stderr)
-            skipped.append({"id": r.get("id"), "title": r.get("title") or "", "link": r.get("link"), "reason": "blad_klasyfikacji", "detail": str(e)})
+            skipped.append({"id": r.get("id"), "title": r.get("title") or "", "link": r.get("link"), "reason": "blad_klasyfikacji", "detail": "Nieoczekiwany błąd przetwarzania"})
     return items, skipped
 
 
